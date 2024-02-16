@@ -6,14 +6,14 @@ const RecordingComponent = ({ onEnd }) => {
   const [isRecording, setIsRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState(null);
 
-  useEffect(() => {
+  const enableRecording = () => {
     // Demander l'autorisation de l'utilisateur pour utiliser le micro
     navigator.mediaDevices.getUserMedia({ audio: true })
-      .then(stream => {
-        const newMediaRecorder = new MediaRecorder(stream);
-        setMediaRecorder(newMediaRecorder);
-      });
-  }, []);
+        .then(stream => {
+          const newMediaRecorder = new MediaRecorder(stream);
+          setMediaRecorder(newMediaRecorder);
+        });
+  }
 
   const startRecording = () => {
     if (mediaRecorder) {
@@ -51,6 +51,7 @@ const RecordingComponent = ({ onEnd }) => {
 
   return (
     <div>
+     <button onClick={enableRecording}>lancer</button>
       <button onClick={isRecording ? stopRecording : startRecording}>
         {isRecording ? 'Stop Recording' : 'Start Recording'}
       </button>
