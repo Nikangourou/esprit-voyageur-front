@@ -126,6 +126,68 @@ export default function Voyageur() {
       })
   }
 
+  const sendTextTranscription = () => {
+
+    fetch("http://localhost:5001/gamev2/post/send_transcription", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        threadKey: threadKey,
+        transcription: prompt,
+      })
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Send text transcription');
+        console.log(data);
+
+        let dataTmp = data;
+
+        setReady(false)
+        const interval = setInterval(() => {
+          fetch(`http://localhost:5001/run/get/${data.id}/${threadKey}`, {
+            method: "GET",
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          })
+            .then(response => response.json())
+            .then(data2 => {
+              console.log("pending...")
+              if (data2.status === "completed") {
+                console.log('Completed');
+                dataTmp = data2;
+                setReady(true)
+                clearInterval(interval);
+              }
+            });
+        }, 1000);
+      })
+  }
+
+  const generate_prompt = () => {
+    fetch("http://localhost:5001/gamev2/post/generate_prompt", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        threadKey: threadKey,
+      })
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Generate prompt');
+        console.log(data);
+      })
+  }
+
+  // generate prompt 
+  // get 3 prompts
+  // generate image for each prompt
+
   return (
     <main>
       <h1>Voyageur</h1>
@@ -141,6 +203,12 @@ export default function Voyageur() {
         </li>
         <li>
           <button onClick={sendAnswer}>Send Answer</button>
+        </li>
+        <li>
+          <button onClick={sendTextTranscription}>Send Text Transcription </button>
+        </li>
+        <li>
+          <button onClick={generate_prompt}>Generate Prompt</button>
         </li>
         <li>
           <h3>Record</h3>
