@@ -10,7 +10,7 @@ import styles from "./page.module.scss";
 export default function Voyageur() {
   const [threadKey, setThreadKey] = useState(null)
   const [base64, setBase64] = useState(null)
-  const [prompt, setPrompt] = useState("test")
+  const [prompt, setPrompt] = useState("")
   const [gameId, setGameId] = useState(null)
   const [transcription, setTranscription] = useState([])
   const [ready, setReady] = useState(false)
