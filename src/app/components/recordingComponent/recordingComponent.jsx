@@ -51,7 +51,7 @@ const RecordingComponent = ({ onEnd }) => {
 
   return (
     <div>
-     <button onClick={enableRecording}>lancer</button>
+     <button onClick={enableRecording}>Set up</button>
       <button onClick={isRecording ? stopRecording : startRecording}>
         {isRecording ? 'Stop Recording' : 'Start Recording'}
       </button>
