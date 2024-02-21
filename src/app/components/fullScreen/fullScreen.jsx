@@ -12,7 +12,7 @@ export default function FullScreen () {
 
     return (
         <div>
-            <p onClick={setFullScreen}>LOGO</p>
+           <img src="/full-screen.png" onClick={setFullScreen} alt="full screen icon" />
         </div>
     );
 }
