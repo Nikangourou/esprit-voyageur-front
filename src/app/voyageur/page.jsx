@@ -20,8 +20,8 @@ export default function Voyageur() {
   useEffect(() => {
     if (!gameId) {
         setReady(false)
-      // fetch('https://espritvoyageur-production.up.railway.app/gamev2/post/create', {
-    fetch('http://localhost:5001/gamev2/post/create', {
+      fetch('https://espritvoyageur-production.up.railway.app/gamev2/post/create', {
+    // fetch('http://localhost:5001/gamev2/post/create', {
       method: 'POST',
     })
       .then(response => response.json())
@@ -41,8 +41,8 @@ export default function Voyageur() {
   useEffect(() => {
     if(base64){
       console.log('Sending Answer !!!!!!');
-      fetch("http://localhost:5001/gamev2/update/send_answer", {
-      // fetch("https://espritvoyageur-production.up.railway.app/gamev2/update/send_answer", {
+      // fetch("http://localhost:5001/gamev2/update/send_answer", {
+      fetch("https://espritvoyageur-production.up.railway.app/gamev2/update/send_answer", {
         method: "PUT",
         headers: {
           'Content-Type': 'application/json',
@@ -91,8 +91,8 @@ export default function Voyageur() {
   }
 
   const updateConversation = () => {
-    fetch("http://localhost:5001/gamev2/update/conversation", {
-    // fetch("https://espritvoyageur-production.up.railway.app/gamev2/update/conversation", {
+    // fetch("http://localhost:5001/gamev2/update/conversation", {
+    fetch("https://espritvoyageur-production.up.railway.app/gamev2/update/conversation", {
       method: "PUT",
       headers: {
         'Content-Type': 'application/json',
@@ -109,8 +109,8 @@ export default function Voyageur() {
         let dataTmp = data;
 
         const interval = setInterval(() => {
-          fetch(`http://localhost:5001/run/get/${data.id}/${threadKey}`, {
-          // fetch(`https://espritvoyageur-production.up.railway.app/run/get/${data.id}/${threadKey}`, {
+          // fetch(`http://localhost:5001/run/get/${data.id}/${threadKey}`, {
+          fetch(`https://espritvoyageur-production.up.railway.app/run/get/${data.id}/${threadKey}`, {
             method: "GET",
             headers: {
               'Content-Type': 'application/json',
@@ -133,8 +133,8 @@ export default function Voyageur() {
 
 
     const getAnswer = () => {
-    fetch(`http://localhost:5001/run/answers/${threadKey}`, {
-    // fetch(`https://espritvoyageur-production.up.railway.app/run/answers/${threadKey}`, {
+    // fetch(`http://localhost:5001/run/answers/${threadKey}`, {
+    fetch(`https://espritvoyageur-production.up.railway.app/run/answers/${threadKey}`, {
       method: "GET",
       headers: {
         'Content-Type': 'application/json',
@@ -157,8 +157,8 @@ export default function Voyageur() {
 
   const sendTextTranscription = () => {
 
-    fetch("http://localhost:5001/gamev2/post/send_transcription", {
-    // fetch("https://espritvoyageur-production.up.railway.app:5001/gamev2/post/send_transcription", {
+    // fetch("http://localhost:5001/gamev2/post/send_transcription", {
+    fetch("https://espritvoyageur-production.up.railway.app:5001/gamev2/post/send_transcription", {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',
@@ -177,8 +177,8 @@ export default function Voyageur() {
 
         setReady(false)
         const interval = setInterval(() => {
-          fetch(`http://localhost:5001/run/get/${data.id}/${threadKey}`, {
-          // fetch(`https://espritvoyageur-production.up.railway.app/run/get/${data.id}/${threadKey}`, {
+          // fetch(`http://localhost:5001/run/get/${data.id}/${threadKey}`, {
+          fetch(`https://espritvoyageur-production.up.railway.app/run/get/${data.id}/${threadKey}`, {
             method: "GET",
             headers: {
               'Content-Type': 'application/json',
@@ -199,8 +199,8 @@ export default function Voyageur() {
   }
 
   const generate_prompt_simple = () => {
-    fetch("http://localhost:5001/gamev2/post/generate_prompt_simple", {
-    // fetch("https://espritvoyageur-production.up.railway.app/gamev2/post/generate_prompt_simple", {
+    // fetch("http://localhost:5001/gamev2/post/generate_prompt_simple", {
+    fetch("https://espritvoyageur-production.up.railway.app/gamev2/post/generate_prompt_simple", {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',
@@ -218,7 +218,8 @@ export default function Voyageur() {
 
           setReady(false)
           const interval = setInterval(() => {
-              fetch(`http://localhost:5001/run/get/${data.id}/${threadKey}`, {
+              fetch(`https://espritvoyageur-production.up.railway.app/run/get/${data.id}/${threadKey}`, {
+              // fetch(`http://localhost:5001/run/get/${data.id}/${threadKey}`, {
                   method: "GET",
                   headers: {
                       'Content-Type': 'application/json',
@@ -240,8 +241,8 @@ export default function Voyageur() {
   }
 
     const generate_prompt_alt = () => {
-        fetch("http://localhost:5001/gamev2/post/generate_prompt_alt", {
-        // fetch("https://espritvoyageur-production.up.railway.app/gamev2/post/generate_prompt_alt", {
+        // fetch("http://localhost:5001/gamev2/post/generate_prompt_alt", {
+        fetch("https://espritvoyageur-production.up.railway.app/gamev2/post/generate_prompt_alt", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -260,8 +261,8 @@ export default function Voyageur() {
 
                 setReady(false)
                 const interval = setInterval(() => {
-                    fetch(`http://localhost:5001/run/get/${data.id}/${threadKey}`, {
-                    // fetch(`https://espritvoyageur-production.up.railway.app/run/get/${data.id}/${threadKey}`, {
+                    // fetch(`http://localhost:5001/run/get/${data.id}/${threadKey}`, {
+                    fetch(`https://espritvoyageur-production.up.railway.app/run/get/${data.id}/${threadKey}`, {
                         method: "GET",
                         headers: {
                             'Content-Type': 'application/json',
