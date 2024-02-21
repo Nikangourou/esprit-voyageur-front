@@ -1,57 +1,54 @@
-"use client"
-
 import React, { useState, useEffect } from 'react';
 
 const RecordingComponent = ({ onEnd }) => {
   const [isRecording, setIsRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState(null);
 
-  const enableRecording = () => {
-    // Demander l'autorisation de l'utilisateur pour utiliser le micro
-    navigator.mediaDevices.getUserMedia({ audio: true })
-        .then(stream => {
-          const newMediaRecorder = new MediaRecorder(stream);
-          setMediaRecorder(newMediaRecorder);
-        });
-  }
+  const initMediaRecorder = async () => {
+    if (!mediaRecorder && navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const newMediaRecorder = new MediaRecorder(stream);
+        newMediaRecorder.ondataavailable = handleDataAvailable;
+        newMediaRecorder.onstop = () => setIsRecording(false);
+        newMediaRecorder.onerror = (event) => console.error('MediaRecorder error:', event.error);
 
-  const startRecording = () => {
-    if (mediaRecorder) {
-      mediaRecorder.start();
-      setIsRecording(true);
-    } else {
-      console.error('No media recorder available');
-    }
-  };
-
-  const stopRecording = () => {
-    if (mediaRecorder) {
-      mediaRecorder.stop();
-      setIsRecording(false);
+        setMediaRecorder(newMediaRecorder);
+      } catch(error) {
+        console.error('Error accessing media devices:', error);
+      }
     }
   };
 
   useEffect(() => {
-    if (mediaRecorder) {
-      // Lorsque l'enregistrement est arrêté, créer un blob audio et le passer à onEnd
-      const handleDataAvailable = e => {
-        if (e.data.size > 0 && onEnd) {
-          onEnd(e.data);
-        }
-      };
+    initMediaRecorder();
+  }, []);
 
-      mediaRecorder.ondataavailable = handleDataAvailable;
-      mediaRecorder.onstop = stopRecording;
-
-      return () => {
-        mediaRecorder.stream.getTracks().forEach(track => track.stop());
-      };
+  const handleDataAvailable = (e) => {
+    if (e.data.size > 0 && onEnd) {
+      onEnd(e.data);
     }
-  }, [mediaRecorder, onEnd]);
+  };
+  
+  const startRecording = () => {
+    if (mediaRecorder && mediaRecorder.state === 'inactive') {
+      mediaRecorder.start();
+      setIsRecording(true);
+    } else {
+      console.error('MediaRecorder not initialized or already recording');
+    }
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorder && mediaRecorder.state === 'recording') {
+      mediaRecorder.stop();
+    }
+  };
+
+
 
   return (
     <div>
-     <button onClick={enableRecording}>Set up</button>
       <button onClick={isRecording ? stopRecording : startRecording}>
         {isRecording ? 'Stop Recording' : 'Start Recording'}
       </button>

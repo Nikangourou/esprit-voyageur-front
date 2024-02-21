@@ -5,14 +5,20 @@ import styles from "./fullScreen.module.scss";
 
 export default function FullScreen () {
 
-    const setFullScreen = () => {
-        document.documentElement.requestFullscreen();
+    const handleFullScreen = () => {
+        const elem = document.documentElement;
+        if (!document.fullscreenElement) {
+            elem.requestFullscreen().catch(err => {
+                alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+            });
+        } else {
+            document.exitFullscreen();
+        }
     }
-
-
+    
     return (
-        <div>
-           <img src="/full-screen.png" onClick={setFullScreen} alt="full screen icon" />
+        <div className={styles.btn} onClick={handleFullScreen}>
+           <img src="/full-screen.png"  alt="full screen icon" />
         </div>
     );
 }
