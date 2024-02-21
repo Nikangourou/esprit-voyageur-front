@@ -11,6 +11,7 @@ export default function GetImg({ prompt, gameId }) {
         if (gameId) {
             console.log('Prompt:', prompt);
             fetch('http://localhost:5001/image/post/create', {
+            // fetch('https://espritvoyageur-production.up.railway.app/image/post/create', {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',
@@ -30,7 +31,7 @@ export default function GetImg({ prompt, gameId }) {
     return (
         <main>
             <h3>GetImg</h3>
-            <img className={styles.img} src={`data:image/png;base64,${img64}`} />
+            <img className={styles.img} src={`data:image/png;base64,${img64}`} style={{width:"350px"}} />
         </main>
     );
 }
