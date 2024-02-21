@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import RecordingComponent from "../components/recordingComponent/recordingComponent";
 import GetImg from "../components/getImg/getImg";
+import FullScreen from "../components/fullScreen/fullScreen";
 import CreateGame from "../components/createGame/createGame";
 import * as utils from "../utils/micro";
 import styles from "./page.module.scss";
@@ -190,6 +191,7 @@ export default function Voyageur() {
 
   return (
     <main>
+      <FullScreen />
       <h1>Voyageur</h1>
       <ul>
         <li>
