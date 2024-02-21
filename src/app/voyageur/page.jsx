@@ -51,7 +51,7 @@ export default function Voyageur() {
   }
 
   const updateConversation = () => {
-    fetch("http://10.137.98.25:5001/gamev2/update/conversation", {
+    fetch("https://espritvoyageur-production.up.railway.app/gamev2/update/conversation", {
       method: "PUT",
       headers: {
         'Content-Type': 'application/json',
@@ -68,7 +68,7 @@ export default function Voyageur() {
         let dataTmp = data;
 
         const interval = setInterval(() => {
-          fetch(`http://10.137.98.25:5001/run/get/${data.id}/${threadKey}`, {
+          fetch(`https://espritvoyageur-production.up.railway.app/run/get/${data.id}/${threadKey}`, {
             method: "GET",
             headers: {
               'Content-Type': 'application/json',
@@ -89,7 +89,7 @@ export default function Voyageur() {
   }
 
   const getAnswer = () => {
-    fetch(`http://10.137.98.25:5001/run/answers/${threadKey}`, {
+    fetch(`https://espritvoyageur-production.up.railway.app/run/answers/${threadKey}`, {
       method: "GET",
       headers: {
         'Content-Type': 'application/json',
@@ -108,7 +108,7 @@ export default function Voyageur() {
 
 
   const sendAnswer = () => {
-    fetch("http://10.137.98.25:5001/gamev2/update/send_answer", {
+    fetch("https://espritvoyageur-production.up.railway.app/gamev2/update/send_answer", {
       method: "PUT",
       headers: {
         'Content-Type': 'application/json',
@@ -129,7 +129,7 @@ export default function Voyageur() {
 
   const sendTextTranscription = () => {
 
-    fetch("http://10.137.98.25:5001/gamev2/post/send_transcription", {
+    fetch("https://espritvoyageur-production.up.railway.app/gamev2/post/send_transcription", {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',
@@ -148,7 +148,7 @@ export default function Voyageur() {
 
         setReady(false)
         const interval = setInterval(() => {
-          fetch(`https://10.137.102.132:5001/run/get/${data.id}/${threadKey}`, {
+          fetch(`https://espritvoyageur-production.up.railway.app/run/get/${data.id}/${threadKey}`, {
             method: "GET",
             headers: {
               'Content-Type': 'application/json',
@@ -169,7 +169,7 @@ export default function Voyageur() {
   }
 
   const generate_prompt = () => {
-    fetch("https://10.137.102.132:5001/gamev2/post/generate_prompt", {
+    fetch("https://espritvoyageur-production.up.railway.app/gamev2/post/generate_prompt", {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',

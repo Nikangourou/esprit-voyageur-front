@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 export default function CreateGame({ setThreadKey, setGameId }) {
 
     const createGame = () => {
-        fetch('http://10.137.98.25:5001/gamev2/post/create', {
+        fetch('https://espritvoyageur-production.up.railway.app/gamev2/post/create', {
             method: 'POST',
         })
             .then(response => response.json())
