@@ -145,7 +145,8 @@ export default function Voyageur() {
         console.log('Get:', data,data[0][0].text.value);
         setTranscription(transcription => [...transcription, data[0][0].text.value])
           if(generateImages){
-              const promptsTmp = [...prompts, data[0][0].text.value]
+              const extractVal = extractTextBetweenQuotes( data[0][0].text.value);
+              const promptsTmp = [...prompts, extractVal ? extractVal : data[0][0].text.value]
               setPrompts(promptsTmp)
               console.log(data[0][0].text.value)
           }
