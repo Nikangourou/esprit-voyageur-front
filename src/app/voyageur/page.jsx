@@ -159,7 +159,7 @@ export default function Voyageur() {
   const sendTextTranscription = () => {
 
     // fetch("http://localhost:5001/gamev2/post/send_transcription", {
-    fetch("https://espritvoyageur-production.up.railway.app:5001/gamev2/post/send_transcription", {
+    fetch("https://espritvoyageur-production.up.railway.app/gamev2/post/send_transcription", {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',
@@ -320,10 +320,11 @@ export default function Voyageur() {
           </li>
         <li>
           <h3>Record</h3>
-          <RecordingComponent onEnd={onSpeechEnd} />
             <li>
                 <button onClick={sendTextTranscription}>Send Text Transcription </button>
             </li>
+          <RecordingComponent onEnd={onSpeechEnd} />
+
         </li>
       </ul>
       <ul className={styles.transcription}>
