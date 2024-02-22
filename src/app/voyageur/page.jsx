@@ -3,46 +3,68 @@
 import { useEffect, useState } from "react";
 import RecordingComponent from "../components/recordingComponent/recordingComponent";
 import GetImg from "../components/getImg/getImg";
-import FullScreen from "../components/fullScreen/fullScreen";
 import * as utils from "../utils/micro";
 import styles from "./page.module.scss";
 
 export default function Voyageur() {
-  const [threadKey, setThreadKey] = useState(null)
   const [base64, setBase64] = useState(null)
   const [prompt, setPrompt] = useState("")
-  const [gameId, setGameId] = useState(null)
   const [transcription, setTranscription] = useState([])
   const [ready, setReady] = useState(false)
-    const [generateImages,setGenerateImages] = useState(false)
-    const [prompts, setPrompts] = useState([])
+  const [generateImages, setGenerateImages] = useState(false)
+  const [prompts, setPrompts] = useState([])
+  
+  // get threadKey from the URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const threadKey = urlParams.get('threadKey');
+  
+  useEffect(() => {
+    if (threadKey) {
+      fetch("http://localhost:5001/gamev2/update/conversation", {
+        // fetch("https://espritvoyageur-production.up.railway.app/gamev2/update/conversation", {
+        method: "PUT",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          threadKey: threadKey,
+        })
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Update');
+          console.log(data);
+
+          let dataTmp = data;
+
+          const interval = setInterval(() => {
+            fetch(`http://localhost:5001/run/get/${data.id}/${threadKey}`, {
+              // fetch(`https://espritvoyageur-production.up.railway.app/run/get/${data.id}/${threadKey}`, {
+              method: "GET",
+              headers: {
+                'Content-Type': 'application/json',
+              }
+            })
+              .then(response => response.json())
+              .then(data2 => {
+                console.log("pending...")
+                if (data2.status === "completed") {
+                  console.log('Completed');
+                  dataTmp = data2;
+                  setReady(true)
+                  clearInterval(interval);
+                }
+              });
+          }, 1000);
+        })
+    }
+  }, [])
 
   useEffect(() => {
-    if (!gameId) {
-        setReady(false)
-      // fetch('https://espritvoyageur-production.up.railway.app/gamev2/post/create', {
-    fetch('http://localhost:5001/gamev2/post/create', {
-      method: 'POST',
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Create Game');
-        console.log(data);
-        setThreadKey(data.thread_id.key)
-        setGameId(data._id)
-      });
-    };
-    
-  }, [gameId])
-
-
-
-
-  useEffect(() => {
-    if(base64){
+    if (base64) {
       console.log('Sending Answer !!!!!!');
       fetch("http://localhost:5001/gamev2/update/send_answer", {
-      // fetch("https://espritvoyageur-production.up.railway.app/gamev2/update/send_answer", {
+        // fetch("https://espritvoyageur-production.up.railway.app/gamev2/update/send_answer", {
         method: "PUT",
         headers: {
           'Content-Type': 'application/json',
@@ -64,24 +86,21 @@ export default function Voyageur() {
           console.error('Error:', error);
         });
     }
-  },[base64])
+  }, [base64])
 
-    useEffect(() => {
-        if(ready && threadKey){
-            console.log("plop")
-            getAnswer()
-        }
-    },[ready])
-
-
-
-
-    function base64Reformat(base64) {
-        const to_remove = "data:audio/webm;codecs=opus;base64,";
-        return utils.arrayBufferToBase64(base64).replace(to_remove, "");
+  useEffect(() => {
+    if (ready && threadKey) {
+      console.log("plop")
+      getAnswer()
     }
+  }, [ready])
 
-    const onSpeechEnd = (audio) => {
+  function base64Reformat(base64) {
+    const to_remove = "data:audio/webm;codecs=opus;base64,";
+    return utils.arrayBufferToBase64(base64).replace(to_remove, "");
+  }
+
+  const onSpeechEnd = (audio) => {
     const reader = new FileReader();
     reader.readAsArrayBuffer(audio);
     reader.onload = () => {
@@ -92,7 +111,7 @@ export default function Voyageur() {
 
   const updateConversation = () => {
     fetch("http://localhost:5001/gamev2/update/conversation", {
-    // fetch("https://espritvoyageur-production.up.railway.app/gamev2/update/conversation", {
+      // fetch("https://espritvoyageur-production.up.railway.app/gamev2/update/conversation", {
       method: "PUT",
       headers: {
         'Content-Type': 'application/json',
@@ -110,7 +129,7 @@ export default function Voyageur() {
 
         const interval = setInterval(() => {
           fetch(`http://localhost:5001/run/get/${data.id}/${threadKey}`, {
-          // fetch(`https://espritvoyageur-production.up.railway.app/run/get/${data.id}/${threadKey}`, {
+            // fetch(`https://espritvoyageur-production.up.railway.app/run/get/${data.id}/${threadKey}`, {
             method: "GET",
             headers: {
               'Content-Type': 'application/json',
@@ -132,9 +151,9 @@ export default function Voyageur() {
 
 
 
-    const getAnswer = () => {
+  const getAnswer = () => {
     fetch(`http://localhost:5001/run/answers/${threadKey}`, {
-    // fetch(`https://espritvoyageur-production.up.railway.app/run/answers/${threadKey}`, {
+      // fetch(`https://espritvoyageur-production.up.railway.app/run/answers/${threadKey}`, {
       method: "GET",
       headers: {
         'Content-Type': 'application/json',
@@ -142,13 +161,13 @@ export default function Voyageur() {
     })
       .then(response => response.json())
       .then(data => {
-        console.log('Get:', data,data[0][0].text.value);
+        console.log('Get:', data, data[0][0].text.value);
         setTranscription(transcription => [...transcription, data[0][0].text.value])
-          if(generateImages){
-              const promptsTmp = [...prompts, data[0][0].text.value]
-              setPrompts(promptsTmp)
-              console.log(data[0][0].text.value)
-          }
+        if (generateImages) {
+          const promptsTmp = [...prompts, data[0][0].text.value]
+          setPrompts(promptsTmp)
+          console.log(data[0][0].text.value)
+        }
       })
       .catch(error => {
         console.error('Error:', error);
@@ -158,7 +177,7 @@ export default function Voyageur() {
   const sendTextTranscription = () => {
 
     fetch("http://localhost:5001/gamev2/post/send_transcription", {
-    // fetch("https://espritvoyageur-production.up.railway.app:5001/gamev2/post/send_transcription", {
+      // fetch("https://espritvoyageur-production.up.railway.app:5001/gamev2/post/send_transcription", {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',
@@ -178,7 +197,7 @@ export default function Voyageur() {
         setReady(false)
         const interval = setInterval(() => {
           fetch(`http://localhost:5001/run/get/${data.id}/${threadKey}`, {
-          // fetch(`https://espritvoyageur-production.up.railway.app/run/get/${data.id}/${threadKey}`, {
+            // fetch(`https://espritvoyageur-production.up.railway.app/run/get/${data.id}/${threadKey}`, {
             method: "GET",
             headers: {
               'Content-Type': 'application/json',
@@ -200,107 +219,106 @@ export default function Voyageur() {
 
   const generate_prompt_simple = () => {
     fetch("http://localhost:5001/gamev2/post/generate_prompt_simple", {
-    // fetch("https://espritvoyageur-production.up.railway.app/gamev2/post/generate_prompt_simple", {
+      // fetch("https://espritvoyageur-production.up.railway.app/gamev2/post/generate_prompt_simple", {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         threadKey: threadKey,
-          prompt: prompt
+        prompt: prompt
       })
     })
       .then(response => response.json())
       .then(data => {
         console.log('Generate prompt');
         console.log(data);
-          let dataTmp = data;
+        let dataTmp = data;
 
-          setReady(false)
-          const interval = setInterval(() => {
-              fetch(`http://localhost:5001/run/get/${data.id}/${threadKey}`, {
-                  method: "GET",
-                  headers: {
-                      'Content-Type': 'application/json',
-                  }
-              })
-                  .then(response => response.json())
-                  .then(data2 => {
-                      console.log("pending...")
-                      if (data2.status === "completed") {
-                          console.log('Completed');
-                          dataTmp = data2;
-                          setReady(true)
-                          setGenerateImages(true)
-                          clearInterval(interval);
-                      }
-                  });
-          }, 1000);
+        setReady(false)
+        const interval = setInterval(() => {
+          fetch(`http://localhost:5001/run/get/${data.id}/${threadKey}`, {
+            method: "GET",
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          })
+            .then(response => response.json())
+            .then(data2 => {
+              console.log("pending...")
+              if (data2.status === "completed") {
+                console.log('Completed');
+                dataTmp = data2;
+                setReady(true)
+                setGenerateImages(true)
+                clearInterval(interval);
+              }
+            });
+        }, 1000);
       })
   }
 
-    const generate_prompt_alt = () => {
-        fetch("http://localhost:5001/gamev2/post/generate_prompt_alt", {
-        // fetch("https://espritvoyageur-production.up.railway.app/gamev2/post/generate_prompt_alt", {
-            method: "POST",
+  const generate_prompt_alt = () => {
+    fetch("http://localhost:5001/gamev2/post/generate_prompt_alt", {
+      // fetch("https://espritvoyageur-production.up.railway.app/gamev2/post/generate_prompt_alt", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        threadKey: threadKey,
+        prompt: prompt
+
+      })
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Generate prompt');
+        console.log(data);
+        let dataTmp = data;
+
+        setReady(false)
+        const interval = setInterval(() => {
+          fetch(`http://localhost:5001/run/get/${data.id}/${threadKey}`, {
+            // fetch(`https://espritvoyageur-production.up.railway.app/run/get/${data.id}/${threadKey}`, {
+            method: "GET",
             headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                threadKey: threadKey,
-                prompt: prompt
-
-            })
-        })
+              'Content-Type': 'application/json',
+            }
+          })
             .then(response => response.json())
-            .then(data => {
-                console.log('Generate prompt');
-                console.log(data);
-                let dataTmp = data;
+            .then(data2 => {
+              console.log("pending...")
+              if (data2.status === "completed") {
+                console.log('Completed');
+                dataTmp = data2;
+                setReady(true)
+                setGenerateImages(true)
+                clearInterval(interval);
+              }
+            });
+        }, 1000);
+      })
+  }
 
-                setReady(false)
-                const interval = setInterval(() => {
-                    fetch(`http://localhost:5001/run/get/${data.id}/${threadKey}`, {
-                    // fetch(`https://espritvoyageur-production.up.railway.app/run/get/${data.id}/${threadKey}`, {
-                        method: "GET",
-                        headers: {
-                            'Content-Type': 'application/json',
-                        }
-                    })
-                        .then(response => response.json())
-                        .then(data2 => {
-                            console.log("pending...")
-                            if (data2.status === "completed") {
-                                console.log('Completed');
-                                dataTmp = data2;
-                                setReady(true)
-                                setGenerateImages(true)
-                                clearInterval(interval);
-                            }
-                        });
-                }, 1000);
-            })
+  function extractTextBetweenQuotes(text) {
+    const regex = /"([^"]*)"/;
+    const match = text.match(regex);
+
+    if (match && match.length > 1) {
+      return match[1];
+    } else {
+      return null;
     }
-
-    function extractTextBetweenQuotes(text) {
-        const regex = /"([^"]*)"/;
-        const match = text.match(regex);
-
-        if (match && match.length > 1) {
-            return match[1];
-        } else {
-            return null;
-        }
-    }
+  }
 
 
-    // generate prompt
+  // generate prompt
   // get 3 prompts
   // generate image for each prompt
 
   return (
     <main>
-      <FullScreen />
       <h1>Voyageur</h1>
       <ul>
         <li>
@@ -313,15 +331,15 @@ export default function Voyageur() {
         <li>
           <button onClick={generate_prompt_simple}>Generate Prompt Simple</button>
         </li>
-          <li>
-              <button onClick={generate_prompt_alt}>Generate Prompt alternate</button>
-          </li>
+        <li>
+          <button onClick={generate_prompt_alt}>Generate Prompt alternate</button>
+        </li>
         <li>
           <h3>Record</h3>
           <RecordingComponent onEnd={onSpeechEnd} />
-            <li>
-                <button onClick={sendTextTranscription}>Send Text Transcription </button>
-            </li>
+        </li>
+        <li>
+          <button onClick={sendTextTranscription}>Send Text Transcription </button>
         </li>
       </ul>
       <ul className={styles.transcription}>
@@ -331,9 +349,9 @@ export default function Voyageur() {
           ))
         }
       </ul>
-        {prompts.map((promptSorted) =>
-            <GetImg prompt={promptSorted} gameId={gameId} />
-        )}
+      {/* {prompts.map((promptSorted) =>
+        <GetImg prompt={promptSorted} gameId={gameId} />
+      )} */}
     </main>
   );
 }

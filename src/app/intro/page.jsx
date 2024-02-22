@@ -3,17 +3,37 @@
 import Image from "next/image";
 import styles from "./page.module.scss";
 import Tuto1 from "../components/tuto/tuto1";
-import Tuto2 from "../components/tuto/tuto2";
+import QrCode from "../components/qrCode/qrCode";
 import Joueurs from "../components/joueurs/joueurs";
-import Voyageur from "../components/voyageur/voyageur";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
 
 export default function Intro() {
 
   const [currentPart, setCurrentPage] = useState(0);
+  const [threadKey, setThreadKey] = useState(null)
+  const [gameId, setGameId] = useState()
+
+  useEffect(() => {
+    if (!gameId) {
+      // setReady(false)
+      // fetch('https://espritvoyageur-production.up.railway.app/gamev2/post/create', {
+      fetch('http://localhost:5001/gamev2/post/create', {
+        method: 'POST',
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Create Game');
+          console.log(data);
+          setThreadKey(data.thread_id.key)
+          setGameId(data._id)
+        });
+    };
+
+  }, [gameId])
 
   const nextPage = () => {
-    if (currentPart === 3) {
+    if (currentPart === 2) {
       return;
     }
     setCurrentPage(currentPart + 1);
@@ -26,24 +46,28 @@ export default function Intro() {
     setCurrentPage(currentPart - 1);
   }
 
-  
+
 
   return (
     <main className={styles.main}>
-      <p onClick={() => nextPage()}>next</p>
-      <p onClick={() => previousPage()}>previous</p>
-      {
-        currentPart === 0 && <Tuto1 />
-      }
-      {
-        currentPart === 1 && <Joueurs />
-      }
-      {
-        currentPart === 2 && <Voyageur />
-      }
-      {
-        currentPart === 3 && <Tuto2 />
-      }
+      <div className={styles.container}>
+        {
+          currentPart === 0 && <Tuto1 />
+        }
+        {
+          currentPart === 1 && <Joueurs />
+        }
+        {
+          currentPart === 2 && <QrCode threadKey={threadKey} />
+        }
+        <div className={styles.containerBtn}>
+          <p onClick={() => previousPage()}>&lt;=</p>
+          <p onClick={() => nextPage()}>=&gt;</p>
+        </div>
+        {
+          currentPart === 2 && <a className={styles.btnPlay} href="/game">Play</a>
+        }
+      </div>
     </main>
   );
 }
