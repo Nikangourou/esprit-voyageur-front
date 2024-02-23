@@ -1,0 +1,13 @@
+.message{
+    border-radius: 25px;
+    max-width: 200px;
+    display: block;
+    padding: 10px 20px;
+    border: 1px solid black;
+
+    &.send{
+        background-color: black;
+        color: white;
+        align-self: flex-end;
+    }
+}

@@ -5,6 +5,7 @@ import RecordingComponent from "../components/recordingComponent/recordingCompon
 import GetImg from "../components/getImg/getImg";
 import * as utils from "../utils/micro";
 import styles from "./page.module.scss";
+import Chat from "../components/chat/chat";
 
 export default function Voyageur() {
   const [base64, setBase64] = useState(null)
@@ -17,7 +18,7 @@ export default function Voyageur() {
   // get threadKey from the URL
   const urlParams = new URLSearchParams(window.location.search);
   const threadKey = urlParams.get('threadKey');
-  
+
   useEffect(() => {
     if (threadKey) {
       fetch("http://localhost:5001/gamev2/update/conversation", {
@@ -88,12 +89,12 @@ export default function Voyageur() {
     }
   }, [base64])
 
-  useEffect(() => {
-    if (ready && threadKey) {
-      console.log("plop")
-      getAnswer()
-    }
-  }, [ready])
+  // useEffect(() => {
+  //   if (ready && threadKey) {
+  //     console.log("plop")
+  //     getAnswer()
+  //   }
+  // }, [ready])
 
   function base64Reformat(base64) {
     const to_remove = "data:audio/webm;codecs=opus;base64,";
@@ -342,13 +343,7 @@ export default function Voyageur() {
           <button onClick={sendTextTranscription}>Send Text Transcription </button>
         </li>
       </ul>
-      <ul className={styles.transcription}>
-        {
-          transcription.map((item, index) => (
-            <li key={index}>{item}</li>
-          ))
-        }
-      </ul>
+      <Chat messages={transcription} />
       {/* {prompts.map((promptSorted) =>
         <GetImg prompt={promptSorted} gameId={gameId} />
       )} */}
