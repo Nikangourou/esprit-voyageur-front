@@ -320,9 +320,7 @@ export default function Voyageur() {
           </li>
         <li>
           <h3>Record</h3>
-            <li>
-                <button onClick={sendTextTranscription}>Send Text Transcription </button>
-            </li>
+            <button onClick={sendTextTranscription}>Send Text Transcription </button>
           <RecordingComponent onEnd={onSpeechEnd} />
 
         </li>
