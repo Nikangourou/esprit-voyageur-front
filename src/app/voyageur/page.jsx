@@ -3,12 +3,10 @@
 import { useEffect, useState } from "react";
 import RecordingComponent from "../components/recordingComponent/recordingComponent";
 import GetImg from "../components/getImg/getImg";
-import * as utils from "../utils/micro";
 import styles from "./page.module.scss";
 import Chat from "../components/chat/chat";
 
 export default function Voyageur() {
-  const [base64, setBase64] = useState(null)
   const [prompt, setPrompt] = useState("")
   const [transcription, setTranscription] = useState([])
   const [ready, setReady] = useState(false)
@@ -16,6 +14,9 @@ export default function Voyageur() {
   const [prompts, setPrompts] = useState([])
   
   // get threadKey from the URL
+  if (typeof window === 'undefined') {
+    return <h1>Server side rendering</h1>
+  }
   const urlParams = new URLSearchParams(window.location.search);
   const threadKey = urlParams.get('threadKey');
 
@@ -61,54 +62,12 @@ export default function Voyageur() {
     }
   }, [])
 
-  useEffect(() => {
-    if (base64) {
-      console.log('Sending Answer !!!!!!');
-      fetch("http://localhost:5001/gamev2/update/send_answer", {
-        // fetch("https://espritvoyageur-production.up.railway.app/gamev2/update/send_answer", {
-        method: "PUT",
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          threadKey: threadKey,
-          audioData: base64,
-        })
-      })
-        .then(response => response.json())
-        .then(data => {
-          console.log('Send Answer');
-          console.log(data);
-          setTranscription(transcription => [...transcription, data.transcription])
-          setPrompt(data.transcription)
-
-
-        }).catch(error => {
-          console.error('Error:', error);
-        });
-    }
-  }, [base64])
-
   // useEffect(() => {
   //   if (ready && threadKey) {
   //     console.log("plop")
   //     getAnswer()
   //   }
   // }, [ready])
-
-  function base64Reformat(base64) {
-    const to_remove = "data:audio/webm;codecs=opus;base64,";
-    return utils.arrayBufferToBase64(base64).replace(to_remove, "");
-  }
-
-  const onSpeechEnd = (audio) => {
-    const reader = new FileReader();
-    reader.readAsArrayBuffer(audio);
-    reader.onload = () => {
-      const buffer = base64Reformat(reader.result);
-      setBase64(buffer)
-    };
-  }
 
   const updateConversation = () => {
     fetch("http://localhost:5001/gamev2/update/conversation", {
@@ -313,7 +272,6 @@ export default function Voyageur() {
     }
   }
 
-
   // generate prompt
   // get 3 prompts
   // generate image for each prompt
@@ -328,16 +286,11 @@ export default function Voyageur() {
         {/*<li>*/}
         {/*  <button disabled={!ready} onClick={getAnswer}>Get Answer</button>*/}
         {/*</li>*/}
-
         <li>
           <button onClick={generate_prompt_simple}>Generate Prompt Simple</button>
         </li>
         <li>
           <button onClick={generate_prompt_alt}>Generate Prompt alternate</button>
-        </li>
-        <li>
-          <h3>Record</h3>
-          <RecordingComponent onEnd={onSpeechEnd} />
         </li>
         <li>
           <button onClick={sendTextTranscription}>Send Text Transcription </button>

@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import styles from "./chat.module.scss";
 import Message from "./message/message";
+import RecordingComponent from "../recordingComponent/recordingComponent";
+import * as utils from "../../utils/micro";
 
 const messagesD = [
     {
@@ -69,16 +71,63 @@ const messagesD = [
 
 export default function Chat({ messages }) {
 
+    const [input, setInput] = useState("");
+    const [base64, setBase64] = useState(null)
+
+    // get threadKey from the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const threadKey = urlParams.get('threadKey');
+
+    useEffect(() => {
+        if (base64) {
+            fetch("http://localhost:5001/gamev2/update/send_answer", {
+                // fetch("https://espritvoyageur-production.up.railway.app/gamev2/update/send_answer", {
+                method: "PUT",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    threadKey: threadKey,
+                    audioData: base64,
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Send Audio');
+                    console.log(data);
+                    setInput(data.transcription)
+                }).catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+    }, [base64])
+
+    function base64Reformat(base64) {
+        const to_remove = "data:audio/webm;codecs=opus;base64,";
+        return utils.arrayBufferToBase64(base64).replace(to_remove, "");
+    }
+
+    const onSpeechEnd = (audio) => {
+        const reader = new FileReader();
+        reader.readAsArrayBuffer(audio);
+        reader.onload = () => {
+            const buffer = base64Reformat(reader.result);
+            setBase64(buffer)
+        };
+    }
+
     return (
         <div className={styles.chat}>
-            {
-                messagesD.map((message) => {
-                    return <Message key={message.id} message={message} />
-                })
-            }
-            {/* Champ text */}
-            <div className={styles.input}>
-                <input type="text" placeholder="Ecrivez un message" />
+            <div className={styles.containerMessages}>
+                {
+                    messages.map((message) => {
+                        return <Message key={message.id} message={message} />
+                    })
+                }
+            </div>
+            <div className={styles.containerInput}>
+                <input type="text" value={input} onChange={(e) => setInput(e.target.value)} placeholder="Ecrivez votre message" />
+                <RecordingComponent onEnd={onSpeechEnd} />
                 <button>Envoyer</button>
             </div>
         </div>
