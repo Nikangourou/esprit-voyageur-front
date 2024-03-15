@@ -18,13 +18,14 @@ export default function Chat() {
     const [input, setInput] = useState("");
     const [base64, setBase64] = useState(null)
     const [messages, setMessages] = useState([firstMessage])
-    const [ready, setReady] = useState(false)
-    const [generateImages, setGenerateImages] = useState(false)
- 
 
+    if (typeof window === 'undefined') {
+        return <h1>Server side rendering</h1>
+    }
     // get threadKey from the URL
     const urlParams = new URLSearchParams(window.location.search);
     const threadKey = urlParams.get('threadKey');
+    const gameId = urlParams.get('gameId');
 
     useEffect(() => {
         if (base64) {
@@ -64,13 +65,22 @@ export default function Chat() {
         };
     }
 
+    const addMessage = (message) => {
+
+        setMessages((prev) => {
+            const tmp = [...prev];
+            tmp.push(message);
+            return tmp;
+        })
+    }
+
+
+
     const subMessage = () => {
 
         if (input === "") {
             return;
         }
-
-        console.log(messages.length)
 
         if (messages.length === 1) {
             updateConversation();
@@ -78,7 +88,13 @@ export default function Chat() {
             sendTextTranscription();
         }
 
-        setMessages([...messages, { id: uuidv4(), content: input, send: true }]);
+        const msg = {
+            id: uuidv4(),
+            content: input,
+            send: true,
+            isImg: false,
+        }
+        addMessage(msg);
         setInput("");
 
     }
@@ -103,7 +119,6 @@ export default function Chat() {
 
                 let dataTmp = data;
 
-                setReady(false)
                 const interval = setInterval(() => {
                     fetch(`http://localhost:5001/run/get/${data.id}/${threadKey}`, {
                         // fetch(`https://espritvoyageur-production.up.railway.app/run/get/${data.id}/${threadKey}`, {
@@ -118,7 +133,6 @@ export default function Chat() {
                             if (data2.status === "completed") {
                                 console.log('Completed');
                                 dataTmp = data2;
-                                setReady(true)
                                 getAnswer()
                                 clearInterval(interval);
                             }
@@ -160,7 +174,6 @@ export default function Chat() {
                             if (data2.status === "completed") {
                                 console.log('Completed');
                                 dataTmp = data2;
-                                setReady(true)
                                 getAnswer()
                                 clearInterval(interval);
                             }
@@ -169,7 +182,7 @@ export default function Chat() {
             })
     }
 
-    const getAnswer = () => {
+    const getAnswer = (isImg = false) => {
         fetch(`http://localhost:5001/run/answers/${threadKey}`, {
             // fetch(`https://espritvoyageur-production.up.railway.app/run/answers/${threadKey}`, {
             method: "GET",
@@ -179,28 +192,112 @@ export default function Chat() {
         })
             .then(response => response.json())
             .then(data => {
-                // console.log('Get:', data, data[0][0].text.value);
+
+                let content = data[0][0].text.value;
+
                 let msg = {
                     id: uuidv4(),
-                    content: data[0][0].text.value,
+                    content: content,
                     send: false,
+                    isImg: isImg
                 }
-                setMessages((prev) => {
-                    const tmp = [...prev];
-                    tmp.push(msg);
-                    console.log(tmp)
-                    return tmp;
-                })
 
-                if (generateImages) {
-                    const promptsTmp = [...prompts, data[0][0].text.value]
-                    setPrompts(promptsTmp)
-                    console.log(data[0][0].text.value)
+                if (content.includes("FIN_CONVERSATION")) {
+                    console.log("FIN_CONVERSATION")
+                    content = content.replace("FIN_CONVERSATION", "")
+                    msg.content = content;
+
+                    addMessage(msg);
+
+                    generate_prompt_simple()
+                    generate_prompt_alt()
+
+                } else {
+                    addMessage(msg);
                 }
+
             })
             .catch(error => {
                 console.error('Error:', error);
             });
+    }
+
+    const generate_prompt_simple = () => {
+        fetch("http://localhost:5001/gamev2/post/generate_prompt_simple", {
+            // fetch("https://espritvoyageur-production.up.railway.app/gamev2/post/generate_prompt_simple", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                threadKey: threadKey,
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Generate prompt');
+                let dataTmp = data;
+
+                const interval = setInterval(() => {
+                    fetch(`http://localhost:5001/run/get/${data.id}/${threadKey}`, {
+                        method: "GET",
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    })
+                        .then(response => response.json())
+                        .then(data2 => {
+                            console.log("pending...")
+                            if (data2.status === "completed") {
+                                console.log('Completed');
+                                dataTmp = data2;
+                                getAnswer(true)
+                                clearInterval(interval);
+                            }
+                        });
+                }, 1000);
+            })
+    }
+
+    const generate_prompt_alt = () => {
+        fetch("http://localhost:5001/gamev2/post/generate_prompt_alt", {
+            // fetch("https://espritvoyageur-production.up.railway.app/gamev2/post/generate_prompt_alt", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                threadKey: threadKey,
+                prompt: prompt
+
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Generate prompt');
+                console.log(data);
+                let dataTmp = data;
+
+                const interval = setInterval(() => {
+                    fetch(`http://localhost:5001/run/get/${data.id}/${threadKey}`, {
+                        // fetch(`https://espritvoyageur-production.up.railway.app/run/get/${data.id}/${threadKey}`, {
+                        method: "GET",
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    })
+                        .then(response => response.json())
+                        .then(data2 => {
+                            console.log("pending...")
+                            if (data2.status === "completed") {
+                                console.log('Completed');
+                                dataTmp = data2;
+                                getAnswer(true)
+                                clearInterval(interval);
+                            }
+                        });
+                }, 1000);
+            })
     }
 
     return (
@@ -208,7 +305,7 @@ export default function Chat() {
             <div className={styles.containerMessages}>
                 {
                     messages.map((message) => {
-                        return <Message key={message.id} message={message} />
+                        return <Message key={message.id} message={message} gameId={gameId} />
                     })
                 }
             </div>

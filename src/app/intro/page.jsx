@@ -63,7 +63,7 @@ export default function Intro() {
           currentPart === 1 && <Joueurs />
         }
         {
-          currentPart === 2 && <QrCode threadKey={threadKey} />
+          currentPart === 2 && <QrCode threadKey={threadKey} gameId={gameId} />
         }
         <div className={styles.containerBtn}>
           <p onClick={() => previousPage()}>&lt;=</p>

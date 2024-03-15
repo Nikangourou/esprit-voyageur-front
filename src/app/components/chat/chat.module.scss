@@ -5,10 +5,13 @@
     .containerMessages {
         display: flex;
         flex-direction: column;
-        justify-content: flex-end;
         position: relative;
         height: 60vh;
         overflow-y: scroll;
+
+        & > :first-child {
+            margin-top: auto;
+        }
     }
 
     .containerInput {
