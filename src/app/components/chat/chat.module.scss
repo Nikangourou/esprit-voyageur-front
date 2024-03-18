@@ -1,12 +1,13 @@
 .chat {
     max-width: 600px;
     margin: auto;
+    height: 100vh;
 
     .containerMessages {
         display: flex;
         flex-direction: column;
         position: relative;
-        height: 60vh;
+        height: calc(100% - 200px);
         overflow-y: scroll;
 
         & > :first-child {
@@ -16,6 +17,7 @@
 
     .containerInput {
         margin-top: 50px;
+        margin-bottom: 50px;
         display: flex;
         justify-content: space-between;
 

@@ -22,7 +22,6 @@ export default function Voyageur() {
 
   return (
     <main>
-      <h1>Voyageur</h1>
       <Chat />
     </main>
   );

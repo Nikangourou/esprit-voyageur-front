@@ -6,6 +6,7 @@ import Message from "./message/message";
 import RecordingComponent from "../recordingComponent/recordingComponent";
 import * as utils from "../../utils/micro";
 import { v4 as uuidv4 } from 'uuid';
+import { pending } from '../../utils/utils';
 
 const firstMessage = {
     id: uuidv4(),
@@ -13,24 +14,25 @@ const firstMessage = {
     send: false,
 };
 
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
 export default function Chat() {
 
     const [input, setInput] = useState("");
     const [base64, setBase64] = useState(null)
     const [messages, setMessages] = useState([firstMessage])
+    const [threadKey, setThreadKey] = useState(null);
+    const [gameId, setGameId] = useState(null);
 
-    if (typeof window === 'undefined') {
-        return <h1>Server side rendering</h1>
-    }
-    // get threadKey from the URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const threadKey = urlParams.get('threadKey');
-    const gameId = urlParams.get('gameId');
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        setThreadKey(urlParams.get('threadKey'));
+        setGameId(urlParams.get('gameId'));
+    }, []);
 
     useEffect(() => {
         if (base64) {
-            fetch("http://localhost:5001/gamev2/update/send_answer", {
-                // fetch("https://espritvoyageur-production.up.railway.app/gamev2/update/send_answer", {
+            fetch(`${apiUrl}/gamev2/update/send_answer`, {
                 method: "PUT",
                 headers: {
                     'Content-Type': 'application/json',
@@ -101,8 +103,7 @@ export default function Chat() {
 
     const sendTextTranscription = () => {
 
-        fetch("http://localhost:5001/gamev2/post/send_transcription", {
-            // fetch("https://espritvoyageur-production.up.railway.app:5001/gamev2/post/send_transcription", {
+        fetch(`${apiUrl}/gamev2/post/send_transcription`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -117,33 +118,14 @@ export default function Chat() {
                 console.log('Send text transcription');
                 console.log(data);
 
-                let dataTmp = data;
-
-                const interval = setInterval(() => {
-                    fetch(`http://localhost:5001/run/get/${data.id}/${threadKey}`, {
-                        // fetch(`https://espritvoyageur-production.up.railway.app/run/get/${data.id}/${threadKey}`, {
-                        method: "GET",
-                        headers: {
-                            'Content-Type': 'application/json',
-                        }
-                    })
-                        .then(response => response.json())
-                        .then(data2 => {
-                            console.log("pending send text transcription...")
-                            if (data2.status === "completed") {
-                                console.log('Completed');
-                                dataTmp = data2;
-                                getAnswer()
-                                clearInterval(interval);
-                            }
-                        });
-                }, 1000);
+                pending(apiUrl, `/run/get/${data.id}`, threadKey, (data) => {
+                    getAnswer()
+                });
             })
     }
 
     const updateConversation = () => {
-        fetch("http://localhost:5001/gamev2/update/conversation", {
-            // fetch("https://espritvoyageur-production.up.railway.app/gamev2/update/conversation", {
+        fetch(`${apiUrl}/gamev2/update/conversation`, {
             method: "PUT",
             headers: {
                 'Content-Type': 'application/json',
@@ -158,33 +140,14 @@ export default function Chat() {
                 console.log('Update conversation');
                 console.log(data);
 
-                let dataTmp = data;
-
-                const interval = setInterval(() => {
-                    fetch(`http://localhost:5001/run/get/${data.id}/${threadKey}`, {
-                        // fetch(`https://espritvoyageur-production.up.railway.app/run/get/${data.id}/${threadKey}`, {
-                        method: "GET",
-                        headers: {
-                            'Content-Type': 'application/json',
-                        }
-                    })
-                        .then(response => response.json())
-                        .then(data2 => {
-                            console.log("pending update conversation...")
-                            if (data2.status === "completed") {
-                                console.log('Completed');
-                                dataTmp = data2;
-                                getAnswer()
-                                clearInterval(interval);
-                            }
-                        });
-                }, 1000);
+                pending(apiUrl, `/run/get/${data.id}`, threadKey, (data) => {
+                    getAnswer()
+                });
             })
     }
 
     const getAnswer = (isImg = false) => {
-        fetch(`http://localhost:5001/run/answers/${threadKey}`, {
-            // fetch(`https://espritvoyageur-production.up.railway.app/run/answers/${threadKey}`, {
+        fetch(`${apiUrl}/run/answers/${threadKey}`, {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json',
@@ -193,27 +156,30 @@ export default function Chat() {
             .then(response => response.json())
             .then(data => {
 
-                let content = data[0][0].text.value;
+                if (data && data[0] && data[0][0]) {
 
-                let msg = {
-                    id: uuidv4(),
-                    content: content,
-                    send: false,
-                    isImg: isImg
-                }
+                    let content = data[0][0].text.value;
 
-                if (content.includes("FIN_CONVERSATION")) {
-                    console.log("FIN_CONVERSATION")
-                    content = content.replace("FIN_CONVERSATION", "")
-                    msg.content = content;
+                    let msg = {
+                        id: uuidv4(),
+                        content: content,
+                        send: false,
+                        isImg: isImg
+                    }
 
-                    addMessage(msg);
+                    if (content.includes("FIN_CONVERSATION")) {
+                        console.log("FIN_CONVERSATION")
+                        content = content.replace("FIN_CONVERSATION", "")
+                        msg.content = content;
 
-                    generate_prompt_simple()
-                    generate_prompt_alt()
+                        addMessage(msg);
 
-                } else {
-                    addMessage(msg);
+                        generate_prompt_simple()
+                        generate_prompt_alt()
+
+                    } else {
+                        addMessage(msg);
+                    }
                 }
 
             })
@@ -223,8 +189,7 @@ export default function Chat() {
     }
 
     const generate_prompt_simple = () => {
-        fetch("http://localhost:5001/gamev2/post/generate_prompt_simple", {
-            // fetch("https://espritvoyageur-production.up.railway.app/gamev2/post/generate_prompt_simple", {
+        fetch(`${apiUrl}/gamev2/post/generate_prompt_simple`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -236,69 +201,34 @@ export default function Chat() {
             .then(response => response.json())
             .then(data => {
                 console.log('Generate prompt');
-                let dataTmp = data;
 
-                const interval = setInterval(() => {
-                    fetch(`http://localhost:5001/run/get/${data.id}/${threadKey}`, {
-                        method: "GET",
-                        headers: {
-                            'Content-Type': 'application/json',
-                        }
-                    })
-                        .then(response => response.json())
-                        .then(data2 => {
-                            console.log("pending...")
-                            if (data2.status === "completed") {
-                                console.log('Completed');
-                                dataTmp = data2;
-                                getAnswer(true)
-                                clearInterval(interval);
-                            }
-                        });
-                }, 1000);
+                pending(apiUrl, `/run/get/${data.id}`, threadKey, (data) => {
+                    getAnswer(true)
+                });
             })
     }
 
     const generate_prompt_alt = () => {
-        fetch("http://localhost:5001/gamev2/post/generate_prompt_alt", {
-            // fetch("https://espritvoyageur-production.up.railway.app/gamev2/post/generate_prompt_alt", {
+        fetch(`${apiUrl}/gamev2/post/generate_prompt_alt`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
                 threadKey: threadKey,
-                prompt: prompt
-
             })
         })
             .then(response => response.json())
             .then(data => {
                 console.log('Generate prompt');
                 console.log(data);
-                let dataTmp = data;
 
-                const interval = setInterval(() => {
-                    fetch(`http://localhost:5001/run/get/${data.id}/${threadKey}`, {
-                        // fetch(`https://espritvoyageur-production.up.railway.app/run/get/${data.id}/${threadKey}`, {
-                        method: "GET",
-                        headers: {
-                            'Content-Type': 'application/json',
-                        }
-                    })
-                        .then(response => response.json())
-                        .then(data2 => {
-                            console.log("pending...")
-                            if (data2.status === "completed") {
-                                console.log('Completed');
-                                dataTmp = data2;
-                                getAnswer(true)
-                                clearInterval(interval);
-                            }
-                        });
-                }, 1000);
+                pending(apiUrl, `/run/get/${data.id}`, threadKey, (data) => {
+                    getAnswer(true)
+                });
             })
     }
+
 
     return (
         <div className={styles.chat}>
