@@ -174,8 +174,8 @@ export default function Chat() {
 
                         addMessage(msg);
 
-                        generate_prompt_simple()
-                        generate_prompt_alt()
+                        generatePrompt('simple'); 
+                        generatePrompt('alt');    
 
                     } else {
                         addMessage(msg);
@@ -188,8 +188,20 @@ export default function Chat() {
             });
     }
 
-    const generate_prompt_simple = () => {
-        fetch(`${apiUrl}/gamev2/post/generate_prompt_simple`, {
+    const generatePrompt = (type) => {
+        let endpoint = "";
+        switch (type) {
+            case 'simple':
+                endpoint = "/gamev2/post/generate_prompt_simple";
+                break;
+            case 'alt':
+                endpoint = "/gamev2/post/generate_prompt_alt";
+                break;
+            default:
+                throw new Error("Invalid prompt type");
+        }
+
+        fetch(`${apiUrl}${endpoint}`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -200,34 +212,16 @@ export default function Chat() {
         })
             .then(response => response.json())
             .then(data => {
-                console.log('Generate prompt');
-
+                console.log('Generate prompt', data);
                 pending(apiUrl, `/run/get/${data.id}`, threadKey, (data) => {
-                    getAnswer(true)
+                    getAnswer(true);
                 });
             })
+            .catch(error => {
+                console.error('Error during prompt generation:', error);
+            });
     }
 
-    const generate_prompt_alt = () => {
-        fetch(`${apiUrl}/gamev2/post/generate_prompt_alt`, {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                threadKey: threadKey,
-            })
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Generate prompt');
-                console.log(data);
-
-                pending(apiUrl, `/run/get/${data.id}`, threadKey, (data) => {
-                    getAnswer(true)
-                });
-            })
-    }
 
 
     return (
