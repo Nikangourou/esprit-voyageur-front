@@ -9,7 +9,6 @@ export default function GetImg({ prompt, gameId }) {
 
     useEffect(() => {
         if (gameId) {
-            console.log('Prompt:', prompt);
             fetch('http://localhost:5001/image/post/create', {
             // fetch('https://espritvoyageur-production.up.railway.app/image/post/create', {
                 method: "POST",
@@ -29,9 +28,6 @@ export default function GetImg({ prompt, gameId }) {
     }, [prompt])
 
     return (
-        <main>
-            <h3>GetImg</h3>
-            <img className={styles.img} src={`data:image/png;base64,${img64}`} style={{width:"350px"}} />
-        </main>
+            <img className={styles.img} src={`data:image/png;base64,${img64}`} />
     );
 }

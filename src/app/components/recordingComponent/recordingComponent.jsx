@@ -48,11 +48,9 @@ const RecordingComponent = ({ onEnd }) => {
 
 
   return (
-    <div>
       <button onClick={isRecording ? stopRecording : startRecording}>
         {isRecording ? 'Stop Recording' : 'Start Recording'}
       </button>
-    </div>
   );
 };
 
