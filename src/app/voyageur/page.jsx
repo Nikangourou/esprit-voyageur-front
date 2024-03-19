@@ -4,8 +4,6 @@ import { useEffect, useState } from "react";
 import styles from "./page.module.scss";
 import Chat from "../components/chat/chat";
 
-
-
 export default function Voyageur() {
   const [generateImages, setGenerateImages] = useState(false)
 
@@ -18,6 +16,7 @@ export default function Voyageur() {
     } else {
       return null;
     }
+
   }
 
   return (
