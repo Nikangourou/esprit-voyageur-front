@@ -3,14 +3,15 @@
 import { useEffect, useState } from "react";
 import styles from "./getImg.module.scss";
 
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
 export default function GetImg({ prompt, gameId }) {
 
-    const [img64, setImg64] = useState(null);
+    const [url, setUrl] = useState(null);
 
     useEffect(() => {
         if (gameId) {
-            fetch('http://localhost:5001/image/post/create', {
-            // fetch('https://espritvoyageur-production.up.railway.app/image/post/create', {
+            fetch(`${apiUrl}/image/post/create`, {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',
@@ -22,12 +23,12 @@ export default function GetImg({ prompt, gameId }) {
             })
                 .then(response => response.json())
                 .then(data => {
-                    setImg64(data.base64);
+                    setUrl(data.url);
                 });
         }
     }, [prompt])
 
     return (
-            <img className={styles.img} src={`data:image/png;base64,${img64}`} />
+            <img className={styles.img} src={url} alt="image" />
     );
 }
