@@ -1,9 +1,9 @@
 import ReactDOM from 'react-dom';
 import { QRCodeSVG } from 'qrcode.react';
 
-export default function QrCode({ threadKey, gameId }) {
+export default function QrCode({ gameId }) {
 
-    const url = `http://localhost:3000/voyageur?threadKey=${threadKey}&gameId=${gameId}`
+    const url = `http://localhost:3000/voyageur?gameId=${gameId}`
     console.log(url)
 
     return (
