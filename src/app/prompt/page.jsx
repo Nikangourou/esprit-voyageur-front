@@ -10,7 +10,7 @@ export default function Prompt() {
   const [url, setUrl] = useState(null);
 
   function createImg(){
-    fetch(`${apiUrl}/image/post/create`, {
+    fetch(`https://espritvoyageur-production.up.railway.app/image/post/create`, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',
