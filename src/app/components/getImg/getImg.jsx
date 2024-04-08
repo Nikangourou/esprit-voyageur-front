@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import styles from "./getImg.module.scss";
+import { io } from "socket.io-client"
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -24,11 +25,14 @@ export default function GetImg({ prompt, gameId }) {
                 .then(response => response.json())
                 .then(data => {
                     setUrl(data.url);
+                    const socket = io("localhost:5001")
+                    console.log("Image created : ", data.url);
+                    socket.emit("imagesAllGenerated", gameId, data.url);
                 });
         }
     }, [prompt])
 
     return (
-            <img className={styles.img} src={url} alt="image" />
+        <img className={styles.img} src={url} alt="image" />
     );
 }

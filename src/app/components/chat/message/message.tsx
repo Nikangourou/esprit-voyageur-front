@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import styles from "./message.module.scss";
 import GetImg from "../../getImg/getImg";
 

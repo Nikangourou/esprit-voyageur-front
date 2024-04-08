@@ -7,6 +7,8 @@ import RecordingComponent from "../recordingComponent/recordingComponent";
 import * as utils from "../../utils/micro";
 import { v4 as uuidv4 } from 'uuid';
 import { pending } from '../../utils/utils';
+import { io } from "socket.io-client"
+import { get } from "http";
 
 const firstMessage = {
     id: uuidv4(),
@@ -24,28 +26,38 @@ export default function Chat() {
 
     const threadKey = useRef(null);
     const gameId = useRef(null);
+    const isReadyRef = useRef(false);
+    const socket = useRef(null);
 
     useEffect(() => {
-        const urlParams = new URLSearchParams(window.location.search);
-        gameId.current = urlParams.get('gameId');
-
-        // const socket = io("localhost:5001")
-        fetch(`${apiUrl}/thread/post/create`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                game_id: gameId.current,
+        if(!isReadyRef.current){
+            const urlParams = new URLSearchParams(window.location.search);
+            gameId.current = urlParams.get('gameId');
+            isReadyRef.current = true;
+            fetch(`${apiUrl}/thread/post/create`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    game_id: gameId.current,
+                })
             })
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Create Game');
-                console.log(data);
-                // socket.emit("connexionPrimary", data.thread_id.key)
-                threadKey.current = data.key;
-            });
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Create Game');
+                    console.log(data);
+                    threadKey.current = data.key;
+    
+                    socket.current = io("localhost:5001")
+                    const imgTab = ["https://i.pinimg.com/236x/c9/38/21/c9382174d9d63212e4e687086bd69e1d.jpg", "https://www.shutterstock.com/image-vector/swag-gangster-gorilla-shutter-shades-600w-1159728040.jpg"];
+                    socket.current.emit("connexionPhone", gameId.current);
+                    // socket.emit("imagesAllGenerated", threadKey.current, imgTab);
+                });
+        }
+        return () => {
+  
+        }
     }, []);
 
     useEffect(() => {
@@ -161,7 +173,7 @@ export default function Chat() {
     }
 
     const getAnswer = (isImg = false) => {
-        fetch(`${apiUrl}/run/answers/${threadKey.current}`, {
+        return fetch(`${apiUrl}/run/answers/${threadKey.current}`, {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json',
@@ -188,8 +200,11 @@ export default function Chat() {
 
                         addMessage(msg);
 
-                        generatePrompt('simple');
-                        generatePrompt('alt');
+                        generatePrompt('alt').then(() => {
+                            return generatePrompt('simple');
+                        }).catch((error) => {
+                            console.error(error);
+                        });
 
                     } else {
                         addMessage(msg);
@@ -203,47 +218,52 @@ export default function Chat() {
     }
 
     const generatePrompt = (type) => {
-        let endpoint = "";
-        switch (type) {
-            case 'simple':
-                endpoint = "/thread/post/generate_prompt_simple";
-                break;
-            case 'alt':
-                endpoint = "/thread/post/generate_prompt_alt";
-                break;
-            default:
-                throw new Error("Invalid prompt type");
-        }
-
-        fetch(`${apiUrl}${endpoint}`, {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                threadKey: threadKey.current,
+        console.log('Generate prompt', type);
+        return new Promise((resolve, reject) => {
+            let endpoint = "";
+            switch (type) {
+                case 'simple':
+                    endpoint = "/thread/post/generate_prompt_simple";
+                    break;
+                case 'alt':
+                    endpoint = "/thread/post/generate_prompt_alt";
+                    break;
+                default:
+                    reject("Invalid prompt type");
+                    return;
+            }
+    
+            fetch(`${apiUrl}${endpoint}`, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    threadKey: threadKey.current,
+                })
             })
-        })
             .then(response => response.json())
             .then(data => {
                 console.log('Generate prompt', data);
+                // Supposons que pending utilise également des promesses.
                 pending(apiUrl, `/run/get/${data.id}`, threadKey.current, (data) => {
-                    getAnswer(true);
+                    getAnswer(true)
+                    resolve(data); // Résoudre la promesse avec les données reçues.
                 });
             })
             .catch(error => {
                 console.error('Error during prompt generation:', error);
+                reject(error); // Rejeter la promesse en cas d'erreur.
             });
-    }
-
-
-
+        });
+    };
+    
     return (
         <div className={styles.chat}>
             <div className={styles.containerMessages}>
                 {
                     messages.map((message) => {
-                        return <Message key={message.id} message={message} gameId={gameId.current} />
+                        return <Message key={message.id} message={message} gameId={gameId.current}/>
                     })
                 }
             </div>
