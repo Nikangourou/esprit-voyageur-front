@@ -150,18 +150,17 @@ vec3 voronoi( in vec2 x )
         md = min( md, dot( 0.5*(mr+r), normalize(r-mr) ) );
     }
 
-    return vec3( md, mr );
+    return vec3( md*uProgress, mr );
 }
 
 vec3 plot( vec2 p, float ss )
 {
-    vec3 c = voronoi( p*2.66 );
+    vec3 c = voronoi( p*2.66 ) ;
     
     float d = length(c.yz);
     float n = c.r * (1.- d);
-    float e = step(.02,n);
+    float e = step(uProgressDistord,n);
     vec3 col = vec3(e);
-    col = smoothstep(col,vec3(.05), vec3(.0));
     return col;
 }
 
@@ -188,6 +187,9 @@ export const fragmentShader = `
     uniform sampler2D uSampler1;
     
     uniform float uTime;
+    uniform float uProgressDistord;
+    uniform float uProgress;
+    uniform float uProgressBlur;
 
     //Classic Perlin 3D Noise 
     //by Stefan Gustavson
@@ -195,6 +197,19 @@ export const fragmentShader = `
     vec4 permute(vec4 x){return mod(((x*34.0)+1.0)*x, 289.0);}
     vec4 taylorInvSqrt(vec4 r){return 1.79284291400159 - 0.85373472095314 * r;}
     vec3 fade(vec3 t) {return t*t*t*(t*(t*6.0-15.0)+10.0);}
+    float luminence(vec3 rgb){
+        return dot(rgb,vec3(.299,.587,.144));
+    }
+    
+        float random(vec2 st){
+        return fract(sin(dot(st.xy,vec2(12.9898,78.233)))*43758.5453123);
+    }
+    
+    void applyGlass(out vec2 uv, in float noise){
+            uv.x += (random(uv.xy)*2. - 1.) *.05 * uProgressBlur + noise * uProgressBlur;
+    }
+    
+
     
     ${functionsNoise}
     
@@ -207,7 +222,10 @@ export const fragmentShader = `
         float borderNoise = fbm(vec3(textureCoord*7.5,uTime*.0015) ) * 5.5;
         float innerNoise =  fbm(vec3(textureCoord1*3.5,uTime*.00175) ) * 35.5;
         
-        vec4 text =  texture2D(uSampler0, textureCoord + vec2(innerNoise*.001));
+        vec2 tmpTextureCoord = textureCoord;
+        applyGlass(tmpTextureCoord,innerNoise*.005);
+        
+        vec4 text =  texture2D(uSampler0, tmpTextureCoord + vec2(innerNoise*.001));
         vec4 textVoronoi =  texture2D(uSampler1, textureCoord1);
 
    
@@ -219,12 +237,16 @@ export const fragmentShader = `
         circle = 1. - step(.44,circle);
         
         
-        vec3 voronoi = plot(tmpUv + innerNoise*.0075,0.001);
-        vec4 finalText = text *( circle *  vec4(voronoi,voronoi.x) );
+        vec3 voronoi = plot( tmpUv + innerNoise*.0075,0.001);
+        vec4 finalText =  text * circle *  vec4(voronoi,voronoi.x) ;
+        
+        vec3 final = finalText.rgb;
+        final = mix(final,vec3(luminence(final)),uProgressBlur);
+        
+        float testVoronoi = voronoi.x;
         
         
-        
-        gl_FragColor = finalText   ;
+        gl_FragColor = vec4(final,abs(circle*voronoi.r))   ;
         // gl_FragColor = finalText * (innerNoise)  ;
     }
 `;

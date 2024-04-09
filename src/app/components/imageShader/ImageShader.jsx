@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { Curtains, Plane } from "curtainsjs";
 import styles from "./ImageShader.module.scss";
 import { fragmentShader, vertexShader } from "./shader/shader";
+import { gsap } from "gsap";
 
 export default function ImageShader({ url }) {
   const canvasRef = useRef();
@@ -23,6 +24,21 @@ export default function ImageShader({ url }) {
             type: "1f", // this means our uniform is a float
             value: 0,
           },
+          progressDistord: {
+            name: "uProgressDistord",
+            type: "1f",
+            value: 0.015,
+          },
+          progressBlur: {
+            name: "uProgressBlur",
+            type: "1f",
+            value: 1,
+          },
+          progress: {
+            name: "uProgress",
+            type: "1f",
+            value: 0,
+          },
         },
       };
 
@@ -30,6 +46,29 @@ export default function ImageShader({ url }) {
 
       planeRef.current.onRender(() => {
         planeRef.current.uniforms.time.value++; // update our time uniform value
+      });
+
+      gsap.to(planeRef.current.uniforms.progress, {
+        value: 1,
+        duration: 6,
+        ease: "sine.in",
+        onComplete: () => {
+          console.log("plop");
+        },
+      });
+
+      document.querySelector(".imageShader").addEventListener("click", () => {
+        gsap.to(planeRef.current.uniforms.progressDistord, {
+          value: 0,
+          duration: 3,
+          ease: "power4.inOut",
+        });
+
+        gsap.to(planeRef.current.uniforms.progressBlur, {
+          value: 0,
+          duration: 5,
+          ease: "power2.out",
+        });
       });
     }
   }, [url]);
