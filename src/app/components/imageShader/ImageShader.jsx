@@ -77,7 +77,7 @@ export default function ImageShader({ url }) {
     <div className="imageShader">
       <div id={styles.canvas} ref={canvasRef}></div>
       <div className={styles.plane} ref={planeElementRef}>
-        <img src={"/image.png"} crossOrigin="Access-Control-Allow-Origin" />
+        <img src={url ? "data:image/png;base64," + url : "/image.png"} />
         <img src={"/voronoi.jpg"} crossOrigin="Access-Control-Allow-Origin" />
       </div>
     </div>
