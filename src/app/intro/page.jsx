@@ -54,8 +54,6 @@ export default function Intro() {
     setCurrentPage(currentPart - 1);
   }
 
-
-
   return (
     <main className={styles.main}>
       <div className={styles.container}>
@@ -73,7 +71,7 @@ export default function Intro() {
           <p onClick={() => nextPage()}>=&gt;</p>
         </div>
         {
-          currentPart === 2 && <a className={styles.btnPlay} href="/game">Play</a>
+          currentPart === 2 && <a className={styles.btnPlay} href={`/game?gameId=${gameId}`}> Play</a>
         }
       </div>
     </main>
