@@ -50,7 +50,7 @@ export default function ImageShader({ url }) {
 
       gsap.to(planeRef.current.uniforms.progress, {
         value: 1,
-        duration: 6,
+        duration: 10,
         ease: "sine.in",
         onComplete: () => {
           console.log("plop");
@@ -60,14 +60,14 @@ export default function ImageShader({ url }) {
       document.querySelector(".imageShader").addEventListener("click", () => {
         gsap.to(planeRef.current.uniforms.progressDistord, {
           value: 0,
-          duration: 3,
+          duration: 6,
           ease: "power4.inOut",
         });
 
         gsap.to(planeRef.current.uniforms.progressBlur, {
           value: 0,
-          duration: 5,
-          ease: "power2.out",
+          duration: 8,
+          ease: "sine.inOut",
         });
       });
     }

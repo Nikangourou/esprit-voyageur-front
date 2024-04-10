@@ -219,7 +219,10 @@ export const fragmentShader = `
         vec2 textureCoord = (vTextureCoord-.5)*1.15+.5 ;
         vec2 textureCoord1 = (vTextureCoord1-.5)*1.15+.5;
         
-        float borderNoise = fbm(vec3(textureCoord*7.5,uTime*.0015) ) * 5.5;
+        float additionnalTime = (uProgressBlur) * .0035;
+        float additionnalAmplitude = ( uProgressBlur) * 5.5;
+        
+        float borderNoise = fbm(vec3(textureCoord*(7.5+additionnalAmplitude),uTime*(.002+additionnalTime)) ) * (5.5 + additionnalAmplitude);
         float innerNoise =  fbm(vec3(textureCoord1*3.5,uTime*.00175) ) * 35.5;
         
         vec2 tmpTextureCoord = textureCoord;
