@@ -5,7 +5,6 @@ import GetImg from "../../getImg/getImg";
 
 export default function Message({ message, gameId }) {
 
-
     return (
 
 
