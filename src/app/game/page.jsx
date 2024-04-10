@@ -5,6 +5,8 @@ import { useEffect, useState, useRef } from "react";
 import { io } from "socket.io-client";
 import { v4 as uuidv4 } from "uuid";
 
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
 export default function Intro() {
   const [images, setImages] = useState([]);
   const gameId = useRef(null);
@@ -22,14 +24,26 @@ export default function Intro() {
     }
 
     // Séparer écoute d'événement de l'initialisation de la connexion
-    const handleImagesAllGenerated = (receivedImage) => {
-      setImages((currentImages) => [
-        ...currentImages,
-        {
-          id: uuidv4(),
-          url: receivedImage,
-        },
-      ]);
+    const handleImagesAllGenerated = (_id) => {
+    
+      fetch(`${apiUrl}/image/get/${_id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+
+          setImages((currentImages) => [
+            ...currentImages,
+            {
+              id: uuidv4(),
+              url: `data:image/png;base64,${data.base64}`,
+            },
+          ]);
+        });
     };
 
     socket.current.on("imageGenerated", handleImagesAllGenerated);

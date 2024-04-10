@@ -1,4 +1,4 @@
-"use client" // This directive is unusual and typically not standard JavaScript or React. Make sure it is necessary for your project.
+"use client"
 
 import { useEffect, useState } from "react";
 import styles from "./page.module.scss";
