@@ -8,6 +8,7 @@ export default function ImageShader({ url }) {
   const canvasRef = useRef();
   const planeElementRef = useRef();
   const planeRef = useRef();
+  const containerRef = useRef();
 
   useEffect(() => {
     if (!planeRef.current) {
@@ -61,7 +62,8 @@ export default function ImageShader({ url }) {
 
   return (
     <div
-      className="imageShader"
+      className={styles.imageShader}
+      ref={containerRef}
       onClick={() => {
         if (planeRef.current) {
           gsap.to(planeRef.current.uniforms.progressDistord, {
