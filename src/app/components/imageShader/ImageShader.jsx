@@ -61,7 +61,8 @@ export default function ImageShader({ url }) {
 
   return (
     <div
-      className="imageShader"
+      className={styles.imageShader}
+      ref={containerRef}
       onClick={() => {
         if (planeRef.current) {
           gsap.to(planeRef.current.uniforms.progressDistord, {
