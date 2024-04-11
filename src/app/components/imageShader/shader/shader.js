@@ -178,13 +178,11 @@ export const fragmentShader = `
     
     // Points cannot be closer than sqrt(EPSILON)
     #define EPSILON .00001
+    
+    varying vec2 vUv;
 
-    varying vec3 vVertexPosition;
-    varying vec2 vTextureCoord;
-    varying vec2 vTextureCoord1;
-
-    uniform sampler2D uSampler0;
-    uniform sampler2D uSampler1;
+    uniform sampler2D uImage;
+    uniform sampler2D uVoronoi;
     
     uniform float uTime;
     uniform float uProgressDistord;
@@ -216,8 +214,8 @@ export const fragmentShader = `
     ${functionsVoronoi} 
     
     void main() {
-        vec2 textureCoord = (vTextureCoord-.5)*1.15+.5 ;
-        vec2 textureCoord1 = (vTextureCoord1-.5)*1.15+.5;
+        vec2 textureCoord = (vUv-.5)*1.15+.5 ;
+        vec2 textureCoord1 = (vUv-.5)*1.15+.5;
         
         float additionnalTime = (uProgressBlur) * .0035;
         float additionnalAmplitude = ( uProgressBlur) * 5.5;
@@ -228,8 +226,8 @@ export const fragmentShader = `
         vec2 tmpTextureCoord = textureCoord;
         applyGlass(tmpTextureCoord,innerNoise*.005);
         
-        vec4 text =  texture2D(uSampler0, tmpTextureCoord + vec2(innerNoise*.001));
-        vec4 textVoronoi =  texture2D(uSampler1, textureCoord1);
+        vec4 text =  texture2D(uImage, tmpTextureCoord + vec2(innerNoise*.001));
+        vec4 textVoronoi =  texture2D(uVoronoi, textureCoord1);
 
    
         // Apply border noise
@@ -249,33 +247,20 @@ export const fragmentShader = `
         float testVoronoi = voronoi.x;
         
         
-        gl_FragColor = vec4(final,abs(circle*voronoi.r))   ;
+        gl_FragColor = vec4(final*circle*voronoi.r+(1.-voronoi.r),abs(circle))   ;
+        // gl_FragColor = vec4(voronoi,1.)  ;
+        // gl_FragColor = vec4(1.,0.,0.,1.);
         // gl_FragColor = finalText * (innerNoise)  ;
     }
 `;
 
 export const vertexShader = `
-    precision mediump float;
-    
-    attribute vec3 aVertexPosition;
-    attribute vec2 aTextureCoord;
-    
-    uniform mat4 uMVMatrix;
-    uniform mat4 uPMatrix;
-    
-    uniform mat4 uTextureMatrix0;
-    uniform mat4 uTextureMatrix1;
-    
-    varying vec3 vVertexPosition;
-    varying vec2 vTextureCoord;
-    varying vec2 vTextureCoord1;
-    
-    void main() {
-        gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
-        
-        // varyings
-        vVertexPosition = aVertexPosition;
-        vTextureCoord = (uTextureMatrix0 * vec4(aTextureCoord, 0.0, 1.0)).xy;
-        vTextureCoord1 = (uTextureMatrix1 * vec4(aTextureCoord, 0.0, 1.0)).xy;
-    }
+varying vec2 vUv;
+uniform float uTime;
+
+void main() {
+
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.);
+    vUv = uv;
+}
 `;
