@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from "uuid";
 import { pending } from "../../utils/utils";
 import { io } from "socket.io-client";
 import { get } from "http";
+import Countdown from "../chrono/countdown";
 
 const firstMessage = {
   id: uuidv4(),
@@ -101,7 +102,6 @@ export default function Chat() {
   };
 
   const addMessage = (message) => {
-
     setMessages((prev) => {
       const tmp = [...prev];
       tmp.push(message);
@@ -259,8 +259,13 @@ export default function Chat() {
     });
   };
 
+  const onEndCountdown = () => {
+    console.log("End countdown");
+  };
+
   return (
     <div className={styles.chat}>
+      <Countdown start={20} onEnd={onEndCountdown} />
       <div className={styles.containerMessages}>
         {messages.map((message) => {
           return (
