@@ -4,7 +4,6 @@ import FullScreen from "./components/fullScreen/fullScreen";
 import store from "./store/index"
 
 const inter = Inter({ subsets: ["latin"] });
-import { Provider } from 'react-redux';
 import StoreProvider from "./store/storeProvider";
 export const metadata = {
   title: "Create Next App",

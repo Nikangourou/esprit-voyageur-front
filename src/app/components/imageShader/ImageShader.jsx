@@ -53,7 +53,7 @@ export default function ImageShader({ url }) {
         duration: 10,
         ease: "sine.in",
         onComplete: () => {
-          console.log("plop");
+          console.log("done");
         },
       });
     }
