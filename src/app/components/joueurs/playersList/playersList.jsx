@@ -1,18 +1,37 @@
-import styles from "./playersList.scss";
-import { useSelector, useDispatch } from 'react-redux';
-
-export default function PlayersList() {
-    const players =  useSelector(state => state.players.players)
-
-
+import styles from "./playersList.module.scss";
+import { useSelector } from "react-redux";
+import { useState } from "react";
+import Button from "../../button/button";
+export default function PlayersList({ setIsAddingPlayers }) {
+  const players = useSelector((state) => state.players.players);
 
   return (
-    <main>
-      <h1>Liste des joueurs</h1>
-      <div className={styles.container}>
-          {players.map(player => (<h1>player.name</h1>))}
-          {players.length < 7 && <button>Ajout joueurs</button>}
+    <section className={styles.playersList}>
+      <div className={styles.textContent}>
+        <h4>
+          Bienvenue dans <b>VRAI MENT ?</b>
+        </h4>
+        <p>
+          Ajoutez jusqu’à 7 joueurs ou 7 équipes, choissiez un avatar parmis
+          ceux proposés. <b>Un joueur</b> parmi vous sera{" "}
+          <b>désigné aléatoirement Voyageur.</b>
+        </p>
       </div>
-    </main>
+      <div className={styles.container}>
+        {players.map((player, i) => (
+          <h1 key={i}>player.name</h1>
+        ))}
+      </div>
+      {players.length < 7 && (
+        <Button
+          color={"black"}
+          event={() => {
+            setIsAddingPlayers(true);
+          }}
+        >
+          <span>+</span>
+        </Button>
+      )}
+    </section>
   );
 }

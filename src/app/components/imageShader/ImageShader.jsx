@@ -8,6 +8,7 @@ export default function ImageShader({ url }) {
   const canvasRef = useRef();
   const planeElementRef = useRef();
   const planeRef = useRef();
+  const containerRef = useRef();
 
   useEffect(() => {
     if (!planeRef.current) {
@@ -56,25 +57,29 @@ export default function ImageShader({ url }) {
           console.log("plop");
         },
       });
-
-      document.querySelector(".imageShader").addEventListener("click", () => {
-        gsap.to(planeRef.current.uniforms.progressDistord, {
-          value: 0,
-          duration: 6,
-          ease: "power4.inOut",
-        });
-
-        gsap.to(planeRef.current.uniforms.progressBlur, {
-          value: 0,
-          duration: 8,
-          ease: "sine.inOut",
-        });
-      });
     }
   }, [url]);
 
   return (
-    <div className="imageShader">
+    <div
+      className={styles.imageShader}
+      ref={containerRef}
+      onClick={() => {
+        if (planeRef.current) {
+          gsap.to(planeRef.current.uniforms.progressDistord, {
+            value: 0,
+            duration: 6,
+            ease: "power4.inOut",
+          });
+
+          gsap.to(planeRef.current.uniforms.progressBlur, {
+            value: 0,
+            duration: 8,
+            ease: "sine.inOut",
+          });
+        }
+      }}
+    >
       <div id={styles.canvas} ref={canvasRef}></div>
       <div className={styles.plane} ref={planeElementRef}>
         <img src={url ? "data:image/png;base64," + url : "/image.png"} />

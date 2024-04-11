@@ -36,7 +36,7 @@ export default function Prompt() {
         placeholder="Ecrivez votre message"
       />
       <button onClick={createImg}>Envoyer</button>
-      {url && <ImageShader url={url}></ImageShader>}
+      <ImageShader></ImageShader>
     </>
   );
 }
