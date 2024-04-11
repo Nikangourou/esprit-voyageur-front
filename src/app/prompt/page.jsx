@@ -11,15 +11,18 @@ export default function Prompt() {
   const [url, setUrl] = useState(null);
 
   function createImg() {
-    fetch(`http://localhost:5001/image/post/create`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    fetch(
+      `https://espritvoyageur-production.up.railway.app/image/post/create`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          prompt: input,
+        }),
       },
-      body: JSON.stringify({
-        prompt: input,
-      }),
-    })
+    )
       .then((response) => response.json())
       .then((data) => {
         setUrl(data.base64);
