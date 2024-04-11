@@ -4,6 +4,8 @@ import styles from "./page.module.scss";
 import { useEffect, useState, useRef } from "react";
 import { io } from "socket.io-client";
 import { v4 as uuidv4 } from "uuid";
+import ImageShader from "../components/imageShader/ImageShader";
+
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -40,7 +42,7 @@ export default function Intro() {
             ...currentImages,
             {
               id: uuidv4(),
-              url: `data:image/png;base64,${data.base64}`,
+              url: data.base64,
             },
           ]);
         });
@@ -63,9 +65,10 @@ export default function Intro() {
   return (
     <main className={styles.main}>
       <h1>Game</h1>
-      {images.map((image) => (
-        <img width={400} key={image.id} src={image.url} alt="image" />
+      {images.length > 0 && images.map((image) => (
+        <ImageShader key={image.id} url={image.url}></ImageShader>
       ))}
+      
     </main>
   );
 }
