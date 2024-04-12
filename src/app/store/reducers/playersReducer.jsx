@@ -11,7 +11,7 @@ export const playersSlice = createSlice({
       purple: { img: "", used: false },
       yellow: { img: "", used: false },
       green: { img: "", used: false },
-      white: { img: "", used: false },
+      "#1ecbe1": { img: "", used: false },
       black: { img: "", used: false },
     },
   },
@@ -29,7 +29,6 @@ export const playersSlice = createSlice({
       state.value += 1;
       const playersTmp = action.players.map((player) => {
         const obj = {};
-        obj.name = player.name;
         obj.score = 0;
         obj.color = player.color;
         obj.alreadyPlay = false;

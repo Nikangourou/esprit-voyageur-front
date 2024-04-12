@@ -7,13 +7,7 @@ export default function Joueurs() {
   const [isAddingPlayer, setIsAddingPlayers] = useState(false);
 
   function innerContent() {
-    if (isAddingPlayer) {
-      return <AddPlayer></AddPlayer>;
-    } else {
-      return (
-        <PlayersList setIsAddingPlayers={setIsAddingPlayers}></PlayersList>
-      );
-    }
+    return <AddPlayer></AddPlayer>;
   }
 
   return (
