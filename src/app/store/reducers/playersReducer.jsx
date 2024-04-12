@@ -4,7 +4,8 @@ export const playersSlice = createSlice({
   name: "counter",
   initialState: {
     playersInGame: [],
-    currentPlayer: "",
+    currentBluffeur: "",
+    nbRound: 0,
     players: {
       rouge: { color: "red", score: 0, alreadyPlay: false },
       bleu: { color: "blue", score: 0, alreadyPlay: false },
@@ -25,16 +26,16 @@ export const playersSlice = createSlice({
       }
     },
     selectBlufferPlayer: (state) => {
-      let currentPlayer = "";
+      let currentBluffeur = "";
       const playersAvailable = state.playersInGame.filter((player) => {
         return !state.players[player].alreadyPlay;
       });
       if (playersAvailable.length > 0) {
         const idx = Math.floor(Math.random() * playersAvailable.length);
-        currentPlayer = playersAvailable[idx];
-        state.players[currentPlayer].alreadyPlay = true;
+        currentBluffeur = playersAvailable[idx];
+        state.players[currentBluffeur].alreadyPlay = true;
       }
-      state.currentPlayer = currentPlayer;
+      state.currentBluffeur = currentBluffeur;
     },
     // Increment le score de tout les joueurs selon le parametre de la fonction.
     // format paramettre : {imageTrue: [...listeCouleurs] }
@@ -42,8 +43,9 @@ export const playersSlice = createSlice({
       action.payload.imageTrue.forEach((color) => {
         state.players[color].score += 1;
       });
-      state.players[state.currentPlayer].score +=
-        action.payload.imageTrue.length;
+      state.players[state.currentBluffeur].score +=
+        state.playersInGame.length - (action.payload.imageTrue.length + 1);
+      // NbPlayers - (NbTrue - currentBluffeur) = additionnalScoreBluffeur
     },
     resetGame: (state) => {
       state.players = {
@@ -56,7 +58,11 @@ export const playersSlice = createSlice({
         noir: { color: "black", score: 0, alreadyPlay: false },
       };
       state.playersInGame = [];
-      state.currentPlayer = "";
+      state.currentBluffeur = "";
+      state.nbRound = 0;
+    },
+    incrementNbRound: (state) => {
+      state.nbRound += 1;
     },
   },
 });
@@ -66,5 +72,6 @@ export const {
   selectBlufferPlayer,
   incrementScorePlayers,
   resetGame,
+  incrementNbRound,
 } = playersSlice.actions;
 export default playersSlice.reducer;
