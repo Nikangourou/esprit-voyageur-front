@@ -3,7 +3,7 @@ import styles from "./button.module.scss";
 
 export default function Button({
   events,
-  color,
+  color = "none",
   children,
   type = "cta",
   isUsed = false,
@@ -11,7 +11,7 @@ export default function Button({
   const buttonRef = useRef();
 
   useEffect(() => {
-    if (buttonRef.current) {
+    if (buttonRef.current && color != "none") {
       buttonRef.current.style.setProperty("--colorButton", color);
     }
   }, [color]);
@@ -38,6 +38,7 @@ export default function Button({
       className={`${styles.button} ${styles[type]} ${
         isUsed ? styles.isUsed : ""
       }`}
+      data-color={color != "none" ? color : "none"}
       ref={buttonRef}
     >
       {selectButtonType()}

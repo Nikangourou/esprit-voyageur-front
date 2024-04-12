@@ -25,15 +25,13 @@ export const playersSlice = createSlice({
         console.log(`La couleur ${action.color} est déjà assigné`);
       }
     },
-    setPlayers: (state, action) => {
-      state.value += 1;
-      const playersTmp = action.players.map((player) => {
-        const obj = {};
-        obj.score = 0;
-        obj.color = player.color;
-        obj.alreadyPlay = false;
-        return obj;
-      });
+    addPlayer: (state, action) => {
+      const obj = {};
+      obj.score = 0;
+      obj.color = action.payload.color;
+      obj.alreadyPlay = false;
+      const playersTmp = [...state.players, obj];
+      console.log(playersTmp);
       state.players = playersTmp;
     },
     setCurrentPlayer: (state) => {
@@ -49,5 +47,5 @@ export const playersSlice = createSlice({
   },
 });
 
-export const { setPlayers, setCurrentPlayer, setColor } = playersSlice.actions;
+export const { addPlayer, setColor } = playersSlice.actions;
 export default playersSlice.reducer;
