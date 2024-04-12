@@ -6,7 +6,7 @@ import { gsap } from "gsap";
 import * as THREE from "three";
 
 export default function ImageShader({ url }) {
-  const canvasRef = useRef();
+  const canvasRef = useRef(null);
   const materialRef = useRef();
   const textures = useRef();
   const startTimeRef = useRef(Date.now()); // Stocker le temps de départ
@@ -93,7 +93,7 @@ export default function ImageShader({ url }) {
       // Scene
       const textureLoader = new THREE.TextureLoader();
 
-      textureLoader.load("/image.png", (textGenerated) => {
+      textureLoader.load(url ? url : "/image.png", (textGenerated) => {
         textureLoader.load("/voronoi.jpg", (textVoronoi) => {
           initThree(textGenerated, textVoronoi);
         });
@@ -104,21 +104,21 @@ export default function ImageShader({ url }) {
   return (
     <div
       className={styles.imageShader}
-      // onClick={() => {
-      //   if (planeRef.current) {
-      //     gsap.to(planeRef.current.uniforms.progressDistord, {
-      //       value: 0,
-      //       duration: 6,
-      //       ease: "power4.inOut",
-      //     });
-      //
-      //     gsap.to(planeRef.current.uniforms.progressBlur, {
-      //       value: 0,
-      //       duration: 8,
-      //       ease: "sine.inOut",
-      //     });
-      //   }
-      // }}
+      onClick={() => {
+        if (materialRef.current) {
+          gsap.to(materialRef.current.uniforms.uProgressDistord, {
+            value: 0,
+            duration: 6,
+            ease: "power4.inOut",
+          });
+
+          gsap.to(materialRef.current.uniforms.uProgressBlur, {
+            value: 0,
+            duration: 8,
+            ease: "sine.inOut",
+          });
+        }
+      }}
     >
       <canvas className={styles.canvas} ref={canvasRef}></canvas>
     </div>
