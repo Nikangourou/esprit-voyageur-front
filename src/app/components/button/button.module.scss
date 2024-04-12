@@ -1,13 +1,12 @@
 .button{
   position: relative;
-  --colorButton: red;
 }
 
 .player{
   position: relative;
   width: 3em;
   height: 3em;
-  background-color: var(--colorButton);
+  background-color: grey;
   border-radius: 50%;
   border: none;
   pointer-events: auto;

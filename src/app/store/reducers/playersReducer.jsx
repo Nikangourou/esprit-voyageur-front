@@ -3,49 +3,68 @@ import { createSlice } from "@reduxjs/toolkit";
 export const playersSlice = createSlice({
   name: "counter",
   initialState: {
-    players: [],
+    playersInGame: [],
     currentPlayer: "",
-    colors: {
-      red: { img: "", used: false },
-      blue: { img: "", used: false },
-      purple: { img: "", used: false },
-      yellow: { img: "", used: false },
-      green: { img: "", used: false },
-      "#1ecbe1": { img: "", used: false },
-      black: { img: "", used: false },
+    players: {
+      rouge: { color: "red", score: 0, alreadyPlay: false },
+      bleu: { color: "blue", score: 0, alreadyPlay: false },
+      violet: { color: "purple", score: 0, alreadyPlay: false },
+      jaune: { color: "yellow", score: 0, alreadyPlay: false },
+      vert: { color: "green", score: 0, alreadyPlay: false },
+      cyan: { color: "#1ecbe1", score: 0, alreadyPlay: false },
+      noir: { color: "black", score: 0, alreadyPlay: false },
     },
   },
   reducers: {
-    setColor: (state, action) => {
-      const color = state.colors[action.color];
-      if (color) {
-        state.colors[action.color].used = true;
-        console.log(`La couleur ${action.color} est à présent utilisée`);
-      } else {
-        console.log(`La couleur ${action.color} est déjà assigné`);
-      }
-    },
     addPlayer: (state, action) => {
-      const obj = {};
-      obj.score = 0;
-      obj.color = action.payload.color;
-      obj.alreadyPlay = false;
-      const playersTmp = [...state.players, obj];
-      console.log(playersTmp);
-      state.players = playersTmp;
-    },
-    setCurrentPlayer: (state) => {
-      let currentTmp = "";
-      if (state.players.length > 0) {
-        const playersTmp = state.players.filter((player) => {
-          return !player.alreadyPlay;
-        });
-        currentTmp = Math.floor(Math.random() * playersTmp.length);
+      console.log(action.payload.color);
+      let playerAlreadyAdded = state.players[action.payload.color].used;
+      if (!playerAlreadyAdded) {
+        state.playersInGame = [...state.playersInGame, action.payload.color];
+        state.players[action.payload.color].used = true;
       }
-      state.currentPlayer = currentTmp;
+    },
+    selectBlufferPlayer: (state) => {
+      let currentPlayer = "";
+      const playersAvailable = state.playersInGame.filter((player) => {
+        return !state.players[player].alreadyPlay;
+      });
+      if (playersAvailable.length > 0) {
+        const idx = Math.floor(Math.random() * playersAvailable.length);
+        currentPlayer = playersAvailable[idx];
+        state.players[currentPlayer].alreadyPlay = true;
+      }
+      state.currentPlayer = currentPlayer;
+    },
+    // Increment le score de tout les joueurs selon le parametre de la fonction.
+    // format paramettre : {imageTrue: [...listeCouleurs] }
+    incrementScorePlayers: (state, action) => {
+      action.payload.imageTrue.forEach((color) => {
+        state.players[color].score += 1;
+      });
+      state.players[state.currentPlayer].score +=
+        action.payload.imageTrue.length;
+    },
+    resetGame: (state) => {
+      state.players = {
+        rouge: { color: "red", score: 0, alreadyPlay: false },
+        bleu: { color: "blue", score: 0, alreadyPlay: false },
+        violet: { color: "purple", score: 0, alreadyPlay: false },
+        jaune: { color: "yellow", score: 0, alreadyPlay: false },
+        vert: { color: "green", score: 0, alreadyPlay: false },
+        cyan: { color: "#1ecbe1", score: 0, alreadyPlay: false },
+        noir: { color: "black", score: 0, alreadyPlay: false },
+      };
+      state.playersInGame = [];
+      state.currentPlayer = "";
     },
   },
 });
 
-export const { addPlayer, setColor } = playersSlice.actions;
+export const {
+  addPlayer,
+  selectBlufferPlayer,
+  incrementScorePlayers,
+  resetGame,
+} = playersSlice.actions;
 export default playersSlice.reducer;

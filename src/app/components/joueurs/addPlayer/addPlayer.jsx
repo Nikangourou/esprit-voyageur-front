@@ -1,23 +1,24 @@
 import styles from "./addPlayer.module.scss";
 import { useSelector, useDispatch } from "react-redux";
-import { addPlayer, setColor } from "../../../store/reducers/playersReducer";
-import { useRef, useState } from "react";
+import { addPlayer } from "../../../store/reducers/playersReducer";
+import { useRef } from "react";
 import Button from "../../button/button";
 import { gsap } from "gsap";
-export default function AddPlayer() {
-  const colors = useSelector((state) => state.players.colors);
-  const [playerName, setPlayerName] = useState("");
-  const [isConfirming, setIsConfirming] = useState(false);
+
+export default function AddPlayer({ nextPage }) {
+  const playersInGame = useSelector((state) => state.players.playersInGame);
+  const players = useSelector((state) => state.players.players);
   const timerRef = useRef(null);
   const dispatch = useDispatch();
+
   const handleMouseDown = (e) => {
     timerRef.current = setTimeout(() => {
-      setIsConfirming(true);
-      dispatch(addPlayer({ color: e.target.getAttribute("data-color") }));
-      gsap.to(e.target.style, {
-        background: "#32CD84",
+      const colorName = e.target.getAttribute("data-color");
+      dispatch(addPlayer({ color: colorName }));
+      gsap.to(e.target, {
+        backgroundColor: players[colorName].color,
       });
-    }, 1000); // Temps en millisecondes (3 secondes)
+    }, 1000);
   };
 
   const handleMouseUp = () => {
@@ -32,15 +33,8 @@ export default function AddPlayer() {
 
   return (
     <section className={styles.addingPlayer}>
-      <input
-        type="text"
-        className={styles.playerName}
-        value={playerName}
-        onChange={(e) => setPlayerName(e.target.value)}
-      />
       <div className={styles.playerChoice}>
-        {Object.entries(colors).map(([colorName, value], id) => {
-          const isUsed = value.used;
+        {Object.entries(players).map(([colorName, value], id) => {
           return (
             <Button
               key={id}
@@ -52,7 +46,9 @@ export default function AddPlayer() {
           );
         })}
       </div>
-      <button>Submit</button>
+      <button disabled={playersInGame.length < 3} onClick={nextPage}>
+        Submit
+      </button>
     </section>
   );
 }

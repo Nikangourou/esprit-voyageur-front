@@ -10,11 +10,6 @@ export default function Button({
 }) {
   const buttonRef = useRef();
 
-  useEffect(() => {
-    if (buttonRef.current && color != "none") {
-      buttonRef.current.style.setProperty("--colorButton", color);
-    }
-  }, [color]);
   function selectButtonType() {
     if (type == "buttonMenu") {
       return (
