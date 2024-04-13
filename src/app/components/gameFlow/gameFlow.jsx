@@ -1,4 +1,4 @@
-import styles from "./pageContainer.module.scss";
+import styles from "./gameFlow.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import ImageShader from "../imageShader/ImageShader";
