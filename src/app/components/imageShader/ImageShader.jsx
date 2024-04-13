@@ -5,7 +5,7 @@ import { fragmentShader, vertexShader } from "./shader/shader";
 import { gsap } from "gsap";
 import * as THREE from "three";
 
-export default function ImageShader({ url }) {
+export default function ImageShader({ url, isBlurry = true }) {
   const canvasRef = useRef(null);
   const materialRef = useRef();
   const textures = useRef();
@@ -101,25 +101,26 @@ export default function ImageShader({ url }) {
     }
   }, [url]);
 
-  return (
-    <div
-      className={styles.imageShader}
-      onClick={() => {
-        if (materialRef.current) {
-          gsap.to(materialRef.current.uniforms.uProgressDistord, {
-            value: 0,
-            duration: 6,
-            ease: "power4.inOut",
-          });
+  useEffect(() => {
+    if (isBlurry) {
+      if (materialRef.current) {
+        gsap.to(materialRef.current.uniforms.uProgressDistord, {
+          value: 0,
+          duration: 6,
+          ease: "power4.inOut",
+        });
 
-          gsap.to(materialRef.current.uniforms.uProgressBlur, {
-            value: 0,
-            duration: 8,
-            ease: "sine.inOut",
-          });
-        }
-      }}
-    >
+        gsap.to(materialRef.current.uniforms.uProgressBlur, {
+          value: 0,
+          duration: 8,
+          ease: "sine.inOut",
+        });
+      }
+    }
+  }, [isBlurry]);
+
+  return (
+    <div className={styles.imageShader}>
       <canvas className={styles.canvas} ref={canvasRef}></canvas>
     </div>
   );

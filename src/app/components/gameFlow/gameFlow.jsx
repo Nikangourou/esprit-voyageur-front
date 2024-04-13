@@ -11,6 +11,7 @@ export default function GameFlow({ images }) {
   const [contentSentence, setContentSentence] = useState();
   const [chronoStart, setChronoStart] = useState(60);
   const [colorListTrue, setColorListTrue] = useState([]);
+  const [isBlurry, setIsBlurry] = useState(true);
 
   const playersInGame = useSelector((state) => state.players.playersInGame);
   const players = useSelector((state) => state.players.players);
@@ -23,7 +24,8 @@ export default function GameFlow({ images }) {
   function eventEndClock() {
     switch (currentPhase) {
       case 0: // Passage images flou à non flou
-        //TODO event rendant les images non flou
+        //TODO rendre fluide la transition avec GSAP
+        setIsBlurry(false);
         setContentSentence(
           <p>
             Attention !<br />
@@ -34,6 +36,7 @@ export default function GameFlow({ images }) {
         setChronoStart(180);
         break;
       case 1: // Passage phase réflexion à la phase vote
+        //TODO rendre fluide la transition avec GSAP
         //TODO event rendant les pions visibles (gsap)
         setContentSentence(
           <p>
@@ -45,6 +48,7 @@ export default function GameFlow({ images }) {
         setChronoStart(60);
         break;
       case 2: // Passage phase vote à la phase score
+        //TODO rendre fluide la transition avec GSAP
         setCurrentPhase(3);
         //TODO Récupérer les votes et les enregistrer dans colorListTrue
         dispatch(incrementScorePlayers(colorListTrue));
@@ -54,11 +58,15 @@ export default function GameFlow({ images }) {
 
   return (
     <section className={styles.containerGame}>
-      <Countdown start={chronoStart} onEnd={nextPage} />
+      <Countdown start={chronoStart} onEnd={eventEndClock} />
       <h1>Game</h1>
       {images.length > 0 &&
         images.map((image) => (
-          <ImageShader key={image.id} url={image.url}></ImageShader>
+          <ImageShader
+            key={image.id}
+            url={image.url}
+            isBlurry={isBlurry}
+          ></ImageShader>
         ))}
       {contentSentence ? (
         contentSentence
