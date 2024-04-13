@@ -5,6 +5,7 @@ import ImageShader from "../imageShader/ImageShader";
 import Countdown from "../chrono/countdown";
 import Button from "../button/button";
 import { incrementScorePlayers } from "../../store/reducers/playersReducer";
+import PageContainer from "../pageContainer/pageContainer";
 
 export default function GameFlow({ images }) {
   const [currentPhase, setCurrentPhase] = useState(0);
@@ -95,6 +96,9 @@ export default function GameFlow({ images }) {
           }
           return <></>;
         })}
+      {currentPhase == 3 && (
+        <PageContainer pageCategory={"score"}></PageContainer>
+      )}
     </section>
   );
 }
