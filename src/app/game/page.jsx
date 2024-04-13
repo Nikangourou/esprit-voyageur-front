@@ -4,8 +4,8 @@ import styles from "./page.module.scss";
 import { useEffect, useState, useRef } from "react";
 import { io } from "socket.io-client";
 import { v4 as uuidv4 } from "uuid";
-import ImageShader from "../components/imageShader/ImageShader";
 import Countdown from "../components/chrono/countdown";
+import GameFlow from "../components/gameFlow/gameFlow";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -83,13 +83,7 @@ export default function Intro() {
         </div>
       )}
       {currentPart == 1 && images.length > 0 && (
-        <div className={styles.containerGame}>
-          <h1>Game</h1>
-          {images.length > 0 &&
-            images.map((image) => (
-              <ImageShader key={image.id} url={image.url}></ImageShader>
-            ))}
-        </div>
+        <GameFlow images={images}></GameFlow>
       )}
     </main>
   );
