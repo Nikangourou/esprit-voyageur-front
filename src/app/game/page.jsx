@@ -5,15 +5,29 @@ import { useEffect, useState, useRef } from "react";
 import { io } from "socket.io-client";
 import { v4 as uuidv4 } from "uuid";
 import ImageShader from "../components/imageShader/ImageShader";
-
+import Countdown from "../components/chrono/countdown";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function Intro() {
+  const [currentPart, setCurrentPage] = useState(0);
   const [images, setImages] = useState([]);
   const gameId = useRef(null);
-  const isReadyRef = useRef(false);
   const socket = useRef(null);
+
+  const nextPage = () => {
+    if (currentPart === 3) {
+      return;
+    }
+    setCurrentPage(currentPart + 1);
+  };
+
+  const previousPage = () => {
+    if (currentPart === 0) {
+      return;
+    }
+    setCurrentPage(currentPart - 1);
+  };
 
   useEffect(() => {
     // Initialiser la connexion une seule fois
@@ -27,12 +41,11 @@ export default function Intro() {
 
     // Séparer écoute d'événement de l'initialisation de la connexion
     const handleImagesAllGenerated = (_id) => {
-    
       fetch(`${apiUrl}/image/get/${_id}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
       })
         .then((response) => response.json())
         .then((data) => {
@@ -64,11 +77,20 @@ export default function Intro() {
 
   return (
     <main className={styles.main}>
-      <h1>Game</h1>
-      {images.length > 0 && images.map((image) => (
-        <ImageShader key={image.id} url={image.url}></ImageShader>
-      ))}
-      
+      {currentPart == 0 && (
+        <div className={styles.container}>
+          <Countdown start={300} onEnd={nextPage} />
+        </div>
+      )}
+      {currentPart == 1 && images.length > 0 && (
+        <div className={styles.containerGame}>
+          <h1>Game</h1>
+          {images.length > 0 &&
+            images.map((image) => (
+              <ImageShader key={image.id} url={image.url}></ImageShader>
+            ))}
+        </div>
+      )}
     </main>
   );
 }

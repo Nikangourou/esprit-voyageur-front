@@ -4,9 +4,9 @@ import styles from "./button.module.scss";
 export default function Button({
   events,
   color = "none",
+  colorActive = false,
   children,
   type = "cta",
-  isUsed = false,
 }) {
   const buttonRef = useRef();
 
@@ -30,10 +30,9 @@ export default function Button({
   return (
     <button
       {...events}
-      className={`${styles.button} ${styles[type]} ${
-        isUsed ? styles.isUsed : ""
-      }`}
+      className={`${styles.button} ${styles[type]}`}
       data-color={color != "none" ? color : "none"}
+      style={colorActive ? { color: color } : {}}
       ref={buttonRef}
     >
       {selectButtonType()}

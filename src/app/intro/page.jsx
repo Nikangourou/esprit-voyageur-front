@@ -7,6 +7,10 @@ import QrCode from "../components/qrCode/qrCode";
 import Joueurs from "../components/joueurs/joueurs";
 import { useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
+import Remember from "../components/remember/remember";
+import PageContainer from "../components/pageContainer/pageContainer";
+import { useDispatch } from "react-redux";
+import { selectBlufferPlayer } from "../store/reducers/playersReducer";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -14,6 +18,7 @@ export default function Intro() {
   const [currentPart, setCurrentPage] = useState(0);
   const [gameId, setGameId] = useState();
   const launched = useRef(false);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (!launched.current) {
@@ -39,7 +44,7 @@ export default function Intro() {
   }, []);
 
   const nextPage = () => {
-    if (currentPart === 2) {
+    if (currentPart === 3) {
       return;
     }
     setCurrentPage(currentPart + 1);
@@ -57,16 +62,27 @@ export default function Intro() {
       <div className={styles.container}>
         {currentPart === 0 && <Tuto1 />}
         {currentPart === 1 && <Joueurs nextPage={nextPage} />}
-        {currentPart === 2 && <QrCode gameId={gameId} />}
+        {currentPart === 2 && (
+          <Remember
+            event={() => {
+              dispatch(selectBlufferPlayer());
+              nextPage();
+            }}
+          />
+        )}
         <div className={styles.containerBtn}>
           <p onClick={() => previousPage()}>&lt;=</p>
           <p onClick={() => nextPage()}>=&gt;</p>
         </div>
-        {currentPart === 2 && (
-          <a className={styles.btnPlay} href={`/game?gameId=${gameId}`}>
-            {" "}
-            Play
-          </a>
+
+        {currentPart === 3 && (
+          <PageContainer pageCategory={"bluffer"}>
+            <QrCode gameId={gameId} />
+            <a className={styles.btnPlay} href={`/game?gameId=${gameId}`}>
+              {" "}
+              Play
+            </a>
+          </PageContainer>
         )}
       </div>
     </main>

@@ -41,7 +41,6 @@ export default function AddPlayer({ nextPage }) {
               type={"player"}
               events={eventsFunctions}
               color={colorName}
-              isUsed={value.used}
             ></Button>
           );
         })}

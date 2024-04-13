@@ -17,7 +17,7 @@ export default function PageContainer({
       case "player":
         return {
           subTitle: "Sélectionner votre pion",
-          textureShader: "/image/players.png",
+          textureShader: "/images/players.png",
           content: (
             <p>
               Pour lever le voile sur le passé de ceux que vous pensiez
@@ -33,7 +33,7 @@ export default function PageContainer({
       case "remember":
         return {
           subTitle: "À présent,",
-          textureShader: "/image/remember.png",
+          textureShader: "/images/remember.png",
           content: (
             <p>
               Vite, vite !<br />
@@ -55,12 +55,12 @@ export default function PageContainer({
       case "bluffer":
         return {
           subTitle: "Découvrez le",
-          textureShader: "/image/bluff.png",
+          textureShader: "/images/bluff.png",
           content: (
             <p>
               Oh, c’est toi{" "}
               <b style={{ color: colorStyle, textTransform: "capitalize" }}>
-                {currentBluffer}
+                {currentBluffeur}
               </b>{" "}
               ! Te voilà désigné comme le bluffer.
               <br />
@@ -73,7 +73,7 @@ export default function PageContainer({
       case "score":
         return {
           subTitle: "Voici le",
-          textureShader: "/image/score.png",
+          textureShader: "/images/score.png",
           content: <p></p>,
         };
     }
