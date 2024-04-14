@@ -10,35 +10,7 @@
     align-items: center;
     gap: 20px;
 
-    button {
-      position: relative;
-      outline: none;
-      border: none;
-      border-radius: 99px;
-      padding: 10px 50px;
-      background-color: transparent;
-      overflow: visible;
-      color: white;
-      cursor: pointer;
-
-      a {
-        position: relative;
-        z-index: 2;
-      }
-
-      svg {
-        position: absolute;
-        top: 50%;
-        right: 0;
-        left: 15%;
-        width: 75%;
-        transform: translateY(-50%);
-        z-index: 1;
-        overflow: visible;
-      }
-    }
-
-    .btn2 {
+    .btn {
       width: 200px;
       height: 200px;
       position: relative;
