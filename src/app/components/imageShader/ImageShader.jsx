@@ -4,6 +4,7 @@ import styles from "./ImageShader.module.scss";
 import { fragmentShader, vertexShader } from "./shader/shader";
 import { gsap } from "gsap";
 import * as THREE from "three";
+import * as THREE from "three";
 
 export default function ImageShader({ url, isBlurry = true }) {
   const canvasRef = useRef(null);
