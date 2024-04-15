@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import styles from "./page.module.scss";
 import { useEffect, useState, useRef } from "react";
@@ -56,7 +56,7 @@ export default function Intro() {
             {
               id: uuidv4(),
               url: data.base64,
-              type: data.isTrue,
+              isTrue: data.isTrue,
             },
           ]);
         });

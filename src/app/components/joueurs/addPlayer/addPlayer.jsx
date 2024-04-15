@@ -10,6 +10,7 @@ export default function AddPlayer({ gameId }) {
   const playersInGame = useSelector((state) => state.players.playersInGame);
   const players = useSelector((state) => state.players.players);
   const timerRef = useRef(null);
+  const containerRef = useRef(null);
   const dispatch = useDispatch();
 
   const handleMouseDown = (e) => {
@@ -33,7 +34,7 @@ export default function AddPlayer({ gameId }) {
   };
 
   return (
-    <section className={styles.addingPlayer}>
+    <section className={styles.addingPlayer} ref={containerRef}>
       <div className={styles.playerChoice}>
         {Object.entries(players).map(([colorName, value], id) => {
           return (

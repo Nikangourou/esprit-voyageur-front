@@ -1,11 +1,14 @@
-import React, { useEffect, useRef } from "react";
+import React, { forwardRef, useEffect, useRef } from "react";
 import { Curtains, Plane } from "curtainsjs";
 import styles from "./ImageShader.module.scss";
 import { fragmentShader, vertexShader } from "./shader/shader";
 import { gsap } from "gsap";
 import * as THREE from "three";
 
-export default function ImageShader({ url, isBlurry = true }) {
+const ImageShader = forwardRef(function ImageShader(
+  { url, isBlurry = true },
+  ref,
+) {
   const canvasRef = useRef(null);
   const materialRef = useRef();
   const textures = useRef();
@@ -130,8 +133,10 @@ export default function ImageShader({ url, isBlurry = true }) {
   }, [isBlurry]);
 
   return (
-    <div className={styles.imageShader}>
+    <div className={styles.imageShader} ref={ref}>
       <canvas className={styles.canvas} ref={canvasRef}></canvas>
     </div>
   );
-}
+});
+
+export default ImageShader;

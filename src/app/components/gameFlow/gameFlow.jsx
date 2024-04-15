@@ -1,6 +1,6 @@
 import styles from "./gameFlow.module.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ImageShader from "../imageShader/ImageShader";
 import Countdown from "../chrono/countdown";
 import Button from "../button/button";
@@ -13,6 +13,9 @@ export default function GameFlow({ images }) {
   const [chronoStart, setChronoStart] = useState(5);
   const [colorListTrue, setColorListTrue] = useState([]);
   const [isBlurry, setIsBlurry] = useState(true);
+  const containerRef = useRef();
+  const imageRef1 = useRef();
+  const imageRef2 = useRef();
 
   const playersInGame = useSelector((state) => state.players.playersInGame);
   const players = useSelector((state) => state.players.players);
@@ -22,7 +25,44 @@ export default function GameFlow({ images }) {
   const colorStyle =
     currentBluffeur != "" ? players[currentBluffeur].color : "";
 
-  console.log(playersInGame);
+  function isPointWithinRadiusFromCenter(element, point) {
+    // Récupérer les dimensions de l'élément
+    const rect = element.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    // Calculer la distance entre le centre de l'élément et le point donné
+    const distance = Math.sqrt(
+      Math.pow(point.x - centerX, 2) + Math.pow(point.y - centerY, 2),
+    );
+
+    // Vérifier si la distance est inférieure ou égale au rayon
+    return distance <= rect.width;
+  }
+
+  function eventDragEnd(point) {
+    if (isPointWithinRadiusFromCenter(imageRef1.current, point)) {
+      if (images && images[0].isTrue) {
+        setColorListTrue((prev) => [
+          ...prev,
+          point.target.getAttribute("data-color"),
+        ]);
+        console.log("AJOUT DANS LISTE TRUE");
+        //TODO GSAP ANIM FEEDBACK
+      }
+    } else if (isPointWithinRadiusFromCenter(imageRef2.current, point)) {
+      if (images && images[0].isTrue) {
+        setColorListTrue((prev) => [
+          ...prev,
+          point.target.getAttribute("data-color"),
+        ]);
+        console.log("AJOUT DANS LISTE TRUE");
+        //TODO GSAP ANIM FEEDBACK
+      }
+    } else {
+      console.log("out images");
+    }
+  }
 
   function eventEndClock() {
     console.log(playersInGame);
@@ -65,7 +105,7 @@ export default function GameFlow({ images }) {
   }
 
   return (
-    <section className={styles.containerGame}>
+    <section className={styles.containerGame} ref={containerRef}>
       <Countdown start={chronoStart} onEnd={eventEndClock} />
       <h1>Game</h1>
       <div className={styles.imgShaders}>
@@ -76,6 +116,7 @@ export default function GameFlow({ images }) {
               // url={image.url}
               key={i}
               // url={image.url}
+              ref={i == 0 ? imageRef1 : imageRef2}
               isBlurry={isBlurry}
             ></ImageShader>
           ))}
@@ -94,13 +135,15 @@ export default function GameFlow({ images }) {
         </p>
       )}
       {currentPhase == 2 &&
-        playersInGame.map((color) => {
+        playersInGame.map((color, i) => {
           // Exclu bluffeur
           console.log(color);
           if (color !== currentBluffeur) {
             return (
               <Button
-                key={id}
+                dragEndEvent={eventDragEnd}
+                dragContainer={containerRef.current}
+                key={i + color}
                 type={"player"}
                 color={players[color].color}
                 colorActive={true}

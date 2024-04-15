@@ -1,5 +1,9 @@
 import React, { useEffect, useRef } from "react";
 import styles from "./button.module.scss";
+import { gsap } from "gsap";
+import { Draggable } from "gsap/Draggable";
+
+gsap.registerPlugin(Draggable);
 
 export default function Button({
   events,
@@ -7,8 +11,31 @@ export default function Button({
   colorActive = false,
   children,
   type = "cta",
+  dragContainer = null,
+  dragEndEvent = null,
 }) {
   const buttonRef = useRef();
+  const draggableRef = useRef();
+
+  useEffect(() => {
+    if (dragContainer) {
+      draggableRef.current = Draggable.create(buttonRef.current, {
+        type: "x,y",
+        bounds: dragContainer,
+        onDragEnd: (e) => {
+          if (dragEndEvent) {
+            dragEndEvent(e);
+          }
+        },
+      });
+    }
+
+    return () => {
+      if (dragContainer) {
+        draggableRef.current[0].kill();
+      }
+    };
+  }, []);
 
   function selectButtonType() {
     if (type == "buttonMenu") {
@@ -32,7 +59,7 @@ export default function Button({
       {...events}
       className={`${styles.button} ${styles[type]}`}
       data-color={color != "none" ? color : "none"}
-      style={colorActive ? { color: color } : {}}
+      style={colorActive ? { backgroundColor: color } : {}}
       ref={buttonRef}
     >
       {selectButtonType()}
