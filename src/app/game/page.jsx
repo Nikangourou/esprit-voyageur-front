@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import styles from "./page.module.scss";
 import { useEffect, useState, useRef } from "react";
@@ -9,7 +9,7 @@ import ImageShader from "../components/imageShader/ImageShader";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-export default function Intro() {
+export default function Game() {
   const [images, setImages] = useState([]);
   const gameId = useRef(null);
   const isReadyRef = useRef(false);

@@ -3,7 +3,6 @@
 import Image from "next/image";
 import styles from "./page.module.scss";
 import Tuto1 from "../components/tuto/tuto1";
-import QrCode from "../components/qrCode/qrCode";
 import Joueurs from "../components/joueurs/joueurs";
 import { useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client"
@@ -41,7 +40,7 @@ export default function Intro() {
   }, [])
 
   const nextPage = () => {
-    if (currentPart === 2) {
+    if (currentPart === 1) {
       return;
     }
     setCurrentPage(currentPart + 1);
@@ -63,15 +62,12 @@ export default function Intro() {
         {
           currentPart === 1 && <Joueurs />
         }
-        {
-          currentPart === 2 && <QrCode gameId={gameId} />
-        }
         <div className={styles.containerBtn}>
           <p onClick={() => previousPage()}>&lt;=</p>
           <p onClick={() => nextPage()}>=&gt;</p>
         </div>
         {
-          currentPart === 2 && <a className={styles.btnPlay} href={`/game?gameId=${gameId}`}> Play</a>
+          currentPart === 1 && <a className={styles.btnPlay} href={`/game/qrcode?gameId=${gameId}`}> Play</a>
         }
       </div>
     </main>
