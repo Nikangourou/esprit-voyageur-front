@@ -6,7 +6,7 @@ export default function Remember({ event }) {
   return (
     <PageContainer pageCategory={"remember"}>
       <div className="container">
-        <Countdown start={60} onEnd={event} />
+        <Countdown start={3} onEnd={event} />
       </div>
     </PageContainer>
   );

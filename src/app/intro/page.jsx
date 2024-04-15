@@ -79,7 +79,6 @@ export default function Intro() {
           <PageContainer pageCategory={"bluffer"}>
             <QrCode gameId={gameId} />
             <a className={styles.btnPlay} href={`/game?gameId=${gameId}`}>
-              {" "}
               Play
             </a>
           </PageContainer>

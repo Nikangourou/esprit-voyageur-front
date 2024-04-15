@@ -188,6 +188,8 @@ export const fragmentShader = `
     uniform float uProgressDistord;
     uniform float uProgress;
     uniform float uProgressBlur;
+    uniform vec3 uColor;
+    uniform vec2 uOffset;
 
     //Classic Perlin 3D Noise 
     //by Stefan Gustavson
@@ -220,8 +222,8 @@ export const fragmentShader = `
         float additionnalTime = (uProgressBlur) * .0035;
         float additionnalAmplitude = ( uProgressBlur) * 5.5;
         
-        float borderNoise = fbm(vec3(textureCoord*(7.5+additionnalAmplitude),uTime*(.0035+additionnalTime)) ) * (5.5 + additionnalAmplitude);
-        float innerNoise =  fbm(vec3(textureCoord1*3.5,uTime*.00175) ) * 35.5;
+        float borderNoise = fbm(vec3((textureCoord + uOffset)*(7.5+additionnalAmplitude),uTime*(.0035+additionnalTime)) ) * (5.5 + additionnalAmplitude);
+        float innerNoise =  fbm(vec3((textureCoord1+uOffset)*3.5,uTime*.00175) ) * 35.5;
         
         vec2 tmpTextureCoord = textureCoord;
         applyGlass(tmpTextureCoord,innerNoise*.005);
@@ -232,7 +234,7 @@ export const fragmentShader = `
    
         // Apply border noise
         textureCoord = textureCoord + vec2(borderNoise) * .025;
-        vec2 tmpUv = vec2(textureCoord1.x ,textureCoord1.y) ;
+        vec2 tmpUv = vec2(textureCoord1.x + uOffset.x ,textureCoord1.y + uOffset.y); ;
 
         float circle = distance(textureCoord,vec2(0.5));
         circle = 1. - step(.44,circle);
@@ -245,9 +247,11 @@ export const fragmentShader = `
         final = mix(final,vec3(luminence(final)),uProgressBlur);
         
         float testVoronoi = voronoi.x;
+        final *= circle;
+        float alpha = abs(1.0 - voronoi.r - circle) - (1.0 - circle);
         
-        
-        gl_FragColor = vec4(final*circle*voronoi.r+(1.-voronoi.r),abs(circle))   ;
+        // gl_FragColor = vec4(final*circle*voronoi.r+(1.-voronoi.r),abs(circle))   ;
+        gl_FragColor = vec4( final,  alpha) ;
         // gl_FragColor = vec4(voronoi,1.)  ;
         // gl_FragColor = vec4(1.,0.,0.,1.);
         // gl_FragColor = finalText * (innerNoise)  ;
