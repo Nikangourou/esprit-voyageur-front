@@ -10,7 +10,7 @@ import PageContainer from "../pageContainer/pageContainer";
 export default function GameFlow({ images }) {
   const [currentPhase, setCurrentPhase] = useState(0);
   const [contentSentence, setContentSentence] = useState();
-  const [chronoStart, setChronoStart] = useState(300);
+  const [chronoStart, setChronoStart] = useState(5);
   const [colorListTrue, setColorListTrue] = useState([]);
   const [isBlurry, setIsBlurry] = useState(true);
 
@@ -22,7 +22,10 @@ export default function GameFlow({ images }) {
   const colorStyle =
     currentBluffeur != "" ? players[currentBluffeur].color : "";
 
+  console.log(playersInGame);
+
   function eventEndClock() {
+    console.log(playersInGame);
     switch (currentPhase) {
       case 0: // Passage images flou à non flou
         //TODO rendre fluide la transition avec GSAP
@@ -33,20 +36,24 @@ export default function GameFlow({ images }) {
             <i>Ne vous laissez pas berner...</i>
           </p>,
         );
-        setCurrentPhase(1);
-        setChronoStart(180);
+        setChronoStart(10);
+        setTimeout(() => {
+          setCurrentPhase(1);
+        }, 1000);
         break;
       case 1: // Passage phase réflexion à la phase vote
         //TODO rendre fluide la transition avec GSAP
-        //TODO event rendant les pions visibles (gsap)
+        //TODO event rendant les pions visibles
         setContentSentence(
           <p>
             Vite, c’est l’heure de voter !<br />
             <i>Déplace ton pion Joueur sur le véritable souvenir.</i>
           </p>,
         );
-        setCurrentPhase(2);
-        setChronoStart(60);
+        setChronoStart(5000);
+        setTimeout(() => {
+          setCurrentPhase(2);
+        }, 1000);
         break;
       case 2: // Passage phase vote à la phase score
         //TODO rendre fluide la transition avec GSAP
@@ -89,6 +96,7 @@ export default function GameFlow({ images }) {
       {currentPhase == 2 &&
         playersInGame.map((color) => {
           // Exclu bluffeur
+          console.log(color);
           if (color !== currentBluffeur) {
             return (
               <Button
@@ -99,7 +107,6 @@ export default function GameFlow({ images }) {
               ></Button>
             );
           }
-          return <></>;
         })}
       {currentPhase == 3 && (
         <PageContainer pageCategory={"score"}></PageContainer>

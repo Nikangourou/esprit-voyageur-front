@@ -27,7 +27,8 @@ export const playersSlice = createSlice({
     },
     selectBlufferPlayer: (state) => {
       let currentBluffeur = "";
-      const playersAvailable = state.playersInGame.filter((player) => {
+      console.log(...state.playersInGame);
+      const playersAvailable = [...state.playersInGame].filter((player) => {
         return !state.players[player].alreadyPlay;
       });
       if (playersAvailable.length > 0) {

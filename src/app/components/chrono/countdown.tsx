@@ -31,6 +31,10 @@ export default function Countdown({ start, onEnd }) {
     return () => clearInterval(timerId);
   }, [timeLeft, onEnd]); // Ajout de onEnd dans le tableau de dépendances
 
+  useEffect(() => {
+    setTimeLeft(start);
+  }, [start]);
+
   // Fonction pour formater le temps restant
   const formatTimeLeft = () => {
     const minutes = Math.floor(timeLeft / 60);

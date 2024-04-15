@@ -61,7 +61,8 @@ export default function Intro() {
         {currentPart === 0 && <Tuto1 />}
         {currentPart === 1 && <Joueurs nextPage={nextPage} />}
         {currentPart === 2 && (
-          <Remember
+          <Remem
+            sddsdber
             event={() => {
               dispatch(selectBlufferPlayer());
               nextPage();

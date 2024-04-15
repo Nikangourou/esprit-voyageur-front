@@ -111,7 +111,8 @@ export default function ImageShader({ url, isBlurry = true }) {
   }, [url]);
 
   useEffect(() => {
-    if (isBlurry) {
+    if (!isBlurry) {
+      console.log(isBlurry);
       if (materialRef.current) {
         gsap.to(materialRef.current.uniforms.uProgressDistord, {
           value: 0,

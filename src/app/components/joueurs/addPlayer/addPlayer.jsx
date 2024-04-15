@@ -45,7 +45,13 @@ export default function AddPlayer({ nextPage }) {
           );
         })}
       </div>
-      <button disabled={playersInGame.length < 3} onClick={nextPage}>
+      <button
+        disabled={playersInGame.length < 3}
+        onClick={() => {
+          nextPage();
+          console.log(playersInGame);
+        }}
+      >
         Submit
       </button>
     </section>
