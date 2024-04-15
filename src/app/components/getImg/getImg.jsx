@@ -6,7 +6,7 @@ import { io } from "socket.io-client";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-export default function GetImg({ prompt, gameId }) {
+export default function GetImg({ prompt, gameId, type }) {
   const [base64, setBase64] = useState(null);
   const isLaunched = useRef(false);
 
@@ -21,6 +21,7 @@ export default function GetImg({ prompt, gameId }) {
         body: JSON.stringify({
           prompt: prompt,
           game_id: gameId,
+          isTrue: type === "simple",
         }),
       })
         .then((response) => response.json())

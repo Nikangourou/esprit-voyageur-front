@@ -10,7 +10,7 @@ export default function Message({ message, gameId }) {
 
         <p className={`${styles.message} ${message.send && styles.send}`}>
             {
-                message.isImg && <GetImg prompt={message.content} gameId={gameId} />
+                message.isImg && <GetImg prompt={message.content} gameId={gameId} type={message.type} />
             }
             {message.content}
         </p >

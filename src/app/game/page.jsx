@@ -56,6 +56,7 @@ export default function Intro() {
             {
               id: uuidv4(),
               url: data.base64,
+              type: data.isTrue,
             },
           ]);
         });

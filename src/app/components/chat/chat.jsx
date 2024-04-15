@@ -175,7 +175,7 @@ export default function Chat() {
       });
   };
 
-  const getAnswer = (isImg = false) => {
+  const getAnswer = (isImg = false, type) => {
     return fetch(`${apiUrl}/run/answers/${threadKey.current}`, {
       method: "GET",
       headers: {
@@ -192,6 +192,7 @@ export default function Chat() {
             content: content,
             send: false,
             isImg: isImg,
+            type: isImg ? type : null,
           };
 
           if (content.includes("FIN_CONVERSATION")) {
@@ -248,7 +249,7 @@ export default function Chat() {
           console.log("Generate prompt", data);
           // Supposons que pending utilise également des promesses.
           pending(apiUrl, `/run/get/${data.id}`, threadKey.current, (data) => {
-            getAnswer(true);
+            getAnswer(true, type);
             resolve(data); // Résoudre la promesse avec les données reçues.
           });
         })
