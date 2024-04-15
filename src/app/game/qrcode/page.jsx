@@ -4,14 +4,14 @@ import styles from "./page.module.scss";
 import QrCode from "../../components/qrCode/qrCode";
 import PageContainer from "../../components/pageContainer/pageContainer";
 
-import { useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 export default function Code() {
-  const gameId = useRef(null);
+  const [gameId, setGameId] = useState();
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    gameId.current = urlParams.get("gameId");
+    setGameId(urlParams.get("gameId"));
   }, []);
 
   return (
