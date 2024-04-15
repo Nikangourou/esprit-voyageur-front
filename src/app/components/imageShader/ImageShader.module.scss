@@ -1,13 +1,14 @@
 .canvas {
   /* make the canvas wrapper fits the document */
-  position: absolute;
+  position: relative;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
   z-index: 1;
-  width: 500px;
-  height: 500px;
+  width: 700px;
+  height: 700px;
+  background-color: transparent;
 }
 .plane {
   /* define the size of your plane */

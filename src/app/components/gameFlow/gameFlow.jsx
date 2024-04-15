@@ -10,7 +10,7 @@ import PageContainer from "../pageContainer/pageContainer";
 export default function GameFlow({ images }) {
   const [currentPhase, setCurrentPhase] = useState(0);
   const [contentSentence, setContentSentence] = useState();
-  const [chronoStart, setChronoStart] = useState(60);
+  const [chronoStart, setChronoStart] = useState(300);
   const [colorListTrue, setColorListTrue] = useState([]);
   const [isBlurry, setIsBlurry] = useState(true);
 
@@ -52,7 +52,7 @@ export default function GameFlow({ images }) {
         //TODO rendre fluide la transition avec GSAP
         setCurrentPhase(3);
         //TODO Récupérer les votes et les enregistrer dans colorListTrue
-        dispatch(incrementScorePlayers(colorListTrue));
+        // dispatch(incrementScorePlayers(colorListTrue));
         break;
     }
   }
@@ -61,14 +61,19 @@ export default function GameFlow({ images }) {
     <section className={styles.containerGame}>
       <Countdown start={chronoStart} onEnd={eventEndClock} />
       <h1>Game</h1>
-      {images.length > 0 &&
-        images.map((image) => (
-          <ImageShader
-            key={image.id}
-            url={image.url}
-            isBlurry={isBlurry}
-          ></ImageShader>
-        ))}
+      <div className={styles.imgShaders}>
+        {images.length > 0 &&
+          images.map((image, i) => (
+            <ImageShader
+              // key={image.id}
+              // url={image.url}
+              key={i}
+              // url={image.url}
+              isBlurry={isBlurry}
+            ></ImageShader>
+          ))}
+      </div>
+
       {contentSentence ? (
         contentSentence
       ) : (

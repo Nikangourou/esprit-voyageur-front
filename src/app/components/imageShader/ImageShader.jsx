@@ -15,6 +15,8 @@ export default function ImageShader({ url, isBlurry = true }) {
     const params = {
       vertexShader: vertexShader, // our vertex shader ID
       fragmentShader: fragmentShader, // our fragment shader ID
+      transparent: true,
+      alphaTest: 0,
       uniforms: {
         uTime: {
           value: 0,
@@ -34,6 +36,12 @@ export default function ImageShader({ url, isBlurry = true }) {
         uVoronoi: {
           value: text2,
         },
+        uColor: {
+          value: new THREE.Color("#EFEBE2"),
+        },
+        uOffset: {
+          value: new THREE.Vector2(Math.random() * 3, Math.random() * 3),
+        },
       },
     };
 
@@ -51,8 +59,8 @@ export default function ImageShader({ url, isBlurry = true }) {
     scene.add(createPlaneShader(text1, text2));
 
     const sizes = {
-      width: 500,
-      height: 500,
+      width: 700,
+      height: 700,
     };
 
     const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
@@ -65,6 +73,7 @@ export default function ImageShader({ url, isBlurry = true }) {
     });
     renderer.setSize(sizes.width, sizes.height);
     renderer.render(scene, camera);
+    renderer.setClearColor(0x000000, 0);
 
     // Fonction de mise à jour
     function update() {
