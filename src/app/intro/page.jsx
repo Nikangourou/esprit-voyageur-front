@@ -59,16 +59,15 @@ export default function Intro() {
     <main className={styles.main}>
       <div className={styles.container}>
         {currentPart === 0 && <Tuto1 />}
-        {currentPart === 1 && <Joueurs nextPage={nextPage} />}
-        {currentPart === 2 && (
-          <Remem
-            sddsdber
-            event={() => {
-              dispatch(selectBlufferPlayer());
-              nextPage();
-            }}
-          />
-        )}
+        {currentPart === 1 && <Joueurs gameId={gameId} />}
+        {/*{currentPart === 2 && (*/}
+        {/*  <Remember*/}
+        {/*    event={() => {*/}
+        {/*      dispatch(selectBlufferPlayer());*/}
+        {/*      nextPage();*/}
+        {/*    }}*/}
+        {/*  />*/}
+        {/*)}*/}
         <div className={styles.containerBtn}>
           <p onClick={() => previousPage()}>&lt;=</p>
           <p onClick={() => nextPage()}>=&gt;</p>

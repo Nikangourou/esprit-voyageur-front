@@ -4,8 +4,9 @@ import { addPlayer } from "../../../store/reducers/playersReducer";
 import { useRef } from "react";
 import Button from "../../button/button";
 import { gsap } from "gsap";
+import Link from "next/link";
 
-export default function AddPlayer({ nextPage }) {
+export default function AddPlayer({ gameId }) {
   const playersInGame = useSelector((state) => state.players.playersInGame);
   const players = useSelector((state) => state.players.players);
   const timerRef = useRef(null);
@@ -45,15 +46,12 @@ export default function AddPlayer({ nextPage }) {
           );
         })}
       </div>
-      <button
+      <Link
+        href={`/game/qrcode?gameId=${gameId}`}
         disabled={playersInGame.length < 3}
-        onClick={() => {
-          nextPage();
-          console.log(playersInGame);
-        }}
       >
-        Submit
-      </button>
+        Next Page
+      </Link>
     </section>
   );
 }
