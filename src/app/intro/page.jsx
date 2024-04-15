@@ -3,7 +3,6 @@
 import Image from "next/image";
 import styles from "./page.module.scss";
 import Tuto1 from "../components/tuto/tuto1";
-import QrCode from "../components/qrCode/qrCode";
 import Joueurs from "../components/joueurs/joueurs";
 import { useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";

@@ -1,0 +1,25 @@
+.main{
+    background-image: url("/bg.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .container{
+        text-align: center;
+
+        .btnPlay{
+            background-color: #1C1C1E;
+            margin-top: 20px;
+            display: block;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+    }
+}

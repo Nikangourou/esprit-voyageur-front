@@ -7,8 +7,8 @@ export default function QrCode({ gameId }) {
     console.log(url)
 
     return (
-        <main>
+        <div>
             <QRCodeSVG value={url}/>
-        </main>
+        </div>
     );
 }
