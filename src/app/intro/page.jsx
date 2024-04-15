@@ -3,12 +3,10 @@
 import Image from "next/image";
 import styles from "./page.module.scss";
 import Tuto1 from "../components/tuto/tuto1";
-import QrCode from "../components/qrCode/qrCode";
 import Joueurs from "../components/joueurs/joueurs";
 import { useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 import Remember from "../components/remember/remember";
-import PageContainer from "../components/pageContainer/pageContainer";
 import { useDispatch } from "react-redux";
 import { selectBlufferPlayer } from "../store/reducers/playersReducer";
 
@@ -44,8 +42,8 @@ export default function Intro() {
   }, []);
 
   const nextPage = () => {
-    if (currentPart === 3) {
-      return;
+    if (currentPart === 2) {
+      window.location.href = `/game/qrcode?gameId=${gameId}`;
     }
     setCurrentPage(currentPart + 1);
   };
@@ -74,15 +72,6 @@ export default function Intro() {
           <p onClick={() => previousPage()}>&lt;=</p>
           <p onClick={() => nextPage()}>=&gt;</p>
         </div>
-
-        {currentPart === 3 && (
-          <PageContainer pageCategory={"bluffer"}>
-            <QrCode gameId={gameId} />
-            <a className={styles.btnPlay} href={`/game?gameId=${gameId}`}>
-              Play
-            </a>
-          </PageContainer>
-        )}
       </div>
     </main>
   );
