@@ -5,6 +5,7 @@ import QrCode from "../../components/qrCode/qrCode";
 import PageContainer from "../../components/pageContainer/pageContainer";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 
 export default function Code() {
   const [gameId, setGameId] = useState();
@@ -19,9 +20,7 @@ export default function Code() {
       <div className={styles.container}>
         <PageContainer pageCategory={"bluffer"}>
           <QrCode gameId={gameId} />
-          <a className={styles.btnPlay} href={`/game?gameId=${gameId}`}>
-            Play
-          </a>
+          <Link href={`/game?gameId=${gameId}`}>Next Page</Link>
         </PageContainer>
       </div>
     </main>
