@@ -51,7 +51,7 @@ export default function AddPlayer({ gameId }) {
         href={`/game/qrcode?gameId=${gameId}`}
         disabled={playersInGame.length < 3}
       >
-        Next Page
+        <Button type={"link"} disabled={playersInGame.length < 3}>Valider</Button>
       </Link>
     </section>
   );

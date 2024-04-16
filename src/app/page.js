@@ -3,8 +3,8 @@
 import { useEffect, useRef } from "react";
 import styles from "./page.module.scss";
 import { gsap, Sine } from "gsap";
-import Blob from "./components/blob/blob";
 import Button from "./components/button/button";
+import Link from "next/link";
 
 export default function Home() {
   const tlRef = useRef();
@@ -42,31 +42,14 @@ export default function Home() {
     // };
   }, []);
 
-  const eventsFunctions = {
-    // onMouseDown: handleMouseDown,
-    // onMouseUp: handleMouseUp,
-    // onMouseLeave: handleMouseUp,
-  };
-
   return (
     <main className={styles.main}>
       <div className={styles.container}>
         <img src="/Logo.svg" alt="Logo" />
         <div>
-          <a className={styles.btn} href="/intro">
-            Jouer
-          </a>
-        </div>
-        <Button type={"blob"} color={"red"} events={eventsFunctions}></Button>
-        <div className={styles.blob}>
-          <Blob
-            numPoints={7}
-            minRadius={40}
-            maxRadius={42}
-            minDuration={1}
-            maxDuration={2}
-            color={"#FF00FF"}
-          />
+          <Link className={styles.btn} href="/intro">
+            <Button type="link"> Jouer </Button>
+          </Link>
         </div>
       </div>
     </main>
