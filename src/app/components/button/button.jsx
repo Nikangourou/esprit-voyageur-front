@@ -58,6 +58,8 @@ export default function Button({
       return (
           <Blob
             numPoints={4}
+            width={200}
+            height={100}
             minRadius={40}
             maxRadius={42}
             minDuration={1}
