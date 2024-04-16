@@ -10,8 +10,8 @@ const ImageShader = forwardRef(function ImageShader(
   ref,
 ) {
   const canvasRef = useRef(null);
+  const rendererRef = useRef(null);
   const materialRef = useRef();
-  const textures = useRef();
   const startTimeRef = useRef(Date.now()); // Stocker le temps de départ
 
   function createPlaneShader(text1, text2) {
@@ -56,62 +56,56 @@ const ImageShader = forwardRef(function ImageShader(
     );
     return cube2;
   }
-  function initThree(text1, text2) {
-    const scene = new THREE.Scene();
-
-    scene.add(createPlaneShader(text1, text2));
-
-    const sizes = {
-      width: 700,
-      height: 700,
-    };
-
-    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-    camera.position.z = 0;
-    // camera.lookAt(new THREE.Vector3(0, - 1, 0))
-    scene.add(camera);
-
-    const renderer = new THREE.WebGLRenderer({
-      canvas: canvasRef.current,
-    });
-    renderer.setSize(sizes.width, sizes.height);
-    renderer.render(scene, camera);
-    renderer.setClearColor(0x000000, 0);
-
-    // Fonction de mise à jour
-    function update() {
-      const currentTime = Date.now();
-      const deltaTime = currentTime - startTimeRef.current;
-      startTimeRef.current = currentTime;
-      materialRef.current.uniforms.uTime.value += deltaTime * 0.05; // Mettre à jour uTime avec le temps écoulé en secondes
-      renderer.render(scene, camera); // Rendu de la scène
-      requestAnimationFrame(update); // Appel récursif de la fonction update
-    }
-
-    // Démarrer la boucle de rendu
-    update();
-    gsap.to(materialRef.current.uniforms.uProgress, {
-      value: 1,
-      duration: 10,
-      ease: "sine.in",
-      onComplete: () => {
-        console.log("done");
-      },
-    });
-  }
 
   useEffect(() => {
-    if (canvasRef.current && !textures.current) {
+    if (canvasRef.current && !rendererRef.current) {
       // Scene
+      rendererRef.current = new THREE.WebGLRenderer({
+        canvas: canvasRef.current,
+      });
+      const sizes = {
+        width: 700,
+        height: 700,
+      };
+      rendererRef.current.setSize(sizes.width, sizes.height);
       const textureLoader = new THREE.TextureLoader();
 
-      textureLoader.load(url, (textGenerated) => {
+      const scene = new THREE.Scene();
+
+      const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+      camera.position.z = 0;
+      // camera.lookAt(new THREE.Vector3(0, - 1, 0))
+      scene.add(camera);
+
+      rendererRef.current.render(scene, camera);
+      rendererRef.current.setClearColor(0x000000, 0);
+
+      textureLoader.load(url ? url : "/image.png", (textGenerated) => {
         textureLoader.load("/voronoi.jpg", (textVoronoi) => {
-          initThree(textGenerated, textVoronoi);
+          scene.add(createPlaneShader(textGenerated, textVoronoi));
+          // Fonction de mise à jour
+          function update() {
+            const currentTime = Date.now();
+            const deltaTime = currentTime - startTimeRef.current;
+            startTimeRef.current = currentTime;
+            materialRef.current.uniforms.uTime.value += deltaTime * 0.05; // Mettre à jour uTime avec le temps écoulé en secondes
+            rendererRef.current.render(scene, camera); // Rendu de la scène
+            requestAnimationFrame(update); // Appel récursif de la fonction update
+          }
+          // Démarrer la boucle de rendu
+          update();
+          gsap.to(materialRef.current.uniforms.uProgress, {
+            value: 1,
+            duration: 10,
+            ease: "sine.in",
+            onComplete: () => {
+              console.log("done");
+            },
+          });
         });
       });
     }
-  }, [url]);
+  }, []);
 
   useEffect(() => {
     if (!isBlurry) {

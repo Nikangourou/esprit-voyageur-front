@@ -63,6 +63,7 @@ export default function Intro() {
     };
 
     socket.current.on("imageGenerated", handleImagesAllGenerated);
+    socket.current.on("startChrono", handleImagesAllGenerated);
 
     // Nettoyage : Désinscrire et fermer la connexion lors du démontage du composant
     return () => {

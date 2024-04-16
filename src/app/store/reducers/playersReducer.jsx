@@ -5,6 +5,7 @@ export const playersSlice = createSlice({
   initialState: {
     playersInGame: [],
     currentBluffeur: "",
+    currentSocket: null,
     nbRound: 0,
     players: {
       rouge: { color: "red", score: 0, alreadyPlay: false },
@@ -17,6 +18,9 @@ export const playersSlice = createSlice({
     },
   },
   reducers: {
+    setCurrentSocket: (state, action) => {
+      state.currentSocket = action.payload.socket;
+    },
     addPlayer: (state, action) => {
       console.log(action.payload.color);
       let playerAlreadyAdded = state.players[action.payload.color].used;
@@ -74,5 +78,6 @@ export const {
   incrementScorePlayers,
   resetGame,
   incrementNbRound,
+  setCurrentSocket,
 } = playersSlice.actions;
 export default playersSlice.reducer;
