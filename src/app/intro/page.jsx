@@ -42,7 +42,7 @@ export default function Intro() {
   }, []);
 
   const nextPage = () => {
-    if (currentPart === 2) {
+    if (currentPart === 1) {
       window.location.href = `/game/qrcode?gameId=${gameId}`;
     }
     setCurrentPage(currentPart + 1);
@@ -58,8 +58,8 @@ export default function Intro() {
   return (
     <main className={styles.main}>
       <div className={styles.container}>
-        {currentPart === 0 && <Tuto1 />}
-        {currentPart === 1 && <Joueurs gameId={gameId} />}
+        {/* {currentPart === 0 && <Tuto1 />} */}
+        {currentPart === 0 && <Joueurs gameId={gameId} />}
         {/*{currentPart === 2 && (*/}
         {/*  <Remember*/}
         {/*    event={() => {*/}
@@ -68,10 +68,10 @@ export default function Intro() {
         {/*    }}*/}
         {/*  />*/}
         {/*)}*/}
-        <div className={styles.containerBtn}>
+        {/* <div className={styles.containerBtn}>
           <p onClick={() => previousPage()}>&lt;=</p>
           <p onClick={() => nextPage()}>=&gt;</p>
-        </div>
+        </div> */}
       </div>
     </main>
   );
