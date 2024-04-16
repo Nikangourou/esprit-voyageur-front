@@ -1,19 +1,21 @@
 "use client";
 
 import styles from "./page.module.scss";
-import { useEffect, useState, useRef } from "react";
-import { io } from "socket.io-client";
+import { useEffect, useState, useRef, useContext } from "react";
 import { v4 as uuidv4 } from "uuid";
 import Countdown from "../components/chrono/countdown";
 import GameFlow from "../components/gameFlow/gameFlow";
+import { useDispatch } from "react-redux";
+import { SocketContext } from "../context/socketContext";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function Intro() {
+  const { socket } = useContext(SocketContext);
   const [currentPart, setCurrentPage] = useState(0);
   const [images, setImages] = useState([]);
   const gameId = useRef(null);
-  const socket = useRef(null);
+  const dispatch = useDispatch();
 
   const nextPage = () => {
     if (currentPart === 3) {
@@ -30,16 +32,6 @@ export default function Intro() {
   };
 
   useEffect(() => {
-    // Initialiser la connexion une seule fois
-    if (!socket.current) {
-      const urlParams = new URLSearchParams(window.location.search);
-      gameId.current = urlParams.get("gameId");
-
-      socket.current = io("localhost:5001");
-      socket.current.emit("connexionPrimary", gameId.current);
-    }
-
-    // Séparer écoute d'événement de l'initialisation de la connexion
     const handleImagesAllGenerated = (_id) => {
       fetch(`${apiUrl}/image/get/${_id}`, {
         method: "GET",
@@ -62,20 +54,25 @@ export default function Intro() {
         });
     };
 
-    socket.current.on("imageGenerated", handleImagesAllGenerated);
-    socket.current.on("startChrono", handleImagesAllGenerated);
+    // Initialiser la connexion une seule fois
+    if (socket) {
+      const urlParams = new URLSearchParams(window.location.search);
+      gameId.current = urlParams.get("gameId");
+
+      socket.emit("connexionPrimary", gameId.current);
+
+      // Séparer écoute d'événement de l'initialisation de la connexion
+
+      socket.on("imageGenerated", handleImagesAllGenerated);
+    }
 
     // Nettoyage : Désinscrire et fermer la connexion lors du démontage du composant
     return () => {
-      if (socket.current) {
-        socket.current.off("imageGenerated", handleImagesAllGenerated);
-        socket.current.close();
-        socket.current = null;
-      }
+      socket?.off("imageGenerated", handleImagesAllGenerated);
     };
 
     // Aucune dépendance donnée à useEffect, donc il agit comme componentDidMount
-  }, []);
+  }, [socket]);
 
   return (
     <main className={styles.main}>

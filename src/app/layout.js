@@ -1,7 +1,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import FullScreen from "./components/fullScreen/fullScreen";
-import store from "./store/index"
+import { SocketProvider } from "./context/socketContext";
 
 const inter = Inter({ subsets: ["latin"] });
 import StoreProvider from "./store/storeProvider";
@@ -13,13 +13,12 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-
-    <body className={inter.className}>
-              <FullScreen />
-              <StoreProvider>{children}</StoreProvider>
-
+      <body className={inter.className}>
+        <FullScreen />
+        <StoreProvider>
+          <SocketProvider>{children}</SocketProvider>
+        </StoreProvider>
       </body>
-
     </html>
   );
 }

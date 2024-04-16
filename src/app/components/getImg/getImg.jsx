@@ -1,17 +1,18 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useContext } from "react";
 import styles from "./getImg.module.scss";
-import { io } from "socket.io-client";
+import { SocketContext } from "../../context/socketContext";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function GetImg({ prompt, gameId, type }) {
+  const { socket } = useContext(SocketContext);
   const [base64, setBase64] = useState(null);
   const isLaunched = useRef(false);
 
   useEffect(() => {
-    if (gameId && !isLaunched.current) {
+    if (gameId && !isLaunched.current && socket) {
       isLaunched.current = true;
       fetch(`${apiUrl}/image/post/create`, {
         method: "POST",
@@ -28,11 +29,10 @@ export default function GetImg({ prompt, gameId, type }) {
         .then((data) => {
           console.log(data);
           setBase64(`data:image/png;base64,${data.base64}`);
-          const socket = io("localhost:5001");
           socket.emit("imagesAllGenerated", gameId, data._id);
         });
     }
-  }, [prompt]);
+  }, [prompt, socket]);
 
   return <img className={styles.img} src={base64} alt="Generated image" />;
 }

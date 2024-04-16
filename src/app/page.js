@@ -3,7 +3,8 @@
 import { useEffect, useRef } from "react";
 import styles from "./page.module.scss";
 import { gsap, Sine } from "gsap";
-import Blob from "./components/blob/blob"; 
+import Blob from "./components/blob/blob";
+import Link from "next/link";
 
 export default function Home() {
   const blobRef = useRef();
@@ -46,9 +47,13 @@ export default function Home() {
     <main className={styles.main}>
       <div className={styles.container}>
         <img src="/Logo.svg" alt="Logo" />
-        <div><a className={styles.btn} href="/intro">Jouer</a></div>
+        <div>
+          <Link className={styles.btn} href="/intro">
+            Jouer
+          </Link>
+        </div>
         <div className={styles.blob}>
-        <svg ref={blobRef} id="svg" viewBox="0 0 1000 1000">
+          <svg ref={blobRef} id="svg" viewBox="0 0 1000 1000">
             <Blob
               numPoints={7}
               centerX={50}
@@ -60,7 +65,6 @@ export default function Home() {
             />
           </svg>
         </div>
-
       </div>
     </main>
   );

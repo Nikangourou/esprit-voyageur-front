@@ -5,10 +5,8 @@ import styles from "./page.module.scss";
 import Tuto1 from "../components/tuto/tuto1";
 import Joueurs from "../components/joueurs/joueurs";
 import { useState, useEffect, useRef } from "react";
-import { io } from "socket.io-client";
-import Remember from "../components/remember/remember";
 import { useDispatch } from "react-redux";
-import { selectBlufferPlayer } from "../store/reducers/playersReducer";
+import { useRouter } from "next/navigation";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -16,13 +14,12 @@ export default function Intro() {
   const [currentPart, setCurrentPage] = useState(0);
   const [gameId, setGameId] = useState();
   const launched = useRef(false);
-  const dispatch = useDispatch();
+  const router = useRouter();
 
   useEffect(() => {
     if (!launched.current) {
       launched.current = true;
 
-      const socket = io("localhost:5001");
       fetch(`${apiUrl}/game/post/create`, {
         method: "POST",
         headers: {
@@ -43,7 +40,7 @@ export default function Intro() {
 
   const nextPage = () => {
     if (currentPart === 2) {
-      window.location.href = `/game/qrcode?gameId=${gameId}`;
+      router.push(`/game/qrcode?gameId=${gameId}`);
     }
     setCurrentPage(currentPart + 1);
   };
@@ -60,14 +57,6 @@ export default function Intro() {
       <div className={styles.container}>
         {currentPart === 0 && <Tuto1 />}
         {currentPart === 1 && <Joueurs gameId={gameId} />}
-        {/*{currentPart === 2 && (*/}
-        {/*  <Remember*/}
-        {/*    event={() => {*/}
-        {/*      dispatch(selectBlufferPlayer());*/}
-        {/*      nextPage();*/}
-        {/*    }}*/}
-        {/*  />*/}
-        {/*)}*/}
         <div className={styles.containerBtn}>
           <p onClick={() => previousPage()}>&lt;=</p>
           <p onClick={() => nextPage()}>=&gt;</p>

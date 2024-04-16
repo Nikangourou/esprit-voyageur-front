@@ -201,7 +201,7 @@ export const fragmentShader = `
         return dot(rgb,vec3(.299,.587,.144));
     }
     
-        float random(vec2 st){
+    float random(vec2 st){
         return fract(sin(dot(st.xy,vec2(12.9898,78.233)))*43758.5453123);
     }
     
@@ -226,9 +226,9 @@ export const fragmentShader = `
         float innerNoise =  fbm(vec3((textureCoord1+uOffset)*3.5,uTime*.00175) ) * 35.5;
         
         vec2 tmpTextureCoord = textureCoord;
-        applyGlass(tmpTextureCoord,innerNoise*.005);
-        
-        vec4 text =  texture2D(uImage, tmpTextureCoord + vec2(innerNoise*.001));
+        tmpTextureCoord.x += (random(tmpTextureCoord)*2. - 1.) *.05 * uProgressBlur + (innerNoise*.005) * uProgressBlur;
+
+        vec4 text =  texture2D(uImage, tmpTextureCoord );
         vec4 textVoronoi =  texture2D(uVoronoi, textureCoord1);
 
    
@@ -250,11 +250,8 @@ export const fragmentShader = `
         final *= circle;
         float alpha = abs(1.0 - voronoi.r - circle) - (1.0 - circle);
         
-        // gl_FragColor = vec4(final*circle*voronoi.r+(1.-voronoi.r),abs(circle))   ;
         gl_FragColor = vec4( final,  alpha) ;
-        // gl_FragColor = vec4(voronoi,1.)  ;
-        // gl_FragColor = vec4(1.,0.,0.,1.);
-        // gl_FragColor = finalText * (innerNoise)  ;
+        
     }
 `;
 

@@ -1,15 +1,14 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useContext } from "react";
 import styles from "./chat.module.scss";
 import Message from "./message/message";
 import RecordingComponent from "../recordingComponent/recordingComponent";
 import * as utils from "../../utils/micro";
 import { v4 as uuidv4 } from "uuid";
 import { pending } from "../../utils/utils";
-import { io } from "socket.io-client";
-import { get } from "http";
 import Countdown from "../chrono/countdown";
+import { SocketContext } from "../../context/socketContext";
 
 const firstMessage = {
   id: uuidv4(),
@@ -21,6 +20,7 @@ const firstMessage = {
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function Chat() {
+  const { socket } = useContext(SocketContext);
   const [input, setInput] = useState("");
   const [base64, setBase64] = useState(null);
   const [messages, setMessages] = useState([firstMessage]);
@@ -28,7 +28,6 @@ export default function Chat() {
   const threadKey = useRef(null);
   const gameId = useRef(null);
   const isReadyRef = useRef(false);
-  const socket = useRef(null);
 
   useEffect(() => {
     if (!isReadyRef.current) {
@@ -50,18 +49,12 @@ export default function Chat() {
           console.log(data);
           threadKey.current = data.key;
 
-          socket.current = io("localhost:5001");
-          socket.current.emit("connexionPhone", gameId.current);
+          socket?.emit("connexionPhone", gameId.current);
         });
     }
 
-    return () => {
-      // if (socket.current) {
-      //     socket.current.close();
-      //     socket.current = null;
-      // }
-    };
-  }, []);
+    return () => {};
+  }, [socket]);
 
   useEffect(() => {
     if (base64) {
