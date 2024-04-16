@@ -10,7 +10,7 @@ import PageContainer from "../pageContainer/pageContainer";
 export default function GameFlow({ images }) {
   const [currentPhase, setCurrentPhase] = useState(0);
   const [contentSentence, setContentSentence] = useState();
-  const [chronoStart, setChronoStart] = useState(5);
+  const [chronoStart, setChronoStart] = useState(20);
   const [colorListTrue, setColorListTrue] = useState([]);
   const [isBlurry, setIsBlurry] = useState(true);
   const containerRef = useRef();
@@ -65,7 +65,6 @@ export default function GameFlow({ images }) {
   }
 
   function eventEndClock() {
-    console.log(playersInGame);
     switch (currentPhase) {
       case 0: // Passage images flou à non flou
         //TODO rendre fluide la transition avec GSAP
@@ -76,7 +75,7 @@ export default function GameFlow({ images }) {
             <i>Ne vous laissez pas berner...</i>
           </p>,
         );
-        setChronoStart(10);
+        setChronoStart(20);
         setTimeout(() => {
           setCurrentPhase(1);
         }, 1000);

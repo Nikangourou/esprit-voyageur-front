@@ -11,7 +11,7 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function Intro() {
   const [currentPart, setCurrentPage] = useState(0);
-  const [images, setImages] = useState([1, 2]);
+  const [images, setImages] = useState([]);
   const gameId = useRef(null);
   const socket = useRef(null);
 
@@ -80,7 +80,7 @@ export default function Intro() {
     <main className={styles.main}>
       {currentPart == 0 && (
         <div className={styles.container}>
-          <Countdown start={3} onEnd={nextPage} />
+          <Countdown start={120} onEnd={nextPage} />
         </div>
       )}
       {currentPart == 1 && <GameFlow images={images}></GameFlow>}

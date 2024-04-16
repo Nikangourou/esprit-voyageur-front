@@ -266,7 +266,7 @@ export default function Chat() {
 
   return (
     <div className={styles.chat}>
-      <Countdown start={20} onEnd={onEndCountdown} />
+      <Countdown start={120} onEnd={onEndCountdown} />
       <div className={styles.containerMessages}>
         {messages.map((message) => {
           return (

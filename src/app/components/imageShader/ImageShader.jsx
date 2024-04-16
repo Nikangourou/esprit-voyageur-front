@@ -105,7 +105,7 @@ const ImageShader = forwardRef(function ImageShader(
       // Scene
       const textureLoader = new THREE.TextureLoader();
 
-      textureLoader.load(url ? url : "/image.png", (textGenerated) => {
+      textureLoader.load(url, (textGenerated) => {
         textureLoader.load("/voronoi.jpg", (textVoronoi) => {
           initThree(textGenerated, textVoronoi);
         });
