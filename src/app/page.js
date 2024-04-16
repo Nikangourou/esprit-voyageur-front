@@ -4,10 +4,9 @@ import { useEffect, useRef } from "react";
 import styles from "./page.module.scss";
 import { gsap, Sine } from "gsap";
 import Blob from "./components/blob/blob";
-import Link from "next/link";
+import Button from "./components/button/button";
 
 export default function Home() {
-  const blobRef = useRef();
   const tlRef = useRef();
   const hoverItemRef = useRef();
   const blobPathRef = useRef();
@@ -43,27 +42,31 @@ export default function Home() {
     // };
   }, []);
 
+  const eventsFunctions = {
+    // onMouseDown: handleMouseDown,
+    // onMouseUp: handleMouseUp,
+    // onMouseLeave: handleMouseUp,
+  };
+
   return (
     <main className={styles.main}>
       <div className={styles.container}>
         <img src="/Logo.svg" alt="Logo" />
         <div>
-          <Link className={styles.btn} href="/intro">
+          <a className={styles.btn} href="/intro">
             Jouer
-          </Link>
+          </a>
         </div>
+        <Button type={"blob"} color={"red"} events={eventsFunctions}></Button>
         <div className={styles.blob}>
-          <svg ref={blobRef} id="svg" viewBox="0 0 1000 1000">
-            <Blob
-              numPoints={7}
-              centerX={50}
-              centerY={200}
-              minRadius={40}
-              maxRadius={42}
-              minDuration={1}
-              maxDuration={2}
-            />
-          </svg>
+          <Blob
+            numPoints={7}
+            minRadius={40}
+            maxRadius={42}
+            minDuration={1}
+            maxDuration={2}
+            color={"#FF00FF"}
+          />
         </div>
       </div>
     </main>

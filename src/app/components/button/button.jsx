@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import styles from "./button.module.scss";
+import Blob from "../blob/blob";
 import { gsap } from "gsap";
 import { Draggable } from "gsap/Draggable";
 
@@ -50,6 +51,19 @@ export default function Button({
           </svg>
           {children}
         </>
+      );
+    }
+
+    if (type == "blob") {
+      return (
+          <Blob
+            numPoints={4}
+            minRadius={40}
+            maxRadius={42}
+            minDuration={1}
+            maxDuration={2}
+            color={color}
+          />
       );
     }
   }

@@ -4,12 +4,13 @@ import { gsap, Sine } from "gsap";
 
 export default function Blob({
   numPoints,
-  centerX,
-  centerY,
+  centerX = 100,
+  centerY = 100,
   minRadius,
   maxRadius,
   minDuration,
   maxDuration,
+  color,
 }) {
   const blobPathRef = useRef();
   const tlRef = useRef();
@@ -138,5 +139,9 @@ export default function Blob({
     return min + (max - min) * Math.random();
   }
 
-  return <path id="blob" ref={blobPathRef} />;
+  return (
+    <svg id="svg" viewBox="0 0 200 200" width={200} height={200}>
+      <path id="blob" ref={blobPathRef} fill={color} width={200} height={200} />
+    </svg>
+  );
 }
