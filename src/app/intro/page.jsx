@@ -58,7 +58,7 @@ export default function Intro() {
         {/* {currentPart === 0 && <Tuto1 />} */}
         {currentPart === 0 && <Joueurs gameId={gameId} />}
         {/*{currentPart === 2 && (*/}
-        {/*  <Remember*/}
+        {/*  <Score*/}
         {/*    event={() => {*/}
         {/*      dispatch(selectBlufferPlayer());*/}
         {/*      nextPage();*/}

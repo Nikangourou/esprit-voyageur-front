@@ -74,7 +74,7 @@ export default function PageContainer({
         return {
           subTitle: "Voici le",
           textureShader: "/images/score.png",
-          content: <p></p>,
+          content: <p>Voici un petit résumé des scores !</p>,
         };
     }
   };

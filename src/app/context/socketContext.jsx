@@ -10,7 +10,7 @@ import React, {
 import { io } from "socket.io-client";
 
 // Créez le contexte
-const value = { socket: io("localhost:5001") };
+const value = { socket: io("10.137.98.39:5001") };
 const SocketContext = createContext(value);
 
 // Créez le fournisseur de contexte
