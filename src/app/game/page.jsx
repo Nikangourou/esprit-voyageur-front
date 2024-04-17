@@ -7,6 +7,7 @@ import Countdown from "../components/chrono/countdown";
 import GameFlow from "../components/gameFlow/gameFlow";
 import { useDispatch } from "react-redux";
 import { SocketContext } from "../context/socketContext";
+import Score from "../components/score/score";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -71,7 +72,10 @@ export default function Intro() {
           <Countdown start={120} onEnd={nextPage} />
         </div>
       )}
-      {currentPart == 1 && <GameFlow images={images}></GameFlow>}
+      {currentPart == 1 && (
+        <GameFlow images={images} nextPage={nextPage}></GameFlow>
+      )}
+      {currentPart == 2 && <Score gameId={gameId}></Score>}
     </main>
   );
 }

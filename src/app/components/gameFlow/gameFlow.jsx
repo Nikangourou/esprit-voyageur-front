@@ -4,10 +4,13 @@ import { useEffect, useRef, useState } from "react";
 import ImageShader from "../imageShader/ImageShader";
 import Countdown from "../chrono/countdown";
 import Button from "../button/button";
-import { incrementScorePlayers } from "../../store/reducers/playersReducer";
+import {
+  incrementNbRound,
+  incrementScorePlayers,
+} from "../../store/reducers/playersReducer";
 import PageContainer from "../pageContainer/pageContainer";
 
-export default function GameFlow({ images }) {
+export default function GameFlow({ images, nextPage }) {
   const [currentPhase, setCurrentPhase] = useState(0);
   const [contentSentence, setContentSentence] = useState();
   const [chronoStart, setChronoStart] = useState(20);
@@ -74,10 +77,8 @@ export default function GameFlow({ images }) {
             <i>Ne vous laissez pas berner...</i>
           </p>
         );
-        setChronoStart(20);
-        setTimeout(() => {
-          setCurrentPhase(1);
-        }, 1000);
+        setChronoStart(10);
+        setCurrentPhase(1);
         break;
       case 1: // Passage phase réflexion à la phase vote
         //TODO rendre fluide la transition avec GSAP
@@ -88,16 +89,16 @@ export default function GameFlow({ images }) {
             <i>Déplace ton pion Joueur sur le véritable souvenir.</i>
           </p>
         );
-        setChronoStart(2000);
-        setTimeout(() => {
-          setCurrentPhase(2);
-        }, 1000);
+        setChronoStart(20);
+        setCurrentPhase(2);
         break;
       case 2: // Passage phase vote à la phase score
         //TODO rendre fluide la transition avec GSAP
         setCurrentPhase(3);
         //TODO Récupérer les votes et les enregistrer dans colorListTrue
-        // dispatch(incrementScorePlayers(colorListTrue));
+        dispatch(incrementScorePlayers({ imageTrue: colorListTrue }));
+        dispatch(incrementNbRound());
+        nextPage();
         break;
     }
   }
@@ -142,15 +143,13 @@ export default function GameFlow({ images }) {
                   dragContainer={containerRef.current}
                   key={i + color}
                   type={"player"}
+                  dataColor={color}
                   color={players[color].color}
                   colorActive={true}
                 ></Button>
               );
             }
           })}
-        {currentPhase == 3 && (
-          <PageContainer pageCategory={"score"}></PageContainer>
-        )}
       </div>
     </section>
   );

@@ -46,6 +46,7 @@ export default function AddPlayer({ gameId }) {
               type={"player"}
               events={eventsFunctions}
               color={colorName}
+              dataColor={colorName}
             ></Button>
           );
         })}
@@ -54,7 +55,9 @@ export default function AddPlayer({ gameId }) {
         href={`/game/qrcode?gameId=${gameId}`}
         disabled={playersInGame.length < 3}
       >
-        <Button type={"link"} disabled={playersInGame.length < 3}>Valider</Button>
+        <Button type={"link"} disabled={playersInGame.length < 3}>
+          Valider
+        </Button>
       </Link>
     </section>
   );

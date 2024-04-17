@@ -15,6 +15,7 @@ export default function Button({
   disabled = false,
   dragContainer = null,
   dragEndEvent = null,
+  dataColor = null,
 }) {
   const buttonRef = useRef();
   const draggableRef = useRef();
@@ -45,8 +46,8 @@ export default function Button({
         <button
           {...events}
           className={`${styles.button} ${styles[type]}`}
-          data-color={color != "none" ? color : "none"}
-          style={colorActive ? { color: color } : {}}
+          data-color={dataColor != "none" ? dataColor : "none"}
+          style={colorActive ? { backgroundColor: color } : {}}
           ref={buttonRef}
         >
           <svg
@@ -66,8 +67,8 @@ export default function Button({
         <button
           {...events}
           className={`${styles.button} ${styles[type]}`}
-          data-color={color != "none" ? color : "none"}
-          style={colorActive ? { color: color } : {}}
+          data-color={dataColor != "none" ? dataColor : "none"}
+          style={colorActive ? { backgroundColor: color } : {}}
           ref={buttonRef}
         />
       );

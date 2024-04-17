@@ -41,7 +41,10 @@ export const playersSlice = createSlice({
     // Increment le score de tout les joueurs selon le parametre de la fonction.
     // format paramettre : {imageTrue: [...listeCouleurs] }
     incrementScorePlayers: (state, action) => {
+      console.log(action.payload);
+
       action.payload.imageTrue.forEach((color) => {
+        console.log(state.players[color]);
         state.players[color].score += 1;
       });
       state.players[state.currentBluffeur].score +=
