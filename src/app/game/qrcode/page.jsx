@@ -7,14 +7,15 @@ import PageContainer from "../../components/pageContainer/pageContainer";
 import { useContext, useEffect, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { SocketContext } from "../../context/socketContext";
-import { useSearchParams } from "next/navigation";
+// import { useSearchParams } from "next/navigation";
 
 export default function Code() {
   const router = useRouter();
   const isReady = useRef(false);
   const { socket } = useContext(SocketContext);
-  const searchParams = useSearchParams();
-  const gameId = searchParams.get("gameId");
+  // const searchParams = useSearchParams();
+  // const gameId = searchParams.get("gameId");
+  const {gameId} = router.query
 
   useEffect(() => {
     if (socket && !isReady.current) {
