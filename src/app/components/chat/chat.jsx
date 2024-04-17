@@ -36,8 +36,6 @@ export default function Chat() {
   const threadKey = useRef(null);
   const gameId = useRef(null);
   const isReadyRef = useRef(false);
-  const socket = useRef(null);
-
   const containerMessagesRef = useRef(null);
 
   useEffect(() => {
