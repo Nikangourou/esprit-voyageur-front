@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "./recording.module.scss";
 
 const RecordingComponent = ({ onEnd }) => {
   const [isRecording, setIsRecording] = useState(false);
-  const [mediaRecorder, setMediaRecorder] = useState(null);
+  // const [mediaRecorder, setMediaRecorder] = useState(null);
+
+  const mediaRecorder = useRef(null);
 
   const initMediaRecorder = async () => {
     if (
-      !mediaRecorder &&
+      !mediaRecorder.current &&
       navigator.mediaDevices &&
       navigator.mediaDevices.getUserMedia
     ) {
@@ -21,7 +23,8 @@ const RecordingComponent = ({ onEnd }) => {
         newMediaRecorder.onerror = (event) =>
           console.error("MediaRecorder error:", event.error);
 
-        setMediaRecorder(newMediaRecorder);
+        // setMediaRecorder(newMediaRecorder);
+        mediaRecorder.current = newMediaRecorder;
       } catch (error) {
         console.error("Error accessing media devices:", error);
       }
@@ -39,8 +42,8 @@ const RecordingComponent = ({ onEnd }) => {
   };
 
   const startRecording = () => {
-    if (mediaRecorder && mediaRecorder.state === "inactive") {
-      mediaRecorder.start();
+    if (mediaRecorder.current && mediaRecorder.current.state === "inactive") {
+      mediaRecorder.current.start();
       setIsRecording(true);
     } else {
       console.error("MediaRecorder not initialized or already recording");
@@ -48,8 +51,8 @@ const RecordingComponent = ({ onEnd }) => {
   };
 
   const stopRecording = () => {
-    if (mediaRecorder && mediaRecorder.state === "recording") {
-      mediaRecorder.stop();
+    if (mediaRecorder.current && mediaRecorder.current.state === "recording") {
+      mediaRecorder.current.stop();
     }
   };
 
