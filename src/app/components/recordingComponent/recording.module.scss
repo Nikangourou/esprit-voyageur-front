@@ -1,0 +1,10 @@
+.recording {
+  background-image: url("/icon-mic.svg");
+  background-size: contain;
+  height: 70px;
+  width: 70px;
+
+  &.recordingActive {
+    background-image: url("/icon-mic-active.svg");
+  }
+}
