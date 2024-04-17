@@ -4,12 +4,13 @@ import { gsap, Sine } from "gsap";
 
 export default function Blob({
   numPoints,
-  centerX,
-  centerY,
+  width = 200,
+  height = 200,
   minRadius,
   maxRadius,
   minDuration,
   maxDuration,
+  color,
 }) {
   const blobPathRef = useRef();
   const tlRef = useRef();
@@ -18,8 +19,8 @@ export default function Blob({
     const blob = createBlob({
       element: blobPathRef.current,
       numPoints,
-      centerX,
-      centerY,
+      width,
+      height,
       minRadius,
       maxRadius,
       minDuration,
@@ -36,8 +37,8 @@ export default function Blob({
     };
   }, [
     numPoints,
-    centerX,
-    centerY,
+    width,
+    height,
     minRadius,
     maxRadius,
     minDuration,
@@ -62,13 +63,13 @@ export default function Blob({
     const slice = (Math.PI * 2) / options.numPoints;
     for (let i = 0; i < options.numPoints; i++) {
       const angle = slice * i;
-      const initialX = options.centerX + Math.cos(angle) * options.minRadius;
-      const initialY = options.centerY + Math.sin(angle) * options.minRadius;
+      const initialX = options.width / 2 + Math.cos(angle) * options.minRadius;
+      const initialY = options.height / 2 + Math.sin(angle) * options.minRadius;
       const point = { x: initialX, y: initialY };
       points.push(point);
 
-      const targetX = options.centerX + Math.cos(angle) * options.maxRadius;
-      const targetY = options.centerY + Math.sin(angle) * options.maxRadius;
+      const targetX = options.width / 2 + Math.cos(angle) * options.maxRadius;
+      const targetY = options.height / 2 + Math.sin(angle) * options.maxRadius;
 
       // Create a GSAP tween for the point using `to` method chaining it with `yoyo` and `repeat` to make it bounce between minRadius and maxRadius
       gsap.to(point, {
@@ -138,5 +139,14 @@ export default function Blob({
     return min + (max - min) * Math.random();
   }
 
-  return <path id="blob" ref={blobPathRef} />;
+  return (
+    <svg
+      id="svg"
+      viewBox={`0 0 ${width} ${height}`}
+      width={width}
+      height={height}
+    >
+      <path id="blob" ref={blobPathRef} fill={color} />
+    </svg>
+  );
 }

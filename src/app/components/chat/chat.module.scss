@@ -1,32 +1,82 @@
 .chat {
-    max-width: 600px;
+  max-width: 600px;
+  margin: auto;
+  height: 100vh;
+  position: relative;
+
+  .background {
+    height: 18vh;
+    background-image: url("/bg-mobile.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: bottom;
+  }
+
+  .containerCountdown {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90px;
+  }
+
+  .containerMessages {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    height: calc(100vh - 18vh - 290px);
+    overflow-y: scroll;
+    mask-image: linear-gradient(to top, black calc(100% - 50px), transparent 100%);
+    
+    & > :first-child {
+      margin-top: auto;
+    }
+  }
+
+  .containerRecording {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+  }
+
+  .containerInput {
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
     margin: auto;
-    height: 100vh;
 
-    .containerMessages {
-        display: flex;
-        flex-direction: column;
-        position: relative;
-        height: calc(100% - 200px);
-        overflow-y: scroll;
+    textarea {
+      width: 100%;
+      display: block;
+      border-radius: 25px 0 0 25px;
+      height: 100px;
+      padding: 10px;
+      background-color: transparent;
+      border: 1px solid grey;
+      border-right: none;
+      resize: none;
 
-        & > :first-child {
-            margin-top: auto;
+        &:focus {
+            outline: none;
+        }
+
+        &:focus-visible {
+            outline: none;
         }
     }
 
-    .containerInput {
-        margin-top: 50px;
-        margin-bottom: 50px;
-        display: flex;
-        justify-content: space-between;
+    button {
+      background-color: transparent;
+      border-radius: 0 25px 25px 0;
+      border: 1px solid grey;
+      border-left: none;
+      width: 80px;
+      cursor: pointer;
 
-        textarea {
-            width: 80%;
-            display: block;
-            border-radius: 25px 0 0 25px;
-            height: 100px;
-            padding: 10px;
-        }
+      img{
+        width: 35px
+      }
     }
+  }
 }

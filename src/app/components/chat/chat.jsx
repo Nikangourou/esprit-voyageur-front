@@ -10,12 +10,20 @@ import { pending } from "../../utils/utils";
 import Countdown from "../chrono/countdown";
 import { SocketContext } from "../../context/socketContext";
 
-const firstMessage = {
-  id: uuidv4(),
-  content:
-    "C'est parti pour une nouvelle aventure dans tes souvenirs. Pour commencer, peux-tu partager avec moi un souvenir qui te tient particulièrement à cœur ? Mentionne également à quel moment cela s'est passé et quel âge tu avais à ce moment-là.",
-  send: false,
-};
+const firstMessage = [
+  {
+    id: uuidv4(),
+    content:
+      "Bravo, tu as été désigné comme le Bluffer. Je suis là pour t’aider à tromper les autres joueurs alors, vite, raconte-moi ton souvenir !",
+    send: false,
+  },
+  {
+    id: uuidv4(),
+    content:
+      "C'est parti pour une nouvelle aventure dans tes souvenirs. Pour commencer, peux-tu partager avec moi un souvenir qui te tient particulièrement à cœur ? Mentionne également à quel moment cela s'est passé et quel âge tu avais à ce moment-là.",
+    send: false,
+  },
+];
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -23,13 +31,14 @@ export default function Chat() {
   const { socket } = useContext(SocketContext);
   const [input, setInput] = useState("");
   const [base64, setBase64] = useState(null);
-  const [messages, setMessages] = useState([firstMessage]);
+  const [messages, setMessages] = useState(firstMessage);
   const [isPaused, setIsPaused] = useState(true);
   const [isFinished, setIsFinished] = useState("not");
 
   const threadKey = useRef(null);
   const gameId = useRef(null);
   const isReadyRef = useRef(false);
+  const containerMessagesRef = useRef(null);
 
   useEffect(() => {
     if (isReadyRef.current) {
@@ -95,6 +104,13 @@ export default function Chat() {
         });
     }
   }, [base64]);
+
+  useEffect(() => {
+    if (containerMessagesRef.current) {
+      containerMessagesRef.current.scrollTop =
+        containerMessagesRef.current.scrollHeight;
+    }
+  }, [messages]);
 
   const base64Reformat = (base64) => {
     const to_remove = "data:audio/webm;codecs=opus;base64,";
@@ -276,10 +292,20 @@ export default function Chat() {
     console.log("End countdown");
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter' && !event.shiftKey) { // Vérifiez si Enter est pressé sans la touche Shift
+      event.preventDefault(); // Empêchez le retour à la ligne par défaut de <textarea>
+      subMessage(); // Soumettez le message
+    }
+  };
+
   return (
     <div className={styles.chat}>
-      <Countdown start={120} onEnd={onEndCountdown} paused={isPaused} />
-      <div className={styles.containerMessages}>
+      <div className={styles.background} />
+      <div className={styles.containerCountdown}>
+        <Countdown start={120} onEnd={onEndCountdown} paused={isPaused} />
+      </div>
+      <div className={styles.containerMessages} ref={containerMessagesRef}>
         {messages.map((message) => {
           return (
             <Message
@@ -296,10 +322,15 @@ export default function Chat() {
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
             placeholder="Ecrivez votre message"
           />
-          <RecordingComponent onEnd={onSpeechEnd} />
-          <button onClick={subMessage}>Envoyer</button>
+          <button onClick={subMessage}>
+            <img src="/send.svg" alt="Send" />
+          </button>
+          <div className={styles.containerRecording}>
+            <RecordingComponent onEnd={onSpeechEnd} />
+          </div>
         </div>
       ) : (
         <p>

@@ -1,21 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
+import styles from "./recording.module.scss";
 
 const RecordingComponent = ({ onEnd }) => {
   const [isRecording, setIsRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState(null);
 
   const initMediaRecorder = async () => {
-    if (!mediaRecorder && navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+    if (
+      !mediaRecorder &&
+      navigator.mediaDevices &&
+      navigator.mediaDevices.getUserMedia
+    ) {
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const stream = await navigator.mediaDevices.getUserMedia({
+          audio: true,
+        });
         const newMediaRecorder = new MediaRecorder(stream);
         newMediaRecorder.ondataavailable = handleDataAvailable;
         newMediaRecorder.onstop = () => setIsRecording(false);
-        newMediaRecorder.onerror = (event) => console.error('MediaRecorder error:', event.error);
+        newMediaRecorder.onerror = (event) =>
+          console.error("MediaRecorder error:", event.error);
 
         setMediaRecorder(newMediaRecorder);
-      } catch(error) {
-        console.error('Error accessing media devices:', error);
+      } catch (error) {
+        console.error("Error accessing media devices:", error);
       }
     }
   };
@@ -29,28 +37,29 @@ const RecordingComponent = ({ onEnd }) => {
       onEnd(e.data);
     }
   };
-  
+
   const startRecording = () => {
-    if (mediaRecorder && mediaRecorder.state === 'inactive') {
+    if (mediaRecorder && mediaRecorder.state === "inactive") {
       mediaRecorder.start();
       setIsRecording(true);
     } else {
-      console.error('MediaRecorder not initialized or already recording');
+      console.error("MediaRecorder not initialized or already recording");
     }
   };
 
   const stopRecording = () => {
-    if (mediaRecorder && mediaRecorder.state === 'recording') {
+    if (mediaRecorder && mediaRecorder.state === "recording") {
       mediaRecorder.stop();
     }
   };
 
-
-
   return (
-      <button onClick={isRecording ? stopRecording : startRecording}>
-        {isRecording ? 'Stop Recording' : 'Start Recording'}
-      </button>
+    <div
+      onClick={isRecording ? stopRecording : startRecording}
+      className={`${styles.recording} ${
+        isRecording ? styles.recordingActive : ""
+      }`}
+    />
   );
 };
 
