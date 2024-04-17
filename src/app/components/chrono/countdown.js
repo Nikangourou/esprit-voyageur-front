@@ -21,7 +21,7 @@ export default function Countdown({ start, onEnd, paused = false }) {
         );
 
         setTimeLeft(time);
-        if (time === 0) {
+        if (time <= 0) {
           if (onEnd) onEnd();
         }
       }
@@ -32,7 +32,7 @@ export default function Countdown({ start, onEnd, paused = false }) {
     return () => {
       cancelAnimationFrame(requestAnimationId);
     };
-  }, [start, paused]);
+  }, [start, paused, onEnd]);
 
   // Fonction pour formater le temps restant
   const formatTimeLeft = () => {

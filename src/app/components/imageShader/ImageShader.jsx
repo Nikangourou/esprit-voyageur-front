@@ -15,6 +15,7 @@ const ImageShader = forwardRef(function ImageShader(
   const startTimeRef = useRef(Date.now()); // Stocker le temps de départ
   const sceneRef = useRef(); // Stocker le temps de départ
   const cameraRef = useRef(); // Stocker le temps de départ
+  const meshRef = useRef(); // Stocker le temps de départ
 
   function createPlaneShader(text1, text2) {
     const params = {
@@ -52,11 +53,11 @@ const ImageShader = forwardRef(function ImageShader(
 
     materialRef.current = new THREE.ShaderMaterial(params);
 
-    const cube2 = new THREE.Mesh(
+    meshRef.current = new THREE.Mesh(
       new THREE.PlaneGeometry(2, 2),
       materialRef.current,
     );
-    return cube2;
+    return meshRef.current;
   }
 
   useEffect(() => {
@@ -84,19 +85,25 @@ const ImageShader = forwardRef(function ImageShader(
   }, []);
 
   useEffect(() => {
+    let requestAnimationId;
+
     if (sceneRef.current && url) {
       const textureLoader = new THREE.TextureLoader();
-      textureLoader.load(url ? url : "/image.png", (textGenerated) => {
+      textureLoader.load(url, (textGenerated) => {
         textureLoader.load("/voronoi.jpg", (textVoronoi) => {
+          if (meshRef.current) {
+            sceneRef.current.remove(meshRef.current);
+          }
           sceneRef.current.add(createPlaneShader(textGenerated, textVoronoi));
           // Fonction de mise à jour
+          console.log("generation plane", url);
           function update() {
             const currentTime = Date.now();
             const deltaTime = currentTime - startTimeRef.current;
             startTimeRef.current = currentTime;
             materialRef.current.uniforms.uTime.value += deltaTime * 0.05; // Mettre à jour uTime avec le temps écoulé en secondes
             rendererRef.current.render(sceneRef.current, cameraRef.current); // Rendu de la scène
-            requestAnimationFrame(update); // Appel récursif de la fonction update
+            requestAnimationId = requestAnimationFrame(update); // Appel récursif de la fonction update
           }
           // Démarrer la boucle de rendu
           update();
@@ -111,6 +118,9 @@ const ImageShader = forwardRef(function ImageShader(
         });
       });
     }
+    return () => {
+      cancelAnimationFrame(requestAnimationId);
+    };
   }, [url]);
 
   useEffect(() => {
