@@ -33,7 +33,7 @@ export default function GameFlow({ images }) {
 
     // Calculer la distance entre le centre de l'élément et le point donné
     const distance = Math.sqrt(
-      Math.pow(point.x - centerX, 2) + Math.pow(point.y - centerY, 2),
+      Math.pow(point.x - centerX, 2) + Math.pow(point.y - centerY, 2)
     );
 
     // Vérifier si la distance est inférieure ou égale au rayon
@@ -72,7 +72,7 @@ export default function GameFlow({ images }) {
           <p>
             Attention !<br />
             <i>Ne vous laissez pas berner...</i>
-          </p>,
+          </p>
         );
         setChronoStart(20);
         setTimeout(() => {
@@ -86,7 +86,7 @@ export default function GameFlow({ images }) {
           <p>
             Vite, c’est l’heure de voter !<br />
             <i>Déplace ton pion Joueur sur le véritable souvenir.</i>
-          </p>,
+          </p>
         );
         setChronoStart(2000);
         setTimeout(() => {
@@ -104,8 +104,9 @@ export default function GameFlow({ images }) {
 
   return (
     <section className={styles.containerGame} ref={containerRef}>
-      <Countdown start={chronoStart} onEnd={eventEndClock} />
-      <h1>Game</h1>
+      <div className={styles.containerChrono}>
+        <Countdown start={chronoStart} onEnd={eventEndClock}></Countdown>
+      </div>
       <div className={styles.imgShaders}>
         {images.length > 0 &&
           images.map((image, i) => (
@@ -117,39 +118,40 @@ export default function GameFlow({ images }) {
             ></ImageShader>
           ))}
       </div>
-
-      {contentSentence ? (
-        contentSentence
-      ) : (
-        <p>
-          Nous avons dérobé les souvenirs de{" "}
-          <b style={{ color: colorStyle, textTransform: "capitalize" }}>
-            {currentBluffeur}
-          </b>
-          mais ils sont encore flous...
-          <br /> <i>Chut, n’allez pas lui répéter !</i>
-        </p>
-      )}
-      {currentPhase == 2 &&
-        playersInGame.map((color, i) => {
-          // Exclu bluffeur
-          console.log(color);
-          if (color !== currentBluffeur) {
-            return (
-              <Button
-                dragEndEvent={eventDragEnd}
-                dragContainer={containerRef.current}
-                key={i + color}
-                type={"player"}
-                color={players[color].color}
-                colorActive={true}
-              ></Button>
-            );
-          }
-        })}
-      {currentPhase == 3 && (
-        <PageContainer pageCategory={"score"}></PageContainer>
-      )}
+      <div className={styles.contentSentence}>
+        {contentSentence ? (
+          contentSentence
+        ) : (
+          <p>
+            Nous avons dérobé les souvenirs de{" "}
+            <b style={{ color: colorStyle, textTransform: "capitalize" }}>
+              {currentBluffeur}
+            </b>
+            mais ils sont encore flous...
+            <br /> <i>Chut, n’allez pas lui répéter !</i>
+          </p>
+        )}
+        {currentPhase == 2 &&
+          playersInGame.map((color, i) => {
+            // Exclu bluffeur
+            console.log(color);
+            if (color !== currentBluffeur) {
+              return (
+                <Button
+                  dragEndEvent={eventDragEnd}
+                  dragContainer={containerRef.current}
+                  key={i + color}
+                  type={"player"}
+                  color={players[color].color}
+                  colorActive={true}
+                ></Button>
+              );
+            }
+          })}
+        {currentPhase == 3 && (
+          <PageContainer pageCategory={"score"}></PageContainer>
+        )}
+      </div>
     </section>
   );
 }
