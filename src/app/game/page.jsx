@@ -24,13 +24,6 @@ export default function Intro() {
     setCurrentPage(currentPart + 1);
   };
 
-  const previousPage = () => {
-    if (currentPart === 0) {
-      return;
-    }
-    setCurrentPage(currentPart - 1);
-  };
-
   useEffect(() => {
     const handleImagesAllGenerated = (_id) => {
       fetch(`${apiUrl}/image/get/${_id}`, {
@@ -42,12 +35,12 @@ export default function Intro() {
         .then((response) => response.json())
         .then((data) => {
           console.log(data);
-
+          setCurrentPage(1);
           setImages((currentImages) => [
             ...currentImages,
             {
               id: uuidv4(),
-              url: data.base64,
+              url: `${apiUrl}${data.url}`,
               isTrue: data.isTrue,
             },
           ]);
@@ -59,10 +52,7 @@ export default function Intro() {
       const urlParams = new URLSearchParams(window.location.search);
       gameId.current = urlParams.get("gameId");
 
-      socket.emit("connexionPrimary", gameId.current);
-
       // Séparer écoute d'événement de l'initialisation de la connexion
-
       socket.on("imageGenerated", handleImagesAllGenerated);
     }
 

@@ -13,7 +13,7 @@ export default function AddPlayer({ gameId }) {
   const containerRef = useRef(null);
   const dispatch = useDispatch();
 
-  const handleMouseDown = (e) => {
+  const handleTouchStart = (e) => {
     timerRef.current = setTimeout(() => {
       const colorName = e.target.getAttribute("data-color");
       dispatch(addPlayer({ color: colorName }));
@@ -23,14 +23,17 @@ export default function AddPlayer({ gameId }) {
     }, 1000);
   };
 
-  const handleMouseUp = () => {
+  const handleTouchEnd = () => {
     clearTimeout(timerRef.current);
   };
 
   const eventsFunctions = {
-    onMouseDown: handleMouseDown,
-    onMouseUp: handleMouseUp,
-    onMouseLeave: handleMouseUp,
+    onTouchStart: handleTouchStart,
+    onTouchEnd: handleTouchEnd,
+    onTouchCancel: handleTouchEnd,
+    onMouseDown: handleTouchStart,
+    onMouseUp: handleTouchEnd,
+    onMouseLeave: handleTouchEnd,
   };
 
   return (

@@ -11,22 +11,20 @@ export default function Prompt() {
   const [url, setUrl] = useState(null);
 
   function createImg() {
-    fetch(
-      `https://espritvoyageur-production.up.railway.app/image/post/create`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          prompt: input,
-        }),
+    fetch(`http://localhost:5001/image/post/create`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
       },
-    )
+      body: JSON.stringify({
+        prompt: input,
+        isTrue: true,
+      }),
+    })
       .then((response) => response.json())
       .then((data) => {
-        setUrl(data.base64);
-        console.log(data.base64);
+        setUrl(data.url);
+        console.log(data.url);
       });
   }
 
@@ -39,7 +37,8 @@ export default function Prompt() {
         placeholder="Ecrivez votre message"
       />
       <button onClick={createImg}>Envoyer</button>
-      <ImageShader></ImageShader>
+      <ImageShader url={`http://localhost:5001${url}`}></ImageShader>
+      <img src={`http://localhost:5001${url}`} alt="" />
     </>
   );
 }

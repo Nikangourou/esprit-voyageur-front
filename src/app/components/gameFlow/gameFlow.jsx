@@ -37,7 +37,7 @@ export default function GameFlow({ images }) {
     );
 
     // Vérifier si la distance est inférieure ou égale au rayon
-    return distance <= rect.width;
+    return distance <= rect.width / 2;
   }
 
   function eventDragEnd(point) {
@@ -47,11 +47,10 @@ export default function GameFlow({ images }) {
           ...prev,
           point.target.getAttribute("data-color"),
         ]);
-        console.log("AJOUT DANS LISTE TRUE");
         //TODO GSAP ANIM FEEDBACK
       }
     } else if (isPointWithinRadiusFromCenter(imageRef2.current, point)) {
-      if (images && images[0].isTrue) {
+      if (images && images[1].isTrue) {
         setColorListTrue((prev) => [
           ...prev,
           point.target.getAttribute("data-color"),
@@ -89,7 +88,7 @@ export default function GameFlow({ images }) {
             <i>Déplace ton pion Joueur sur le véritable souvenir.</i>
           </p>,
         );
-        setChronoStart(5000);
+        setChronoStart(2000);
         setTimeout(() => {
           setCurrentPhase(2);
         }, 1000);
@@ -111,10 +110,8 @@ export default function GameFlow({ images }) {
         {images.length > 0 &&
           images.map((image, i) => (
             <ImageShader
-              // key={image.id}
-              // url={image.url}
-              key={i}
-              // url={image.url}
+              key={image.id}
+              url={image.url}
               ref={i == 0 ? imageRef1 : imageRef2}
               isBlurry={isBlurry}
             ></ImageShader>

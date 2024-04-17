@@ -13,6 +13,9 @@ const ImageShader = forwardRef(function ImageShader(
   const rendererRef = useRef(null);
   const materialRef = useRef();
   const startTimeRef = useRef(Date.now()); // Stocker le temps de départ
+  const sceneRef = useRef(); // Stocker le temps de départ
+  const cameraRef = useRef(); // Stocker le temps de départ
+  const meshRef = useRef(); // Stocker le temps de départ
 
   function createPlaneShader(text1, text2) {
     const params = {
@@ -50,11 +53,11 @@ const ImageShader = forwardRef(function ImageShader(
 
     materialRef.current = new THREE.ShaderMaterial(params);
 
-    const cube2 = new THREE.Mesh(
+    meshRef.current = new THREE.Mesh(
       new THREE.PlaneGeometry(2, 2),
       materialRef.current,
     );
-    return cube2;
+    return meshRef.current;
   }
 
   useEffect(() => {
@@ -68,29 +71,39 @@ const ImageShader = forwardRef(function ImageShader(
         height: 700,
       };
       rendererRef.current.setSize(sizes.width, sizes.height);
-      const textureLoader = new THREE.TextureLoader();
 
-      const scene = new THREE.Scene();
+      sceneRef.current = new THREE.Scene();
 
-      const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-      camera.position.z = 0;
+      cameraRef.current = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+      cameraRef.current.position.z = 0;
       // camera.lookAt(new THREE.Vector3(0, - 1, 0))
-      scene.add(camera);
+      sceneRef.current.add(cameraRef.current);
 
-      rendererRef.current.render(scene, camera);
+      rendererRef.current.render(sceneRef.current, cameraRef.current);
       rendererRef.current.setClearColor(0x000000, 0);
+    }
+  }, []);
 
-      textureLoader.load(url ? url : "/image.png", (textGenerated) => {
+  useEffect(() => {
+    let requestAnimationId;
+
+    if (sceneRef.current && url) {
+      const textureLoader = new THREE.TextureLoader();
+      textureLoader.load(url, (textGenerated) => {
         textureLoader.load("/voronoi.jpg", (textVoronoi) => {
-          scene.add(createPlaneShader(textGenerated, textVoronoi));
+          if (meshRef.current) {
+            sceneRef.current.remove(meshRef.current);
+          }
+          sceneRef.current.add(createPlaneShader(textGenerated, textVoronoi));
           // Fonction de mise à jour
+          console.log("generation plane", url);
           function update() {
             const currentTime = Date.now();
             const deltaTime = currentTime - startTimeRef.current;
             startTimeRef.current = currentTime;
             materialRef.current.uniforms.uTime.value += deltaTime * 0.05; // Mettre à jour uTime avec le temps écoulé en secondes
-            rendererRef.current.render(scene, camera); // Rendu de la scène
-            requestAnimationFrame(update); // Appel récursif de la fonction update
+            rendererRef.current.render(sceneRef.current, cameraRef.current); // Rendu de la scène
+            requestAnimationId = requestAnimationFrame(update); // Appel récursif de la fonction update
           }
           // Démarrer la boucle de rendu
           update();
@@ -105,7 +118,10 @@ const ImageShader = forwardRef(function ImageShader(
         });
       });
     }
-  }, []);
+    return () => {
+      cancelAnimationFrame(requestAnimationId);
+    };
+  }, [url]);
 
   useEffect(() => {
     if (!isBlurry) {
