@@ -37,7 +37,7 @@ export default function GameFlow({ images }) {
     );
 
     // Vérifier si la distance est inférieure ou égale au rayon
-    return distance <= rect.width;
+    return distance <= rect.width / 2;
   }
 
   function eventDragEnd(point) {
@@ -47,11 +47,10 @@ export default function GameFlow({ images }) {
           ...prev,
           point.target.getAttribute("data-color"),
         ]);
-        console.log("AJOUT DANS LISTE TRUE");
         //TODO GSAP ANIM FEEDBACK
       }
     } else if (isPointWithinRadiusFromCenter(imageRef2.current, point)) {
-      if (images && images[0].isTrue) {
+      if (images && images[1].isTrue) {
         setColorListTrue((prev) => [
           ...prev,
           point.target.getAttribute("data-color"),
