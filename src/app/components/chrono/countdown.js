@@ -1,39 +1,38 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "./countdown.module.scss";
 import { useSelector } from "react-redux";
 
-interface CountdownProps {
-  start: number;
-  onEnd?: () => void;
-}
-
-export default function Countdown({ start, onEnd }) {
+export default function Countdown({ start, onEnd, paused = false }) {
   const players = useSelector((state) => state.players.players);
   const currentBluffeur = useSelector((state) => state.players.currentBluffeur);
+  const startTimeRef = useRef(null); // Stocker le temps de départ
 
   const colorStyle =
     currentBluffeur != "" ? players[currentBluffeur].color : "#373FEF";
   const [timeLeft, setTimeLeft] = useState(start);
 
   useEffect(() => {
-    // Si le temps est écoulé et la fonction onEnd est définie, l'exécuter
-    if (timeLeft === 0) {
-      if (onEnd) onEnd();
-      return;
+    startTimeRef.current = performance.now();
+    let requestAnimationId;
+    function update() {
+      if (!paused) {
+        const time = Math.floor(
+          start - (performance.now() - startTimeRef.current) / 1000,
+        );
+
+        setTimeLeft(time);
+        if (time === 0) {
+          if (onEnd) onEnd();
+        }
+      }
+
+      requestAnimationId = requestAnimationFrame(update);
     }
-
-    // Définir l'intervalle pour décrémenter le temps
-    const timerId = setInterval(() => {
-      setTimeLeft((prevTimeLeft) => prevTimeLeft - 1);
-    }, 1000);
-
-    // Nettoyer l'intervalle
-    return () => clearInterval(timerId);
-  }, [timeLeft, onEnd]); // Ajout de onEnd dans le tableau de dépendances
-
-  useEffect(() => {
-    setTimeLeft(start);
-  }, [start]);
+    update();
+    return () => {
+      cancelAnimationFrame(requestAnimationId);
+    };
+  }, [start, paused]);
 
   // Fonction pour formater le temps restant
   const formatTimeLeft = () => {

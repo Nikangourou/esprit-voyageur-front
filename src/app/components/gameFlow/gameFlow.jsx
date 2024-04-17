@@ -89,7 +89,7 @@ export default function GameFlow({ images }) {
             <i>Déplace ton pion Joueur sur le véritable souvenir.</i>
           </p>,
         );
-        setChronoStart(5000);
+        setChronoStart(2000);
         setTimeout(() => {
           setCurrentPhase(2);
         }, 1000);
@@ -111,10 +111,8 @@ export default function GameFlow({ images }) {
         {images.length > 0 &&
           images.map((image, i) => (
             <ImageShader
-              // key={image.id}
-              // url={image.url}
-              key={i}
-              // url={image.url}
+              key={image.id}
+              url={image.url}
               ref={i == 0 ? imageRef1 : imageRef2}
               isBlurry={isBlurry}
             ></ImageShader>

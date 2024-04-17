@@ -28,7 +28,7 @@ export default function GetImg({ prompt, gameId, type }) {
         .then((response) => response.json())
         .then((data) => {
           console.log(data);
-          setBase64(`data:image/png;base64,${data.base64}`);
+          setBase64(`${apiUrl}${data.url}`);
           socket.emit("imagesAllGenerated", gameId, data._id);
         });
     }

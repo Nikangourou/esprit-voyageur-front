@@ -13,6 +13,8 @@ const ImageShader = forwardRef(function ImageShader(
   const rendererRef = useRef(null);
   const materialRef = useRef();
   const startTimeRef = useRef(Date.now()); // Stocker le temps de départ
+  const sceneRef = useRef(); // Stocker le temps de départ
+  const cameraRef = useRef(); // Stocker le temps de départ
 
   function createPlaneShader(text1, text2) {
     const params = {
@@ -68,28 +70,32 @@ const ImageShader = forwardRef(function ImageShader(
         height: 700,
       };
       rendererRef.current.setSize(sizes.width, sizes.height);
-      const textureLoader = new THREE.TextureLoader();
 
-      const scene = new THREE.Scene();
+      sceneRef.current = new THREE.Scene();
 
-      const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-      camera.position.z = 0;
+      cameraRef.current = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+      cameraRef.current.position.z = 0;
       // camera.lookAt(new THREE.Vector3(0, - 1, 0))
-      scene.add(camera);
+      sceneRef.current.add(cameraRef.current);
 
-      rendererRef.current.render(scene, camera);
+      rendererRef.current.render(sceneRef.current, cameraRef.current);
       rendererRef.current.setClearColor(0x000000, 0);
+    }
+  }, []);
 
+  useEffect(() => {
+    if (sceneRef.current && url) {
+      const textureLoader = new THREE.TextureLoader();
       textureLoader.load(url ? url : "/image.png", (textGenerated) => {
         textureLoader.load("/voronoi.jpg", (textVoronoi) => {
-          scene.add(createPlaneShader(textGenerated, textVoronoi));
+          sceneRef.current.add(createPlaneShader(textGenerated, textVoronoi));
           // Fonction de mise à jour
           function update() {
             const currentTime = Date.now();
             const deltaTime = currentTime - startTimeRef.current;
             startTimeRef.current = currentTime;
             materialRef.current.uniforms.uTime.value += deltaTime * 0.05; // Mettre à jour uTime avec le temps écoulé en secondes
-            rendererRef.current.render(scene, camera); // Rendu de la scène
+            rendererRef.current.render(sceneRef.current, cameraRef.current); // Rendu de la scène
             requestAnimationFrame(update); // Appel récursif de la fonction update
           }
           // Démarrer la boucle de rendu
@@ -105,7 +111,7 @@ const ImageShader = forwardRef(function ImageShader(
         });
       });
     }
-  }, []);
+  }, [url]);
 
   useEffect(() => {
     if (!isBlurry) {

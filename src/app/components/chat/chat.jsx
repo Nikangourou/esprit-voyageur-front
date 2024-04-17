@@ -24,36 +24,52 @@ export default function Chat() {
   const [input, setInput] = useState("");
   const [base64, setBase64] = useState(null);
   const [messages, setMessages] = useState([firstMessage]);
+  const [isPaused, setIsPaused] = useState(true);
+  const [isFinished, setIsFinished] = useState("not");
 
   const threadKey = useRef(null);
   const gameId = useRef(null);
   const isReadyRef = useRef(false);
 
   useEffect(() => {
-    if (!isReadyRef.current) {
-      const urlParams = new URLSearchParams(window.location.search);
-      gameId.current = urlParams.get("gameId");
-      isReadyRef.current = true;
-      fetch(`${apiUrl}/thread/post/create`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          game_id: gameId.current,
-        }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Create Game");
-          console.log(data);
-          threadKey.current = data.key;
-
-          socket?.emit("connexionPhone", gameId.current);
-        });
+    if (isReadyRef.current) {
+      return;
     }
 
-    return () => {};
+    function startChrono() {
+      setIsPaused(false);
+      console.log("ploppy");
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    gameId.current = urlParams.get("gameId");
+    isReadyRef.current = true;
+    fetch(`${apiUrl}/thread/post/create`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        game_id: gameId.current,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Create Game");
+        console.log(data);
+        threadKey.current = data.key;
+
+        socket.on("startChrono", () => {
+          console.log("test");
+          startChrono();
+        });
+
+        socket?.emit("connexionPhone", gameId.current);
+      });
+
+    return () => {
+      socket?.off("startChrono", startChrono);
+    };
   }, [socket]);
 
   useEffect(() => {
@@ -191,13 +207,16 @@ export default function Chat() {
           if (content.includes("FIN_CONVERSATION")) {
             console.log("FIN_CONVERSATION");
             content = content.replace("FIN_CONVERSATION", "");
+            setIsFinished("processing");
             msg.content = content;
 
             addMessage(msg);
 
             generatePrompt("alt")
               .then(() => {
-                return generatePrompt("simple");
+                return generatePrompt("simple").then(() => {
+                  setIsFinished("end");
+                });
               })
               .catch((error) => {
                 console.error(error);
@@ -259,7 +278,7 @@ export default function Chat() {
 
   return (
     <div className={styles.chat}>
-      <Countdown start={120} onEnd={onEndCountdown} />
+      <Countdown start={120} onEnd={onEndCountdown} paused={isPaused} />
       <div className={styles.containerMessages}>
         {messages.map((message) => {
           return (
@@ -271,16 +290,24 @@ export default function Chat() {
           );
         })}
       </div>
-      <div className={styles.containerInput}>
-        <textarea
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Ecrivez votre message"
-        />
-        <RecordingComponent onEnd={onSpeechEnd} />
-        <button onClick={subMessage}>Envoyer</button>
-      </div>
+      {isFinished == "not" ? (
+        <div className={styles.containerInput}>
+          <textarea
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="Ecrivez votre message"
+          />
+          <RecordingComponent onEnd={onSpeechEnd} />
+          <button onClick={subMessage}>Envoyer</button>
+        </div>
+      ) : (
+        <p>
+          {isFinished == "processing"
+            ? "Génération des images"
+            : "Veuillez fermé la page et retournez à la table"}
+        </p>
+      )}
     </div>
   );
 }
