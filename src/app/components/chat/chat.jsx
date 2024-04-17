@@ -317,25 +317,28 @@ export default function Chat() {
           );
         })}
       </div>
-      {isFinished == "not" ? (
-        <>
-          <div className={styles.containerInput}>
-            <textarea
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder="Ecrivez votre message"
-            />
-            <button onClick={subMessage}>
-              <img src="/send.svg" alt="Send" />
-            </button>
-          </div>
-          <div className={styles.containerRecording}>
-            <RecordingComponent onEnd={onSpeechEnd} />
-          </div>
-        </>
-      ) : (
+      <div
+        className={styles.containerInput}
+        style={{ display: isFinished == "not" ? "auto" : "none" }}
+      >
+        <textarea
+          type="text"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder="Ecrivez votre message"
+        />
+        <button onClick={subMessage}>
+          <img src="/send.svg" alt="Send" />
+        </button>
+      </div>
+      <div
+        className={styles.containerRecording}
+        style={{ display: isFinished == "not" ? "auto" : "none" }}
+      >
+        <RecordingComponent onEnd={onSpeechEnd} />
+      </div>
+      {isFinished != "not" && (
         <p>
           {isFinished == "processing"
             ? "Génération des images"
