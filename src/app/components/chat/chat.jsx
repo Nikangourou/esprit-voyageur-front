@@ -293,7 +293,8 @@ export default function Chat() {
   };
 
   const handleKeyDown = (event) => {
-    if (event.key === 'Enter' && !event.shiftKey) { // Vérifiez si Enter est pressé sans la touche Shift
+    if (event.key === "Enter" && !event.shiftKey) {
+      // Vérifiez si Enter est pressé sans la touche Shift
       event.preventDefault(); // Empêchez le retour à la ligne par défaut de <textarea>
       subMessage(); // Soumettez le message
     }
@@ -317,21 +318,23 @@ export default function Chat() {
         })}
       </div>
       {isFinished == "not" ? (
-        <div className={styles.containerInput}>
-          <textarea
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder="Ecrivez votre message"
-          />
-          <button onClick={subMessage}>
-            <img src="/send.svg" alt="Send" />
-          </button>
+        <>
+          <div className={styles.containerInput}>
+            <textarea
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="Ecrivez votre message"
+            />
+            <button onClick={subMessage}>
+              <img src="/send.svg" alt="Send" />
+            </button>
+          </div>
           <div className={styles.containerRecording}>
             <RecordingComponent onEnd={onSpeechEnd} />
           </div>
-        </div>
+        </>
       ) : (
         <p>
           {isFinished == "processing"

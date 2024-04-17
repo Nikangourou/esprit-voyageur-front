@@ -9,6 +9,13 @@ import { useParams, useRouter } from "next/navigation";
 import { SocketContext } from "../../context/socketContext";
 import { useSearchParams } from "next/navigation";
 
+function QrCodeWithGameId() {
+  const searchParams = useSearchParams();
+  const gameId = searchParams.get("gameId");
+
+  return <QrCode gameId={gameId} />;
+}
+
 export default function Code() {
   const router = useRouter();
   const isReady = useRef(false);
@@ -36,14 +43,14 @@ export default function Code() {
   }, [socket, gameId]);
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <main className={styles.main}>
-        <div className={styles.container}>
-          <PageContainer pageCategory={"bluffer"}>
-            <QrCode gameId={gameId} />
-          </PageContainer>
-        </div>
-      </main>
-    </Suspense>
+    <main className={styles.main}>
+      <div className={styles.container}>
+        <PageContainer pageCategory={"bluffer"}>
+          <Suspense fallback={<div>Loading...</div>}>
+            <QrCodeWithGameId />
+          </Suspense>
+        </PageContainer>
+      </div>
+    </main>
   );
 }
