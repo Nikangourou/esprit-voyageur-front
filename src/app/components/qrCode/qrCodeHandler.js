@@ -1,7 +1,7 @@
 "use client";
 
 import styles from "./qrCodeHandler.module.scss";
-import QrCode from "../components/qrCode/qrCode";
+import QrCode from "./qrCode";
 import PageContainer from "../pageContainer/pageContainer";
 
 import { useContext, useEffect, useRef} from "react";
