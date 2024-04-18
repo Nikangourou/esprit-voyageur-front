@@ -11,13 +11,6 @@ import { useSearchParams } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { selectBlufferPlayer } from "../../store/reducers/playersReducer";
 
-function QrCodeWithGameId() {
-  const searchParams = useSearchParams();
-  const gameId = searchParams.get("gameId");
-
-  return <QrCode gameId={gameId} />;
-}
-
 export default function Code() {
   const router = useRouter();
   const isReady = useRef(false);
@@ -51,7 +44,7 @@ export default function Code() {
       <div className={styles.container}>
         <PageContainer pageCategory={"bluffer"}>
           <Suspense fallback={<div>Loading...</div>}>
-            <QrCodeWithGameId />
+            <QrCode gameId={gameId} />
           </Suspense>
         </PageContainer>
       </div>
