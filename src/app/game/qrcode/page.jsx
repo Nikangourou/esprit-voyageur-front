@@ -1,6 +1,6 @@
 "use client";
 
-import QrCodeHandler from "../../components/qrCode/qrHandler";
+import QrCodeHandler from "../../components/qrCode/qrCodeHandler";
 
 import {Suspense} from "react";
 
