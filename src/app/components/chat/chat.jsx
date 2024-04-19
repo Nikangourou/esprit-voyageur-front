@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef, useContext } from "react";
+import { useEffect, useState, useRef, useContext, useMemo } from "react";
 import styles from "./chat.module.scss";
 import Message from "./message/message";
 import RecordingComponent from "../recordingComponent/recordingComponent";
@@ -300,11 +300,15 @@ export default function Chat() {
     }
   };
 
+  const countdownComponent = useMemo(() => (
+    <Countdown start={120} onEnd={onEndCountdown} paused={isPaused} />
+  ), [isPaused]);
+
   return (
     <div className={styles.chat}>
       <div className={styles.background} />
       <div className={styles.containerCountdown}>
-        <Countdown start={120} onEnd={onEndCountdown} paused={isPaused} />
+         {countdownComponent}
       </div>
       <div className={styles.containerMessages} ref={containerMessagesRef}>
         {messages.map((message) => {
