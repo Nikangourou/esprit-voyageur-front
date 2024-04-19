@@ -18,7 +18,7 @@ export default function FullScreen () {
     
     return (
         <div className={styles.btn} onClick={handleFullScreen}>
-           <img src="/full-screen.png"  alt="full screen icon" />
+           <img src="/images/full-screen.png"  alt="full screen icon" />
         </div>
     );
 }

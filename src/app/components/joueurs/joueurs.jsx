@@ -8,14 +8,6 @@ export default function Joueurs({ gameId }) {
   return (
     <PageContainer pageCategory={"player"}>
       <AddPlayer gameId={gameId}></AddPlayer>
-      {/* <Blob
-        numPoints={7}
-        minRadius={40}
-        maxRadius={42}
-        minDuration={1}
-        maxDuration={2}
-        color={"#FF00FF"}
-      /> */}
     </PageContainer>
   );
 }

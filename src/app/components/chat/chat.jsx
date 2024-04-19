@@ -333,7 +333,7 @@ export default function Chat() {
           placeholder="Ecrivez votre message"
         />
         <button onClick={subMessage}>
-          <img src="/send.svg" alt="Send" />
+          <img src="/images/send.svg" alt="Send" />
         </button>
       </div>
       <div

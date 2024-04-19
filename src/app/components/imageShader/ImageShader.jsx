@@ -90,7 +90,7 @@ const ImageShader = forwardRef(function ImageShader(
     if (sceneRef.current && url) {
       const textureLoader = new THREE.TextureLoader();
       textureLoader.load(url, (textGenerated) => {
-        textureLoader.load("/voronoi.jpg", (textVoronoi) => {
+        textureLoader.load("/images/voronoi.jpg", (textVoronoi) => {
           if (meshRef.current) {
             sceneRef.current.remove(meshRef.current);
           }

@@ -45,7 +45,7 @@ export default function Home() {
   return (
     <main className={styles.main}>
       <div className={styles.container}>
-        <img src="/Logo.svg" alt="Logo" />
+        <img src="/images/logo.svg" alt="Logo" />
         <div>
           <Link className={styles.btn} href="/intro">
             <Button type="link"> Jouer </Button>

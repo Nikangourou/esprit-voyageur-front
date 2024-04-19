@@ -1,6 +1,6 @@
 @font-face {
   font-family: Nighty;
-  src: url("./font/Nightydemo.otf") format("opentype");
+  src: url("/fonts/NightyDemo.otf") format("opentype");
 }
 
 :root {

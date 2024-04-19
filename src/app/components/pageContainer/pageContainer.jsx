@@ -1,5 +1,6 @@
 import styles from "./pageContainer.module.scss";
 import { useSelector } from "react-redux";
+import Title from "../title/title";
 
 export default function PageContainer({
   children,
@@ -16,17 +17,13 @@ export default function PageContainer({
     switch (pageCategory) {
       case "player":
         return {
-          subTitle: "Sélectionner votre pion",
-          textureShader: "/images/players.png",
+          subTitle: "Selection des joueurs",
           content: (
             <p>
-              Pour lever le voile sur le passé de ceux que vous pensiez
-              connaître,
+              Toucher un pion pour vous enregistrer en tant que joueur.
+
               <br />
-              il vous faudra <b>entre 3 et 7</b> valeureux joueurs ou équipes.
-              <br />
-              Cliquez vite sur l’une des balles sombres et découvrez votre
-              couleur Joueur.
+              Il faut <b>entre 3 et 7</b> joueurs/équipes par partie.
             </p>
           ),
         };
@@ -83,8 +80,10 @@ export default function PageContainer({
     <main className={styles.container}>
       <section className={styles.content}>
         <div className={styles.titleContent}>
-          <h3>{pageContent().subTitle}</h3>
-          <img src={pageContent().textureShader} alt="" />
+          <Title title={pageContent().subTitle}></Title>
+          {pageContent().textureShader && (
+            <img src={pageContent().textureShader} alt="" />
+          )}
         </div>
         {pageContent().content}
       </section>
