@@ -1,18 +1,15 @@
 import styles from "./pageContainer.module.scss";
 import { useSelector } from "react-redux";
 import Title from "../title/title";
+import { getCurrentColor } from "../../utils/color";
 
 export default function PageContainer({
   children,
   pageCategory,
-  color = null,
 }) {
-  const players = useSelector((state) => state.players.players);
-  const currentBluffeur = useSelector((state) => state.players.currentBluffeur);
 
-  const colorStyle =
-    currentBluffeur != "" ? players[currentBluffeur].color : "";
-
+  const color = getCurrentColor();
+   
   const pageContent = () => {
     switch (pageCategory) {
       case "player":
@@ -21,7 +18,6 @@ export default function PageContainer({
           content: (
             <p>
               Toucher un pion pour vous enregistrer en tant que joueur.
-
               <br />
               Il faut <b>entre 3 et 7</b> joueurs/équipes par partie.
             </p>
@@ -51,19 +47,18 @@ export default function PageContainer({
         };
       case "bluffer":
         return {
-          subTitle: "Découvrez le",
-          textureShader: "/images/bluff.png",
+          subTitle: "Piochez 3 cartes",
           content: (
             <p>
-              Oh, c’est toi{" "}
-              <b style={{ color: colorStyle, textTransform: "capitalize" }}>
-                {currentBluffeur}
-              </b>{" "}
-              ! Te voilà désigné comme le bluffer.
+              Aidez-vous d’une de vos cartes pour vous{" "}
+              <b>remémorer un souvenir.</b>
               <br />
-              Scanne vite le QR code avec ton portable et isole toi...
               <br />
-              le temps t’es compté !
+              Le
+              <span style={{ color: color }}> bluffer</span> doit
+              maintenant scanner le QR code
+              <br />
+              et s’isole du groupe...
             </p>
           ),
         };

@@ -1,9 +1,14 @@
-import styles from "./title.module.scss";
+import { getCurrentColor } from "../../utils/color";
 
 export default function Title({ title }) {
-  return (
-    <div className={styles.title}>
-      <h1>{title}</h1>
-    </div>
-  );
+
+  const color = getCurrentColor();
+
+  const style = {
+    fontSize: "56px",
+    fontFamily: "Nighty",
+    color: color,
+  };
+
+  return <h1 style={style}>{title}</h1>;
 }

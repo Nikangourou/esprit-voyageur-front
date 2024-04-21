@@ -31,7 +31,7 @@
   }
 
   &:not(.disabled):hover {
-    color: #373FEF;
-    border-color: #373FEF;
+    color: var(--color-primary);
+    border-color: var(--color-primary);
   }
 }

@@ -6,17 +6,12 @@
 :root {
   --max-width: 1100px;
   --border-radius: 12px;
-  --backgroundColor : #EFEBE2;
+  --backgroundColor: #efebe2;
+  --color-primary: #373fef;
   --font-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
     "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro",
     "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
-  font-size: clamp(16px,2.5vw,24px);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-  
-  }
+  font-size: clamp(16px, 2.5vw, 24px);
 }
 
 * {
@@ -33,16 +28,9 @@ body {
 }
 
 body {
-  
 }
 
 a {
   color: inherit;
   text-decoration: none;
-}
-
-@media (prefers-color-scheme: dark) {
-  html {
-  
-  }
 }
