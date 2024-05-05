@@ -22,7 +22,6 @@ export const playersSlice = createSlice({
       let playerAlreadyAdded = state.players[action.payload.color].used;
       if (!playerAlreadyAdded) {
         state.playersInGame = [...state.playersInGame, action.payload.color];
-        state.players[action.payload.color].used = true;
       }
     },
     selectBlufferPlayer: (state) => {

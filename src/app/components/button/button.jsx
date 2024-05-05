@@ -91,9 +91,12 @@ export default function Button({
 
     if (type == "link") {
       return (
-        <div className={`${styles.link} ${disabled && styles.disabled}`}>
+        <button
+          className={`${styles.link} ${disabled && styles.disabled}`}
+          {...events}
+        >
           {children}
-        </div>
+        </button>
       );
     }
   }

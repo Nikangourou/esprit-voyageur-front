@@ -4,10 +4,10 @@ import AddPlayer from "./addPlayer/addPlayer";
 import Countdown from "../chrono/countdown";
 import Blob from "../blob/blob";
 
-export default function Joueurs({ gameId }) {
+export default function Joueurs() {
   return (
     <PageContainer pageCategory={"player"}>
-      <AddPlayer gameId={gameId}></AddPlayer>
+      <AddPlayer></AddPlayer>
       {/* <Blob
         numPoints={7}
         minRadius={40}
