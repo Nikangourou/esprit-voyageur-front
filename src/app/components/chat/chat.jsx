@@ -9,6 +9,8 @@ import { v4 as uuidv4 } from "uuid";
 import { pending } from "../../utils/utils";
 import Countdown from "../chrono/countdown";
 import { SocketContext } from "../../context/socketContext";
+import { div } from "three/nodes";
+import { useSelector } from "react-redux";
 
 const firstMessage = [
   {
@@ -28,6 +30,8 @@ const firstMessage = [
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function Chat() {
+  const trueImageId = useSelector((state) => state.players.trueImageId);
+  const falseImageId = useSelector((state) => state.players.falseImageId);
   const { socket } = useContext(SocketContext);
   const [input, setInput] = useState("");
   const [base64, setBase64] = useState(null);
@@ -68,17 +72,15 @@ export default function Chat() {
         console.log(data);
         threadKey.current = data.key;
 
-        socket.on("startChrono", () => {
-          console.log("test");
-          startChrono();
-        });
-
-        socket?.emit("connexionPhone", gameId.current);
+        // socket.on("startChrono", () => {
+        //   console.log("test");
+        //   startChrono();
+        // });
       });
 
-    return () => {
-      socket?.off("startChrono", startChrono);
-    };
+    // return () => {
+    //   socket?.off("startChrono", startChrono);
+    // };
   }, [socket]);
 
   useEffect(() => {
@@ -232,6 +234,12 @@ export default function Chat() {
               .then(() => {
                 return generatePrompt("simple").then(() => {
                   setIsFinished("end");
+                  socket.emit(
+                    "sendActorAction",
+                    gameId.current,
+                    "ImagesGenerated",
+                    { TrueImageId: trueImageId, FalseImageId: falseImageId },
+                  );
                 });
               })
               .catch((error) => {
@@ -339,11 +347,20 @@ export default function Chat() {
         <RecordingComponent onEnd={onSpeechEnd} />
       </div>
       {isFinished != "not" && (
-        <p>
-          {isFinished == "processing"
-            ? "Génération des images"
-            : "Veuillez fermé la page et retournez à la table"}
-        </p>
+        <div>
+          <p>
+            {isFinished == "processing"
+              ? "Génération des images"
+              : "Veuillez fermé la page et retournez à la table"}
+          </p>
+          <button
+            onClick={() => {
+              socket?.emit("sendActorAction", gameId.current, "EndChrono");
+            }}
+          >
+            END CHRONO SOCKET
+          </button>
+        </div>
       )}
     </div>
   );

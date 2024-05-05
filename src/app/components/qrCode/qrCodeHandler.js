@@ -9,7 +9,6 @@ import { useParams, useRouter } from "next/navigation";
 import { SocketContext } from "../../context/socketContext";
 import { useSearchParams } from "next/navigation";
 import { useDispatch } from "react-redux";
-import { selectBlufferPlayer } from "../../store/reducers/playersReducer";
 
 export default function Code() {
   const router = useRouter();
@@ -22,7 +21,6 @@ export default function Code() {
   //   if (socket && !isReady.current) {
   //     isReady.current = true;
   //     socket.emit("connexionPrimary", gameId);
-  //     dispatch(selectBlufferPlayer());
   //   }
   //   const handleNextPage = () => {
   //     console.log("tewt");

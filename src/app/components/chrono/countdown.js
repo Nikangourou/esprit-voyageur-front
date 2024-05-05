@@ -4,11 +4,11 @@ import { useSelector } from "react-redux";
 
 export default function Countdown({ start, onEnd, paused = false }) {
   const players = useSelector((state) => state.players.players);
-  const currentBluffeur = useSelector((state) => state.players.currentBluffeur);
+  const currentBluffer = useSelector((state) => state.players.currentBluffer);
   const startTimeRef = useRef(null); // Stocker le temps de départ
 
   const colorStyle =
-    currentBluffeur != "" ? players[currentBluffeur].color : "#373FEF";
+    currentBluffer != "" ? players[currentBluffer].color : "#373FEF";
   const [timeLeft, setTimeLeft] = useState(start);
 
   useEffect(() => {

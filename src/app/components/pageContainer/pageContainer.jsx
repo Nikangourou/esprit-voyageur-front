@@ -7,10 +7,9 @@ export default function PageContainer({
   color = null,
 }) {
   const players = useSelector((state) => state.players.players);
-  const currentBluffeur = useSelector((state) => state.players.currentBluffeur);
+  const currentBluffer = useSelector((state) => state.players.currentBluffer);
 
-  const colorStyle =
-    currentBluffeur != "" ? players[currentBluffeur].color : "";
+  const colorStyle = currentBluffer != "" ? players[currentBluffer].color : "";
 
   const pageContent = () => {
     switch (pageCategory) {
@@ -60,7 +59,7 @@ export default function PageContainer({
             <p>
               Oh, c’est toi{" "}
               <b style={{ color: colorStyle, textTransform: "capitalize" }}>
-                {currentBluffeur}
+                {currentBluffer}
               </b>{" "}
               ! Te voilà désigné comme le bluffer.
               <br />

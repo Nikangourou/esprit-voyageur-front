@@ -1,6 +1,6 @@
 import styles from "./addPlayer.module.scss";
 import { useSelector, useDispatch } from "react-redux";
-import { addPlayer } from "../../../store/reducers/playersReducer";
+import { addPlayer, setGameId } from "../../../store/reducers/playersReducer";
 import { useContext, useEffect, useRef, useState } from "react";
 import Button from "../../button/button";
 import { gsap } from "gsap";
@@ -10,15 +10,13 @@ import { useRouter } from "next/navigation";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 export default function AddPlayer() {
-  const router = useRouter();
-
   const playersInGame = useSelector((state) => state.players.playersInGame);
   const players = useSelector((state) => state.players.players);
+  const gameId = useSelector((state) => state.players.players);
   const { socket } = useContext(SocketContext);
   const timerRef = useRef(null);
   const containerRef = useRef(null);
   const dispatch = useDispatch();
-  const [gameId, setGameId] = useState(null);
   const handleTouchStart = (e) => {
     timerRef.current = setTimeout(() => {
       const colorName = e.target.getAttribute("data-color");
@@ -56,9 +54,11 @@ export default function AddPlayer() {
         .then((response) => response.json())
         .then((data) => {
           console.log("Create Game");
-          setGameId(data.game_id);
-          router.push(`/game/qrcode?gameId=${data.game_id}`);
-          console.log(data, players, playersInGame);
+          dispatch(
+            setGameId({
+              gameId: data.game_id,
+            }),
+          );
           socket.emit("connexionPrimary", data.game_id, {
             Players: players,
             PlayersInArray: playersInGame,

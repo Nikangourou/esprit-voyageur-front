@@ -1,27 +1,34 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import styles from "./page.module.scss";
 import Chat from "../components/chat/chat";
+import { SocketContext } from "../context/socketContext";
+import { useDispatch } from "react-redux";
+import { setGameId } from "../store/reducers/playersReducer";
 
 export default function Voyageur() {
-  const [generateImages, setGenerateImages] = useState(false)
+  const { socket } = useContext(SocketContext);
+  const dispatch = useDispatch();
+  const gameIdRef = useRef();
 
-  function extractTextBetweenQuotes(text) {
-    const regex = /"([^"]*)"/;
-    const match = text.match(regex);
-
-    if (match && match.length > 1) {
-      return match[1];
-    } else {
-      return null;
-    }
-
-  }
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    dispatch(setGameId(urlParams.get("gameId")));
+    gameIdRef.current = urlParams.get("gameId");
+    socket?.emit("connexionPhone", urlParams.get("gameId"));
+  }, []);
 
   return (
     <main>
-      <Chat />
+      <h1>Introduction PHONE</h1>
+      <button
+        onClick={() => {
+          socket?.emit("sendActorAction", gameIdRef.current, "Launch");
+        }}
+      >
+        C'est partiiii!
+      </button>
     </main>
   );
 }

@@ -4,10 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import ImageShader from "../imageShader/ImageShader";
 import Countdown from "../chrono/countdown";
 import Button from "../button/button";
-import {
-  incrementNbRound,
-  incrementScorePlayers,
-} from "../../store/reducers/playersReducer";
+
 import PageContainer from "../pageContainer/pageContainer";
 
 export default function GameFlow({ images, nextPage }) {
@@ -22,11 +19,10 @@ export default function GameFlow({ images, nextPage }) {
 
   const playersInGame = useSelector((state) => state.players.playersInGame);
   const players = useSelector((state) => state.players.players);
-  const currentBluffeur = useSelector((state) => state.players.currentBluffeur);
+  const currentBluffer = useSelector((state) => state.players.currentBluffer);
   const dispatch = useDispatch();
 
-  const colorStyle =
-    currentBluffeur != "" ? players[currentBluffeur].color : "";
+  const colorStyle = currentBluffer != "" ? players[currentBluffer].color : "";
 
   function isPointWithinRadiusFromCenter(element, point) {
     // Récupérer les dimensions de l'élément
@@ -36,7 +32,7 @@ export default function GameFlow({ images, nextPage }) {
 
     // Calculer la distance entre le centre de l'élément et le point donné
     const distance = Math.sqrt(
-      Math.pow(point.x - centerX, 2) + Math.pow(point.y - centerY, 2)
+      Math.pow(point.x - centerX, 2) + Math.pow(point.y - centerY, 2),
     );
 
     // Vérifier si la distance est inférieure ou égale au rayon
@@ -75,7 +71,7 @@ export default function GameFlow({ images, nextPage }) {
           <p>
             Attention !<br />
             <i>Ne vous laissez pas berner...</i>
-          </p>
+          </p>,
         );
         setChronoStart(10);
         setCurrentPhase(1);
@@ -87,7 +83,7 @@ export default function GameFlow({ images, nextPage }) {
           <p>
             Vite, c’est l’heure de voter !<br />
             <i>Déplace ton pion Joueur sur le véritable souvenir.</i>
-          </p>
+          </p>,
         );
         setChronoStart(20);
         setCurrentPhase(2);
@@ -96,8 +92,8 @@ export default function GameFlow({ images, nextPage }) {
         //TODO rendre fluide la transition avec GSAP
         setCurrentPhase(3);
         //TODO Récupérer les votes et les enregistrer dans colorListTrue
-        dispatch(incrementScorePlayers({ imageTrue: colorListTrue }));
-        dispatch(incrementNbRound());
+        // dispatch(incrementScorePlayers({ imageTrue: colorListTrue }));
+        // dispatch(incrementNbRound());
         nextPage();
         break;
     }
@@ -126,7 +122,7 @@ export default function GameFlow({ images, nextPage }) {
           <p>
             Nous avons dérobé les souvenirs de{" "}
             <b style={{ color: colorStyle, textTransform: "capitalize" }}>
-              {currentBluffeur}
+              {currentBluffer}
             </b>
             mais ils sont encore flous...
             <br /> <i>Chut, n’allez pas lui répéter !</i>
@@ -136,7 +132,7 @@ export default function GameFlow({ images, nextPage }) {
           playersInGame.map((color, i) => {
             // Exclu bluffeur
             console.log(color);
-            if (color !== currentBluffeur) {
+            if (color !== currentBluffer) {
               return (
                 <Button
                   dragEndEvent={eventDragEnd}
