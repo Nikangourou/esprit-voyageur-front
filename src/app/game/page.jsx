@@ -13,17 +13,8 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function Intro() {
   const { socket } = useContext(SocketContext);
-  const [currentPart, setCurrentPage] = useState(0);
   const [images, setImages] = useState([]);
-  const gameId = useRef(null);
-  const dispatch = useDispatch();
-
-  const nextPage = () => {
-    if (currentPart === 3) {
-      return;
-    }
-    setCurrentPage(currentPart + 1);
-  };
+  const [gameId, setGameId] = useState(null);
 
   useEffect(() => {
     const handleImagesAllGenerated = (_id) => {
@@ -36,7 +27,6 @@ export default function Intro() {
         .then((response) => response.json())
         .then((data) => {
           console.log(data);
-          setCurrentPage(1);
           setImages((currentImages) => [
             ...currentImages,
             {
@@ -51,7 +41,7 @@ export default function Intro() {
     // Initialiser la connexion une seule fois
     if (socket) {
       const urlParams = new URLSearchParams(window.location.search);
-      gameId.current = urlParams.get("gameId");
+      setGameId(urlParams.get("gameId"));
 
       // Séparer écoute d'événement de l'initialisation de la connexion
       socket.on("imageGenerated", handleImagesAllGenerated);
@@ -67,15 +57,7 @@ export default function Intro() {
 
   return (
     <main className={styles.main}>
-      {currentPart == 0 && (
-        <div className={styles.container}>
-          <Countdown start={120} onEnd={nextPage} />
-        </div>
-      )}
-      {currentPart == 1 && (
-        <GameFlow images={images} nextPage={nextPage}></GameFlow>
-      )}
-      {currentPart == 2 && <Score gameId={gameId}></Score>}
+      <GameFlow images={images} gameId={gameId}></GameFlow>
     </main>
   );
 }
