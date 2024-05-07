@@ -17,25 +17,28 @@ export default function Intro() {
   const [gameId, setGameId] = useState(null);
 
   useEffect(() => {
-    const handleImagesAllGenerated = (_id) => {
-      fetch(`${apiUrl}/image/get/${_id}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log(data);
-          setImages((currentImages) => [
-            ...currentImages,
-            {
-              id: uuidv4(),
-              url: `${apiUrl}${data.url}`,
-              isTrue: data.isTrue,
-            },
-          ]);
-        });
+    const handleImagesAllGenerated = (trueImageId, falseImageId) => {
+      const arrayTmp = [trueImageId, falseImageId];
+      arrayTmp.forEach((imageId) => {
+        fetch(`${apiUrl}/image/get/${imageId}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+            setImages((currentImages) => [
+              ...currentImages,
+              {
+                id: uuidv4(),
+                url: `${apiUrl}${data.url}`,
+                isTrue: data.isTrue,
+              },
+            ]);
+          });
+      });
     };
 
     // Initialiser la connexion une seule fois

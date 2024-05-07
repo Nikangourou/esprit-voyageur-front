@@ -30,8 +30,6 @@ const firstMessage = [
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function Chat() {
-  const trueImageId = useSelector((state) => state.players.trueImageId);
-  const falseImageId = useSelector((state) => state.players.falseImageId);
   const { socket } = useContext(SocketContext);
   const [input, setInput] = useState("");
   const [base64, setBase64] = useState(null);
@@ -234,12 +232,6 @@ export default function Chat() {
               .then(() => {
                 return generatePrompt("simple").then(() => {
                   setIsFinished("end");
-                  socket.emit(
-                    "sendActorAction",
-                    gameId.current,
-                    "ImagesGenerated",
-                    { TrueImageId: trueImageId, FalseImageId: falseImageId },
-                  );
                 });
               })
               .catch((error) => {
@@ -355,7 +347,7 @@ export default function Chat() {
           </p>
           <button
             onClick={() => {
-              socket?.emit("sendActorAction", gameId.current, "EndChrono");
+              socket?.emit("sendActorAction", gameId.current, "RevealImage");
             }}
           >
             END CHRONO SOCKET

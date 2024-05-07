@@ -36,7 +36,7 @@ const SocketProvider = ({ children }) => {
         if (pathname == "/voyageur") {
           router.push(`/voyageur/chat?gameId=${gameId}`);
         } else {
-          router.push("/game?gameId=${gameId}");
+          router.push(`/game?gameId=${gameId}`);
         }
         break;
       case "WinnerScreen":
@@ -105,6 +105,7 @@ const SocketProvider = ({ children }) => {
 
     window.addEventListener("online", () => {
       if (hasBeenDisconnected) {
+        console.log("reconnection");
         storageGameId = localStorage.getItem("gameId");
         isMobile = localStorage.getItem("isMobile");
         value.socket.emit("reconnection", storageGameId, isMobile);
