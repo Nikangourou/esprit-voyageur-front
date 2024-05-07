@@ -47,12 +47,12 @@ export default function Intro() {
       setGameId(urlParams.get("gameId"));
 
       // Séparer écoute d'événement de l'initialisation de la connexion
-      socket.on("imageGenerated", handleImagesAllGenerated);
+      socket.on("imagesGenerated", handleImagesAllGenerated);
     }
 
     // Nettoyage : Désinscrire et fermer la connexion lors du démontage du composant
     return () => {
-      socket?.off("imageGenerated", handleImagesAllGenerated);
+      socket?.off("imagesGenerated", handleImagesAllGenerated);
     };
 
     // Aucune dépendance donnée à useEffect, donc il agit comme componentDidMount

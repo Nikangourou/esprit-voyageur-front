@@ -41,7 +41,6 @@ export default function AddPlayer() {
   };
 
   const onRedirectEvent = () => {
-    localStorage.setItem("gameId", "plop");
     if (socket) {
       fetch(`${apiUrl}/game/post/create`, {
         method: "POST",
@@ -60,6 +59,8 @@ export default function AddPlayer() {
               gameId: data.game_id,
             }),
           );
+          localStorage.setItem("gameId", data.game_id);
+
           socket.emit("connexionPrimary", data.game_id, {
             Players: players,
             PlayersInArray: playersInGame,

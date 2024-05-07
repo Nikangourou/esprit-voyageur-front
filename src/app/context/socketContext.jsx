@@ -55,7 +55,7 @@ const SocketProvider = ({ children }) => {
         router.push(`/game/qrcode?gameId=${gameId}`);
         break;
       case "IntroductionPhone":
-        if (!isMobile) {
+        if (!isMobile && pathname != "/voyageur") {
           router.push(`/game?gameId=${gameId}`);
         } else {
           router.push(`/voyageur?gameId=${gameId}`);
@@ -63,7 +63,7 @@ const SocketProvider = ({ children }) => {
 
         break;
       case "Conversation":
-        if (isMobile) {
+        if (pathname == "/voyageur" && isMobile) {
           router.push(`/voyageur/chat?gameId=${gameId}`);
         } else {
           router.push(`/game?gameId=${gameId}`);
@@ -99,22 +99,23 @@ const SocketProvider = ({ children }) => {
     let storageGameId = localStorage.getItem("gameId");
     let isMobile = localStorage.getItem("isMobile");
 
-    if (storageGameId) {
-      value.socket.emit("reconnection", storageGameId, isMobile);
-    }
-
-    window.addEventListener("online", () => {
-      if (hasBeenDisconnected) {
-        console.log("reconnection");
-        storageGameId = localStorage.getItem("gameId");
-        isMobile = localStorage.getItem("isMobile");
-        value.socket.emit("reconnection", storageGameId, isMobile);
-      }
-    });
-
-    window.addEventListener("offline", () => {
-      setHasBeenDisconnected(true);
-    });
+    // if (storageGameId) {
+    //   console.log("reconnection", storageGameId);
+    //   value.socket.emit("reconnection", storageGameId, isMobile);
+    // }
+    //
+    // window.addEventListener("online", () => {
+    //   if (hasBeenDisconnected) {
+    //     console.log("reconnection");
+    //     storageGameId = localStorage.getItem("gameId");
+    //     isMobile = localStorage.getItem("isMobile");
+    //     value.socket.emit("reconnection", storageGameId, isMobile);
+    //   }
+    // });
+    //
+    // window.addEventListener("offline", () => {
+    //   setHasBeenDisconnected(true);
+    // });
 
     value.socket.on("stateChanged", routeManagement);
     value.socket.on("backToState", backToRoute);

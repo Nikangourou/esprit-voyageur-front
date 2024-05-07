@@ -33,6 +33,7 @@ export default function GameFlow({ images, gameId }) {
   }, []);
 
   function phaseManagement(state, gameId) {
+    console.log(state);
     switch (state) {
       case "Conversation":
         setCurrentPhase("Conversation");

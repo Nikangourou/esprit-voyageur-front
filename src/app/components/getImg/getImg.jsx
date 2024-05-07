@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef, useContext } from "react";
 import styles from "./getImg.module.scss";
 import { SocketContext } from "../../context/socketContext";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   setFalseImageId,
   setTrueImageId,

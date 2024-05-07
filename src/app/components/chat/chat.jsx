@@ -30,6 +30,8 @@ const firstMessage = [
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function Chat() {
+  const trueImageId = useSelector((state) => state.players.trueImageId);
+  const falseImageId = useSelector((state) => state.players.falseImageId);
   const { socket } = useContext(SocketContext);
   const [input, setInput] = useState("");
   const [base64, setBase64] = useState(null);
@@ -111,6 +113,17 @@ export default function Chat() {
         containerMessagesRef.current.scrollHeight;
     }
   }, [messages]);
+
+  useEffect(() => {
+    if (trueImageId && falseImageId) {
+      console.log(trueImageId, falseImageId);
+      socket.emit("sendActorAction", gameId.current, "ImagesGenerated", {
+        TrueImageId: trueImageId,
+        FalseImageId: falseImageId,
+      });
+      socket.emit("imagesAllGenerated", gameId.current);
+    }
+  }, [trueImageId, falseImageId]);
 
   const base64Reformat = (base64) => {
     const to_remove = "data:audio/webm;codecs=opus;base64,";
