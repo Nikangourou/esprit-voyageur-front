@@ -1,6 +1,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import FullScreen from "./components/fullScreen/fullScreen";
+import LoadShader from "./components/loadShader/loadShader";
 import { SocketProvider } from "./context/socketContext";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -15,8 +16,11 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={inter.className}>
         <FullScreen />
+        <LoadShader />
         <StoreProvider>
-          <SocketProvider>{children}</SocketProvider>
+          <SocketProvider>
+            {children}
+            </SocketProvider>
         </StoreProvider>
       </body>
     </html>
