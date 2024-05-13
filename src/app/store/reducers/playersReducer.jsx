@@ -26,7 +26,13 @@ export const playersSlice = createSlice({
         state.playersInGame = [...state.playersInGame, action.payload.color];
       }
     },
-    resetGame: (state) => {
+    newRound: (state) => {
+      state.currentBluffer = "";
+      state.trueImageId = null;
+      state.falseImageId = null;
+    },
+    newGame: (state) => {
+      state.playersInGame = [];
       state.players = {
         rouge: { color: "red", score: 0, alreadyPlay: false },
         bleu: { color: "blue", score: 0, alreadyPlay: false },
@@ -36,8 +42,10 @@ export const playersSlice = createSlice({
         cyan: { color: "#1ecbe1", score: 0, alreadyPlay: false },
         noir: { color: "black", score: 0, alreadyPlay: false },
       };
-      state.playersInGame = [];
+      state.currentBluffer = "";
       state.gameId = null;
+      state.trueImageId = null;
+      state.falseImageId = null;
     },
     setGameId: (state, action) => {
       state.gameId = action.payload.gameId;
@@ -54,15 +62,20 @@ export const playersSlice = createSlice({
     setCurrentBluffer: (state, action) => {
       state.currentBluffer = action.payload.CurrentBluffer;
     },
+    setScore: (state, action) => {
+      state.players = action.payload.Players;
+    },
   },
 });
 
 export const {
   addPlayer,
-  resetGame,
+  setScore,
   setGameId,
   setTrueImageId,
   setFalseImageId,
   setCurrentBluffer,
+  newRound,
+  newGame,
 } = playersSlice.actions;
 export default playersSlice.reducer;

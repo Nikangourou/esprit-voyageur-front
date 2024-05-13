@@ -2,12 +2,18 @@ import styles from "./score.module.scss";
 import PageContainer from "../pageContainer/pageContainer";
 import Countdown from "../chrono/countdown";
 import Button from "../button/button";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
+import { useContext } from "react";
+import { SocketContext } from "../../context/socketContext";
+import { newRound } from "../../store/reducers/playersReducer";
 
 export default function Score({ gameId }) {
+  const { socket } = useContext(SocketContext);
   const playersInGame = useSelector((state) => state.players.playersInGame);
   const players = useSelector((state) => state.players.players);
+  const dispatch = useDispatch();
+
   return (
     <PageContainer pageCategory={"score"}>
       <div className={styles.scoreList}>
@@ -26,9 +32,14 @@ export default function Score({ gameId }) {
         })}
       </div>
 
-      <Link href={`/game/qrcode?gameId=${gameId}`}>
-        <Button type={"link"}>Valider</Button>
-      </Link>
+      <button
+        onClick={() => {
+          dispatch(newRound());
+          socket?.emit("sendActorAction", gameId, "Click End");
+        }}
+      >
+        C'est Finiiii!
+      </button>
     </PageContainer>
   );
 }

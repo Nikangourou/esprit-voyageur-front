@@ -7,6 +7,7 @@ export default function DraggablePawns({
   imageRef2,
   images,
   setColorListTrue,
+  colorListTrue,
 }) {
   const currentBluffer = useSelector((state) => state.players.currentBluffer);
   const playersInGame = useSelector((state) => state.players.playersInGame);
@@ -27,26 +28,68 @@ export default function DraggablePawns({
     return distance <= rect.width / 2;
   }
 
+  function removeItemOnce(arr, value) {
+    const index = arr.indexOf(value);
+    if (index > -1) {
+      arr.splice(index, 1);
+    }
+    return arr;
+  }
+
   function eventDragEnd(point) {
     if (isPointWithinRadiusFromCenter(imageRef1.current, point)) {
       if (images && images[0].isTrue) {
-        setColorListTrue((prev) => [
-          ...prev,
+        setColorListTrue((prev) => {
+          const tmp = [...prev];
+          return [
+            ...removeItemOnce(tmp, point.target.getAttribute("data-color")),
+            point.target.getAttribute("data-color"),
+          ];
+        });
+        console.log(
+          "AJOUT DANS LISTE TRUE",
+          colorListTrue,
           point.target.getAttribute("data-color"),
-        ]);
+        );
         //TODO GSAP ANIM FEEDBACK
+      } else {
+        setColorListTrue((prev) => {
+          const tmp = [...prev];
+          return [
+            ...removeItemOnce(tmp, point.target.getAttribute("data-color")),
+          ];
+        });
       }
     } else if (isPointWithinRadiusFromCenter(imageRef2.current, point)) {
       if (images && images[1].isTrue) {
-        setColorListTrue((prev) => [
-          ...prev,
+        setColorListTrue((prev) => {
+          const tmp = [...prev];
+          return [
+            ...removeItemOnce(tmp, point.target.getAttribute("data-color")),
+            point.target.getAttribute("data-color"),
+          ];
+        });
+        console.log(
+          "AJOUT DANS LISTE TRUE",
+          colorListTrue,
           point.target.getAttribute("data-color"),
-        ]);
-        console.log("AJOUT DANS LISTE TRUE");
+        );
         //TODO GSAP ANIM FEEDBACK
+      } else {
+        setColorListTrue((prev) => {
+          const tmp = [...prev];
+          return [
+            ...removeItemOnce(tmp, point.target.getAttribute("data-color")),
+          ];
+        });
       }
     } else {
-      console.log("out images");
+      setColorListTrue((prev) => {
+        const tmp = [...prev];
+        return [
+          ...removeItemOnce(tmp, point.target.getAttribute("data-color")),
+        ];
+      });
     }
   }
 

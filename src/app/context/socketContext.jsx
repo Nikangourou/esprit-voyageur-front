@@ -9,7 +9,12 @@ import React, {
 } from "react";
 import { io } from "socket.io-client";
 import { usePathname, useRouter } from "next/navigation";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  newGame,
+  setCurrentBluffer,
+  setScore,
+} from "../store/reducers/playersReducer";
 
 // Créez le contexte
 const value = { socket: io("localhost:5001") };
@@ -19,6 +24,7 @@ const SocketContext = createContext(value);
 const SocketProvider = ({ children }) => {
   const router = useRouter();
   const pathname = usePathname();
+  const dispatch = useDispatch();
   const [hasBeenDisconnected, setHasBeenDisconnected] = useState(false);
 
   function routeManagement(state, gameId) {
@@ -40,7 +46,7 @@ const SocketProvider = ({ children }) => {
         }
         break;
       case "WinnerScreen":
-        router.push(`/intro`);
+        router.push(`/game/qrcode?gameId=${gameId}`);
         break;
       default:
         break;
@@ -95,6 +101,19 @@ const SocketProvider = ({ children }) => {
     }
   }
 
+  function setBluffer(bluffer) {
+    console.log("bluffer initialized: " + bluffer);
+    dispatch(setCurrentBluffer({ CurrentBluffer: bluffer }));
+  }
+
+  function setPlayersScore(players) {
+    dispatch(setScore({ Players: players }));
+  }
+
+  function resetGame() {
+    dispatch(newGame());
+  }
+
   useEffect(() => {
     let storageGameId = localStorage.getItem("gameId");
     let isMobile = localStorage.getItem("isMobile");
@@ -120,9 +139,16 @@ const SocketProvider = ({ children }) => {
     value.socket.on("stateChanged", routeManagement);
     value.socket.on("backToState", backToRoute);
 
+    value.socket.on("setCurrentBluffer", setBluffer);
+    value.socket.on("setScore", setPlayersScore);
+    value.socket.on("resetAll", resetGame);
+
     return () => {
       value.socket.off("stateChanged", routeManagement);
       value.socket.off("backToState", backToRoute);
+      value.socket.off("setCurrentBluffer", setBluffer);
+      value.socket.off("setScore", setPlayersScore);
+      value.socket.off("resetAll", resetGame);
     };
   }, []);
 

@@ -40,6 +40,10 @@ export default function GameFlow({ images, gameId }) {
     setRender(renderContent());
   }, [currentPhase]);
 
+  useEffect(() => {
+    console.log(colorListTrue);
+  }, [colorListTrue]);
+
   function phaseManagement(state, gameId) {
     console.log(state);
     switch (state) {
@@ -91,7 +95,7 @@ export default function GameFlow({ images, gameId }) {
     if (currentPhase == "Conversation") {
       return <h1>La conversation est en cours</h1>;
     } else if (
-      currentPhase == "RevealPhase" ||
+      currentPhase == "RevealImage" ||
       currentPhase == "QuestionsPhase" ||
       currentPhase == "VotePhase" ||
       currentPhase == "RevealPhase"
@@ -103,17 +107,6 @@ export default function GameFlow({ images, gameId }) {
               currentPhase == "VotePhase") && (
               <Countdown start={chronoStart} onEnd={eventEndClock}></Countdown>
             )}
-          </div>
-          <div className={styles.imgShaders}>
-            {images.length > 0 &&
-              images.map((image, i) => (
-                <ImageShader
-                  key={image.id}
-                  url={image.url}
-                  ref={i == 0 ? imageRef1 : imageRef2}
-                  isBlurry={isBlurry}
-                ></ImageShader>
-              ))}
           </div>
           <div className={styles.contentSentence}>
             {contentSentence ? (
@@ -131,6 +124,7 @@ export default function GameFlow({ images, gameId }) {
           </div>
           {currentPhase == "VotePhase" && (
             <DraggablePawns
+              colorListTrue={colorListTrue}
               containerRef={containerRef}
               imageRef1={imageRef1}
               imageRef2={imageRef2}
@@ -141,22 +135,24 @@ export default function GameFlow({ images, gameId }) {
         </>
       );
     } else if (currentPhase == "ScorePhase") {
-      return <Score></Score>;
+      return <Score gameId={gameId}></Score>;
     } else {
       return <></>;
     }
   }
 
   function eventEndClock() {
-    socket?.emit(
-      "sendActorAction",
-      gameId,
-      "EndPhase",
-      currentPhase == "VotePhase" ? { ImageTrueVotes: colorListTrue } : {},
-    );
+    // console.log(colorListTrue);
+    // socket?.emit(
+    //   "sendActorAction",
+    //   gameId,
+    //   "EndPhase",
+    //   currentPhase == "VotePhase" ? { ImageTrueVotes: colorListTrue } : {},
+    // );
   }
 
   function clickNextPhase() {
+    console.log(colorListTrue);
     socket?.emit(
       "sendActorAction",
       gameId,
@@ -168,6 +164,17 @@ export default function GameFlow({ images, gameId }) {
   return (
     <section className={styles.containerGame} ref={containerRef}>
       <button onClick={clickNextPhase}>NextPhase</button>
+      <div className={styles.imgShaders}>
+        {images.length > 0 &&
+          images.map((image, i) => (
+            <ImageShader
+              key={image.id}
+              url={image.url}
+              ref={i == 0 ? imageRef1 : imageRef2}
+              isBlurry={isBlurry}
+            ></ImageShader>
+          ))}
+      </div>
       {render}
     </section>
   );
