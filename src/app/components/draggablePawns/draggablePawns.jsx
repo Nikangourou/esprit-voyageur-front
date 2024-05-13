@@ -10,6 +10,7 @@ export default function DraggablePawns({
 }) {
   const currentBluffer = useSelector((state) => state.players.currentBluffer);
   const playersInGame = useSelector((state) => state.players.playersInGame);
+  const players = useSelector((state) => state.players.players);
 
   function isPointWithinRadiusFromCenter(element, point) {
     // Récupérer les dimensions de l'élément

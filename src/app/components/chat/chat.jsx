@@ -43,6 +43,7 @@ export default function Chat() {
   const gameId = useRef(null);
   const isReadyRef = useRef(false);
   const containerMessagesRef = useRef(null);
+  const imagesCountRef = useRef(0);
 
   useEffect(() => {
     if (isReadyRef.current) {
@@ -225,6 +226,14 @@ export default function Chat() {
         if (data && data[0] && data[0][0]) {
           let content = data[0][0].text.value;
 
+          const regex = /Remember:(.*)/;
+          // Utilisation de la méthode match() pour récupérer le texte correspondant à l'expression régulière
+          const resultat = content.match(regex);
+          const promptRemember = resultat ? resultat[1].trim() : null;
+          if (resultat) {
+            content = promptRemember;
+          }
+
           let msg = {
             id: uuidv4(),
             content: content,
@@ -237,25 +246,34 @@ export default function Chat() {
             console.log("FIN_CONVERSATION");
             content = content.replace("FIN_CONVERSATION", "");
             setIsFinished("processing");
-            msg.content = content;
+
+            // Utilisation d'une expression régulière pour rechercher la partie du texte après "Remember:"
 
             addMessage(msg);
-
-            generatePrompt("alt")
-              .then(() => {
-                return generatePrompt("simple").then(() => {
-                  setIsFinished("end");
+            imagesCountRef.current += 1;
+            if (imagesCountRef.current == 1) {
+              generatePrompt("alt")
+                .then(() => {
+                  console.log("altGenerated");
+                  imagesCountRef.current += 1;
+                  if (imagesCountRef.current == 2) {
+                    return generatePrompt("simple").then(() => {
+                      console.log("simpleGenerated");
+                      setIsFinished("end");
+                    });
+                  }
+                })
+                .catch((error) => {
+                  console.error(error);
                 });
-              })
-              .catch((error) => {
-                console.error(error);
-              });
+            }
           } else {
             addMessage(msg);
           }
         }
       })
       .catch((error) => {
+        console.log("error1");
         console.error("Error:", error);
       });
   };
@@ -360,7 +378,11 @@ export default function Chat() {
           </p>
           <button
             onClick={() => {
-              socket?.emit("sendActorAction", gameId.current, "RevealImage");
+              socket?.emit(
+                "sendActorAction",
+                gameId.current,
+                "ImagesGenerated",
+              );
             }}
           >
             END CHRONO SOCKET
