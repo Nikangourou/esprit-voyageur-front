@@ -157,7 +157,7 @@ export default function AddPlayer() {
       ref={containerRef}
       onTouchMove={onTouchMove}
     >
-      {/* <div className={styles.playerChoice}>
+      <div className={styles.playerChoice}>
         {Object.entries(players).map(([colorName, value], id) => {
           return (
             <Button
@@ -169,7 +169,7 @@ export default function AddPlayer() {
             ></Button>
           );
         })}
-      </div> */}
+      </div>
       {blobs.map((blob) => {
         return (
           <div

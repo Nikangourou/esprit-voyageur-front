@@ -5,6 +5,7 @@ import { useRef, useEffect } from "react";
 import { fragmentShader, vertexShader } from "./shader/shader";
 import { gsap } from "gsap";
 import * as THREE from "three";
+import { useSelector } from "react-redux";
 
 const LoaderShader = () => {
   const canvasRef = useRef(null);
@@ -14,6 +15,8 @@ const LoaderShader = () => {
   const sceneRef = useRef(); // Stocker le temps de départ
   const cameraRef = useRef(); // Stocker le temps de départ
   const meshRef = useRef(); // Stocker le temps de départ
+
+  const shaderPosition = useSelector((state) => state.game.shaderPosition);
 
   function createPlaneShader() {
     const pixelRatio = window.devicePixelRatio;
@@ -28,16 +31,19 @@ const LoaderShader = () => {
           value: 0,
         },
         uProgress: {
-          value: 0,
+          value: 1,
         },
         uColor: {
-          value: new THREE.Vector3(1., 1., 0.),
+          value: new THREE.Vector3(1, 1, 0),
         },
         uOffset: {
           value: new THREE.Vector2(Math.random() * 3, Math.random() * 3),
         },
         uResolution: {
-            value: new THREE.Vector2(window.innerWidth *pixelRatio , window.innerHeight*pixelRatio ),
+          value: new THREE.Vector2(
+            window.innerWidth * pixelRatio,
+            window.innerHeight * pixelRatio
+          ),
         },
       },
     };
@@ -61,8 +67,8 @@ const LoaderShader = () => {
 
       const pixelRatio = window.devicePixelRatio;
       const sizes = {
-        width: window.innerWidth  ,
-        height: window.innerHeight ,
+        width: window.innerWidth,
+        height: window.innerHeight,
       };
       rendererRef.current.setPixelRatio(pixelRatio);
       rendererRef.current.setSize(sizes.width, sizes.height);
@@ -77,14 +83,11 @@ const LoaderShader = () => {
       rendererRef.current.render(sceneRef.current, cameraRef.current);
       rendererRef.current.setClearColor(0x000000, 0);
       sceneRef.current.add(createPlaneShader());
-
     }
 
     let requestAnimationId;
 
     if (sceneRef.current) {
-    
-
       function update() {
         const currentTime = Date.now();
         const deltaTime = currentTime - startTimeRef.current;
@@ -95,16 +98,34 @@ const LoaderShader = () => {
       }
       // Démarrer la boucle de rendu
       update();
-      
     }
     return () => {
       cancelAnimationFrame(requestAnimationId);
     };
   }, []);
 
+  useEffect(() => {
+    if (materialRef.current && materialRef.current.uniforms.uProgress) {
+      gsap.to(materialRef.current.uniforms.uProgress, {
+        value: shaderPosition, 
+        duration: 2, 
+        ease: "power2.inOut", 
+        onUpdate: () => {
+          if (rendererRef.current && sceneRef.current && cameraRef.current) {
+            rendererRef.current.render(sceneRef.current, cameraRef.current);
+          }
+        },
+      });
+    }
+  }, [shaderPosition]); // Ajoutez shaderPosition dans le tableau de dépendances
+
   return (
     <div className={styles.LoaderShader}>
-      <canvas className={styles.canvas} ref={canvasRef} style={{width: "100svw",height:"100svh",background:"transparent"}}></canvas>
+      <canvas
+        className={styles.canvas}
+        ref={canvasRef}
+        style={{ width: "100svw", height: "100svh", background: "transparent" }}
+      ></canvas>
     </div>
   );
 };

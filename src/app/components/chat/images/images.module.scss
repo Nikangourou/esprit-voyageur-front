@@ -1,0 +1,13 @@
+.images {
+  max-width: 600px;
+  margin: auto;
+  text-align: center;
+
+  .swiper {
+    z-index: 0;
+
+    img {
+      width: 100%;
+    }
+  }
+}

@@ -1,26 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import styles from "./page.module.scss";
 import Chat from "../../components/chat/chat";
+import Images from "../../components/chat/images/images";
+import { useSelector } from "react-redux";
 
 export default function Voyageur() {
-  const [generateImages, setGenerateImages] = useState(false);
+  const loadingImages = useSelector((state) => state.game.loadingImages);
 
-  function extractTextBetweenQuotes(text) {
-    const regex = /"([^"]*)"/;
-    const match = text.match(regex);
-
-    if (match && match.length > 1) {
-      return match[1];
-    } else {
-      return null;
-    }
-  }
-
-  return (
-    <main>
-      <Chat />
-    </main>
-  );
+  return <main>{loadingImages ? <Images /> : <Chat />}</main>;
 }

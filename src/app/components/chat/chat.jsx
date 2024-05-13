@@ -10,7 +10,9 @@ import { pending } from "../../utils/utils";
 import Countdown from "../chrono/countdown";
 import { SocketContext } from "../../context/socketContext";
 import { div } from "three/nodes";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setShaderPosition, setLoadingImages } from "../../store/reducers/gameReducer";
+
 
 const firstMessage = [
   {
@@ -32,12 +34,15 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 export default function Chat() {
   const trueImageId = useSelector((state) => state.players.trueImageId);
   const falseImageId = useSelector((state) => state.players.falseImageId);
+
   const { socket } = useContext(SocketContext);
   const [input, setInput] = useState("");
   const [base64, setBase64] = useState(null);
   const [messages, setMessages] = useState(firstMessage);
   const [isPaused, setIsPaused] = useState(true);
   const [isFinished, setIsFinished] = useState("not");
+  const dispatch = useDispatch();
+
 
   const threadKey = useRef(null);
   const gameId = useRef(null);
@@ -242,10 +247,15 @@ export default function Chat() {
             type: isImg ? type : null,
           };
 
+          dispatch(setShaderPosition(0));
+          dispatch(setLoadingImages({ loadingImages: true }));
+
           if (content.includes("FIN_CONVERSATION")) {
             console.log("FIN_CONVERSATION");
             content = content.replace("FIN_CONVERSATION", "");
             setIsFinished("processing");
+            // set loeadinImages to true
+            // loadingImages(true);
 
             // Utilisation d'une expression régulière pour rechercher la partie du texte après "Remember:"
 
@@ -333,7 +343,6 @@ export default function Chat() {
 
   return (
     <div className={styles.chat}>
-      <div className={styles.background} />
       <div className={styles.containerCountdown}>
         <Countdown start={120} onEnd={onEndCountdown} paused={isPaused} />
       </div>
