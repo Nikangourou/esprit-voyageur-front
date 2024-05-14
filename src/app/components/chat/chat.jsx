@@ -6,13 +6,16 @@ import Message from "./message/message";
 import RecordingComponent from "../recordingComponent/recordingComponent";
 import * as utils from "../../utils/micro";
 import { v4 as uuidv4 } from "uuid";
-import { pending } from "../../utils/utils";
+import { pending, generateImg } from "../../utils/utils";
 import Countdown from "../chrono/countdown";
 import { SocketContext } from "../../context/socketContext";
 import { div } from "three/nodes";
 import { useDispatch, useSelector } from "react-redux";
-import { setShaderPosition, setLoadingImages } from "../../store/reducers/gameReducer";
-
+import {
+  setShaderPosition,
+  setLoadingImages,
+} from "../../store/reducers/gameReducer";
+import { get } from "http";
 
 const firstMessage = [
   {
@@ -42,7 +45,6 @@ export default function Chat() {
   const [isPaused, setIsPaused] = useState(true);
   const [isFinished, setIsFinished] = useState("not");
   const dispatch = useDispatch();
-
 
   const threadKey = useRef(null);
   const gameId = useRef(null);
@@ -162,7 +164,6 @@ export default function Chat() {
       id: uuidv4(),
       content: input,
       send: true,
-      isImg: false,
     };
 
     if (messages.length === 1) {
@@ -243,19 +244,16 @@ export default function Chat() {
             id: uuidv4(),
             content: content,
             send: false,
-            isImg: isImg,
-            type: isImg ? type : null,
           };
 
-          dispatch(setShaderPosition(0));
-          dispatch(setLoadingImages({ loadingImages: true }));
+          if(isImg) {
+            generateImg(apiUrl, content, gameId, type, socket);
+          }
 
           if (content.includes("FIN_CONVERSATION")) {
             console.log("FIN_CONVERSATION");
             content = content.replace("FIN_CONVERSATION", "");
             setIsFinished("processing");
-            // set loeadinImages to true
-            // loadingImages(true);
 
             // Utilisation d'une expression régulière pour rechercher la partie du texte après "Remember:"
 
@@ -270,6 +268,7 @@ export default function Chat() {
                     return generatePrompt("simple").then(() => {
                       console.log("simpleGenerated");
                       setIsFinished("end");
+                      dispatch(setShaderPosition(0));
                     });
                   }
                 })
@@ -283,7 +282,7 @@ export default function Chat() {
         }
       })
       .catch((error) => {
-        console.log("error1");
+        console.log("error getAnswer");
         console.error("Error:", error);
       });
   };
@@ -390,7 +389,7 @@ export default function Chat() {
               socket?.emit(
                 "sendActorAction",
                 gameId.current,
-                "ImagesGenerated",
+                "ImagesGenerated"
               );
             }}
           >

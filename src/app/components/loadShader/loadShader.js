@@ -18,6 +18,21 @@ const LoaderShader = () => {
 
   const shaderPosition = useSelector((state) => state.game.shaderPosition);
 
+  const handleResize = () => {
+    const pixelRatio = window.devicePixelRatio;
+    const newWidth = window.innerWidth;
+    const newHeight = window.innerHeight;
+
+    // Mise à jour de la résolution du shader
+    materialRef.current.uniforms.uResolution.value.x = newWidth * pixelRatio;
+    materialRef.current.uniforms.uResolution.value.y = newHeight * pixelRatio;
+
+    // Mise à jour de la taille du renderer
+    if (rendererRef.current) {
+      rendererRef.current.setSize(newWidth, newHeight);
+    }
+  };
+
   function createPlaneShader() {
     const pixelRatio = window.devicePixelRatio;
 
@@ -96,20 +111,21 @@ const LoaderShader = () => {
         rendererRef.current.render(sceneRef.current, cameraRef.current); // Rendu de la scène
         requestAnimationId = requestAnimationFrame(update); // Appel récursif de la fonction update
       }
-      // Démarrer la boucle de rendu
+      window.addEventListener("resize", handleResize);
       update();
     }
     return () => {
       cancelAnimationFrame(requestAnimationId);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
   useEffect(() => {
     if (materialRef.current && materialRef.current.uniforms.uProgress) {
       gsap.to(materialRef.current.uniforms.uProgress, {
-        value: shaderPosition, 
-        duration: 2, 
-        ease: "power2.inOut", 
+        value: shaderPosition,
+        duration: 2,
+        ease: "power2.inOut",
         onUpdate: () => {
           if (rendererRef.current && sceneRef.current && cameraRef.current) {
             rendererRef.current.render(sceneRef.current, cameraRef.current);
@@ -117,7 +133,7 @@ const LoaderShader = () => {
         },
       });
     }
-  }, [shaderPosition]); // Ajoutez shaderPosition dans le tableau de dépendances
+  }, [shaderPosition]);
 
   return (
     <div className={styles.LoaderShader}>
