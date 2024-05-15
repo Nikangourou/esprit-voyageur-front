@@ -9,6 +9,11 @@ import {
   setCurrentBluffer,
   setScore,
 } from "../store/reducers/playersReducer";
+import {
+  setDistanceCircle,
+  setOffset,
+  setShaderPosition,
+} from "../store/reducers/gameReducer";
 
 // Créez le contexte
 const value = { socket: io("localhost:5001") };
@@ -26,21 +31,32 @@ const SocketProvider = ({ children }) => {
     switch (state) {
       case "SetBluffer":
         router.push(`/game/qrcode?gameId=${gameId}`);
+        dispatch(setDistanceCircle([0.1, 0.1]));
         break;
       case "IntroductionPhone":
         if (pathname == "/game/qrcode") {
           router.push(`/game?gameId=${gameId}`);
+          dispatch(setDistanceCircle([0.1, 0.1]));
         }
         break;
       case "Conversation":
         if (pathname == "/voyageur") {
           router.push(`/voyageur/chat?gameId=${gameId}`);
+          dispatch(setDistanceCircle([0.4, 0.65]));
+          dispatch(setOffset(0.115));
         } else {
           router.push(`/game?gameId=${gameId}`);
+          console.log("Conversation");
+          dispatch(setDistanceCircle([0.65, 0.65]));
+          dispatch(setShaderPosition(0));
+          setTimeout(() => {
+            dispatch(setShaderPosition(1));
+          }, 2000);
         }
         break;
       case "WinnerScreen":
         router.push(`/game/qrcode?gameId=${gameId}`);
+        dispatch(setDistanceCircle([0.1, 0.1]));
         break;
       default:
         break;
@@ -53,42 +69,54 @@ const SocketProvider = ({ children }) => {
     switch (state) {
       case "SetBluffer":
         router.push(`/game/qrcode?gameId=${gameId}`);
+        dispatch(setDistanceCircle([0.1, 0.1]));
         break;
       case "IntroductionPhone":
         if (!isMobile && pathname != "/voyageur") {
           router.push(`/game?gameId=${gameId}`);
+          dispatch(setDistanceCircle([0.1, 0.1]));
         } else {
           router.push(`/voyageur?gameId=${gameId}`);
+          dispatch(setDistanceCircle([0.1, 0.65]));
         }
 
         break;
       case "Conversation":
         if (pathname == "/voyageur" && isMobile) {
           router.push(`/voyageur/chat?gameId=${gameId}`);
+          dispatch(setDistanceCircle([0.1, 0.1]));
         } else {
           router.push(`/game?gameId=${gameId}`);
+          dispatch(setDistanceCircle([0.65, 0.65]));
         }
         break;
       case "RevealImage":
         if (isMobile) {
+          router.push(`/game?gameId=${gameId}&state=RevealImage`);
+          dispatch(setDistanceCircle([0.1, 0.65]));
         } else {
           router.push(`/game?gameId=${gameId}&state=RevealImage`);
         }
         break;
       case "QuestionPhase":
         router.push(`/game?gameId=${gameId}&state=QuestionPhase`);
+        dispatch(setDistanceCircle([0.1, 0.1]));
         break;
       case "VotePhase":
         router.push(`/game?gameId=${gameId}&state=VotePhase`);
+        dispatch(setDistanceCircle([0.1, 0.1]));
         break;
       case "RevealPhase":
         router.push(`/game?gameId=${gameId}&state=RevealPhase`);
+        dispatch(setDistanceCircle([0.1, 0.1]));
         break;
       case "ScorePhase":
         router.push(`/game?gameId=${gameId}&state=ScorePhase`);
+        dispatch(setDistanceCircle([0.1, 0.1]));
         break;
       case "WinnerScreen":
         router.push(`/game/winner`);
+        dispatch(setDistanceCircle([0.1, 0.1]));
         break;
       default:
         break;

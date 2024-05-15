@@ -8,6 +8,8 @@ import * as THREE from "three";
 import { useSelector } from "react-redux";
 
 const LoaderShader = () => {
+  const players = useSelector((state) => state.players.players);
+  const currentBluffer = useSelector((state) => state.players.currentBluffer);
   const canvasRef = useRef(null);
   const rendererRef = useRef(null);
   const materialRef = useRef();
@@ -15,8 +17,20 @@ const LoaderShader = () => {
   const sceneRef = useRef(); // Stocker le temps de départ
   const cameraRef = useRef(); // Stocker le temps de départ
   const meshRef = useRef(); // Stocker le temps de départ
+  const colorRef = useRef();
+  const distanceRef = useRef();
 
   const shaderPosition = useSelector((state) => state.game.shaderPosition);
+  const distanceCircle = useSelector((state) => state.game.distanceCircle);
+  const offset = useSelector((state) => state.game.offset);
+
+  useEffect(() => {
+    const colorStyle =
+      currentBluffer != "" ? players[currentBluffer].color : "";
+    if (colorStyle !== "") {
+      colorRef.current.set(colorStyle);
+    }
+  }, [currentBluffer]);
 
   const handleResize = () => {
     const pixelRatio = window.devicePixelRatio;
@@ -35,7 +49,8 @@ const LoaderShader = () => {
 
   function createPlaneShader() {
     const pixelRatio = window.devicePixelRatio;
-
+    colorRef.current = new THREE.Color("blue");
+    distanceRef.current = new THREE.Vector2(...distanceCircle);
     const params = {
       vertexShader: vertexShader, // our vertex shader ID
       fragmentShader: fragmentShader, // our fragment shader ID
@@ -46,18 +61,21 @@ const LoaderShader = () => {
           value: 0,
         },
         uProgress: {
-          value: 1,
+          value: 0,
         },
         uColor: {
-          value: new THREE.Vector3(1, 1, 0),
+          value: colorRef.current,
         },
         uOffset: {
-          value: new THREE.Vector2(Math.random() * 3, Math.random() * 3),
+          value: 0,
+        },
+        uDistanceCircle: {
+          value: distanceRef.current,
         },
         uResolution: {
           value: new THREE.Vector2(
             window.innerWidth * pixelRatio,
-            window.innerHeight * pixelRatio
+            window.innerHeight * pixelRatio,
           ),
         },
       },
@@ -67,7 +85,7 @@ const LoaderShader = () => {
 
     meshRef.current = new THREE.Mesh(
       new THREE.PlaneGeometry(2, 2),
-      materialRef.current
+      materialRef.current,
     );
     return meshRef.current;
   }
@@ -116,7 +134,7 @@ const LoaderShader = () => {
     }
     return () => {
       cancelAnimationFrame(requestAnimationId);
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
 
@@ -125,15 +143,32 @@ const LoaderShader = () => {
       gsap.to(materialRef.current.uniforms.uProgress, {
         value: shaderPosition,
         duration: 2,
-        ease: "power2.inOut",
-        onUpdate: () => {
-          if (rendererRef.current && sceneRef.current && cameraRef.current) {
-            rendererRef.current.render(sceneRef.current, cameraRef.current);
-          }
-        },
+        ease: "power1.inOut",
       });
     }
   }, [shaderPosition]);
+
+  useEffect(() => {
+    if (materialRef.current && materialRef.current.uniforms.uDistanceCircle) {
+      console.log(distanceCircle);
+      gsap.to(materialRef.current.uniforms.uDistanceCircle.value, {
+        x: distanceCircle[0],
+        y: distanceCircle[1],
+        duration: 2,
+        ease: "power2.inOut",
+      });
+    }
+  }, [distanceCircle]);
+
+  useEffect(() => {
+    if (materialRef.current && materialRef.current.uniforms.uOffset) {
+      gsap.to(materialRef.current.uniforms.uOffset, {
+        value: offset,
+        duration: 2,
+        ease: "power2.inOut",
+      });
+    }
+  }, [distanceCircle]);
 
   return (
     <div className={styles.LoaderShader}>

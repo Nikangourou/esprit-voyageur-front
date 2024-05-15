@@ -5,11 +5,12 @@ import styles from "./page.module.scss";
 import { gsap, Sine } from "gsap";
 import Button from "./components/button/button";
 import Link from "next/link";
+import { useDispatch } from "react-redux";
+import { setDistanceCircle } from "./store/reducers/gameReducer";
 
 export default function Home() {
   const tlRef = useRef();
-  const hoverItemRef = useRef();
-  const blobPathRef = useRef();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     // Function to handle mouse enter
@@ -29,17 +30,6 @@ export default function Home() {
         onComplete: () => tlRef.current.pause(),
       });
     };
-
-    // Add event listeners
-    // const hoverElem = hoverItemRef.current;
-    // hoverElem.addEventListener("mouseenter", enterAnimation);
-    // hoverElem.addEventListener("mouseleave", leaveAnimation);
-
-    // // Cleanup the event listeners on component unmount
-    // return () => {
-    //   hoverElem.removeEventListener("mouseenter", enterAnimation);
-    //   hoverElem.removeEventListener("mouseleave", leaveAnimation);
-    // };
   }, []);
 
   return (
@@ -47,7 +37,13 @@ export default function Home() {
       <div className={styles.container}>
         <img src="/Logo.svg" alt="Logo" />
         <div>
-          <Link className={styles.btn} href="/intro">
+          <Link
+            className={styles.btn}
+            href="/intro"
+            onClick={() => {
+              dispatch(setDistanceCircle([0.1, 0.1]));
+            }}
+          >
             <Button type="link"> Jouer </Button>
           </Link>
         </div>
