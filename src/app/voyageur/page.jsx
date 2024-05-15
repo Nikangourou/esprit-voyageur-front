@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { setGameId, setCurrentBluffer } from "../store/reducers/playersReducer";
 import Button from "../components/button/button";
 import { useSelector } from "react-redux";
-
+import { setDistanceCircle } from "../store/reducers/gameReducer";
 
 export default function Voyageur() {
   const { socket } = useContext(SocketContext);
@@ -71,6 +71,7 @@ export default function Voyageur() {
   );
 
   useEffect(() => {
+    dispatch(setDistanceCircle([0.4, 0.8]));
     const urlParams = new URLSearchParams(window.location.search);
     gameIdRef.current = urlParams.get("gameId");
     dispatch(setGameId(gameIdRef.current));

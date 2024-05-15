@@ -33,20 +33,14 @@ export default function Voyageur() {
       const urlParams = new URLSearchParams(window.location.search);
       gameId.current = urlParams.get("gameId");
     }
-
-    socket.on("stateChanged", phaseManagement);
-    return () => {
-      socket.off("stateChanged", phaseManagement);
-    };
+    //
+    // socket.on("stateChanged", phaseManagement);
+    // return () => {
+    //   socket.off("stateChanged", phaseManagement);
+    // };
   }, []);
 
-  const onEndCountdown = () => {
-    if (currentPhase == "RevealImage" && !disconnect) {
-      console.log("End countdown", currentPhase);
-      setDisconnect(true);
-      socket?.emit("sendActorAction", gameId.current, "EndChrono", {});
-    }
-  };
+  const onEndCountdown = () => {};
 
   return (
     <main>

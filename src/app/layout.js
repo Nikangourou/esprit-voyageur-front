@@ -16,7 +16,9 @@ export default function RootLayout({ children }) {
       <body className={inter.className}>
         <StoreProvider>
           <LoadShader />
-          <SocketProvider>{children}</SocketProvider>
+          <SocketProvider>
+            <main className="pageContainer">{children}</main>
+          </SocketProvider>
         </StoreProvider>
       </body>
     </html>

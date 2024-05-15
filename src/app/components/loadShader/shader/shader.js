@@ -103,8 +103,9 @@ export const fragmentShader = `
     uniform float uTime;
     uniform float uProgress;
     uniform vec3 uColor;
-    uniform vec2 uOffset;
+    uniform float uOffset;
     uniform vec2 uResolution;
+    uniform vec2 uDistanceCircle ;
 
     //Classic Perlin 3D Noise 
     //by Stefan Gustavson
@@ -133,8 +134,9 @@ float sdBox( in vec2 p, in vec2 b )
     float n = snoise(vec3(nUv ,uTime *.15)) ;
     
     vec2 dUv = vec2(uv.x,uv.y)-.5;
-    dUv.x *=.6;
-    dUv.y *= .65;
+    dUv.x *= uDistanceCircle.x;
+    dUv.y *= uDistanceCircle.y; 
+    dUv.y += uOffset;
     
     float dist = sdBox(dUv,vec2(.05));
     float n2 = snoise(vec3(dUv*3.5,uTime *.25)) * .1;
