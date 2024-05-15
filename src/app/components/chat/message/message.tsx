@@ -1,17 +1,11 @@
 "use client";
 
 import styles from "./message.module.scss";
-import GetImg from "../../getImg/getImg";
 
-export default function Message({ message, gameId }) {
+export default function Message({ message }) {
 
     return (
-
-
         <p className={`${styles.message} ${message.send && styles.send}`}>
-            {
-                message.isImg && <GetImg prompt={message.content} gameId={gameId} type={message.type} />
-            }
             {message.content}
         </p >
 

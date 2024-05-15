@@ -6,11 +6,14 @@ import Message from "./message/message";
 import RecordingComponent from "../recordingComponent/recordingComponent";
 import * as utils from "../../utils/micro";
 import { v4 as uuidv4 } from "uuid";
-import { pending } from "../../utils/utils";
+import { pending, generateImg } from "../../utils/utils";
 import Countdown from "../chrono/countdown";
 import { SocketContext } from "../../context/socketContext";
 import { div } from "three/nodes";
-import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { setShaderPosition } from "../../store/reducers/gameReducer";
+import { get } from "http";
+import { useRouter } from "next/navigation";
 
 const firstMessage = [
   {
@@ -30,14 +33,14 @@ const firstMessage = [
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function Chat() {
-  const trueImageId = useSelector((state) => state.players.trueImageId);
-  const falseImageId = useSelector((state) => state.players.falseImageId);
   const { socket } = useContext(SocketContext);
+  const router = useRouter();
   const [input, setInput] = useState("");
   const [base64, setBase64] = useState(null);
   const [messages, setMessages] = useState(firstMessage);
   const [isPaused, setIsPaused] = useState(true);
   const [isFinished, setIsFinished] = useState("not");
+  const dispatch = useDispatch();
 
   const threadKey = useRef(null);
   const gameId = useRef(null);
@@ -115,17 +118,6 @@ export default function Chat() {
     }
   }, [messages]);
 
-  useEffect(() => {
-    if (trueImageId && falseImageId) {
-      console.log(trueImageId, falseImageId);
-      socket.emit("sendActorAction", gameId.current, "ImagesGenerated", {
-        TrueImageId: trueImageId,
-        FalseImageId: falseImageId,
-      });
-      socket.emit("imagesAllGenerated", gameId.current);
-    }
-  }, [trueImageId, falseImageId]);
-
   const base64Reformat = (base64) => {
     const to_remove = "data:audio/webm;codecs=opus;base64,";
     return utils.arrayBufferToBase64(base64).replace(to_remove, "");
@@ -157,7 +149,6 @@ export default function Chat() {
       id: uuidv4(),
       content: input,
       send: true,
-      isImg: false,
     };
 
     if (messages.length === 1) {
@@ -238,9 +229,11 @@ export default function Chat() {
             id: uuidv4(),
             content: content,
             send: false,
-            isImg: isImg,
-            type: isImg ? type : null,
           };
+
+          if (isImg) {
+            generateImg(apiUrl, content, gameId, type, socket, dispatch);
+          }
 
           if (content.includes("FIN_CONVERSATION")) {
             console.log("FIN_CONVERSATION");
@@ -260,6 +253,10 @@ export default function Chat() {
                     return generatePrompt("simple").then(() => {
                       console.log("simpleGenerated");
                       setIsFinished("end");
+                      dispatch(setShaderPosition(0));
+                      setTimeout(() => {
+                        router.push("chat/images?gameId=" + gameId.current);
+                      }, 1000);
                     });
                   }
                 })
@@ -273,7 +270,7 @@ export default function Chat() {
         }
       })
       .catch((error) => {
-        console.log("error1");
+        console.log("error getAnswer");
         console.error("Error:", error);
       });
   };
@@ -306,7 +303,6 @@ export default function Chat() {
         .then((response) => response.json())
         .then((data) => {
           console.log("Generate prompt", data);
-          // Supposons que pending utilise également des promesses.
           pending(apiUrl, `/run/get/${data.id}`, threadKey.current, (data) => {
             getAnswer(true, type);
             resolve(data); // Résoudre la promesse avec les données reçues.
@@ -333,7 +329,6 @@ export default function Chat() {
 
   return (
     <div className={styles.chat}>
-      <div className={styles.background} />
       <div className={styles.containerCountdown}>
         <Countdown start={120} onEnd={onEndCountdown} paused={isPaused} />
       </div>
@@ -381,7 +376,7 @@ export default function Chat() {
               socket?.emit(
                 "sendActorAction",
                 gameId.current,
-                "ImagesGenerated",
+                "ImagesGenerated"
               );
             }}
           >
