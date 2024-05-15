@@ -48,7 +48,7 @@ export default function Home() {
               dispatch(setDistanceCircle([0.1, 0.1]));
             }}
           >
-            <Button type="link"> Jouer </Button>
+            <Button color={"#373FEF"} type="link"> Jouer </Button>
           </Link>
         </div>
         </div>

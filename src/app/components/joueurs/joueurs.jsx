@@ -52,7 +52,8 @@ export default function Joueurs() {
       <AddPlayer></AddPlayer>
       <PageContainer pageCategory={"player"}>
         <Footer>
-          <div className={styles.btnContainer}>
+          <p>{playersInGame} joueur enregistré</p>
+          <div>
             <Button
               type={"link"}
               color={"#373FEF"}
