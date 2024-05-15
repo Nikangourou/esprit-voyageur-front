@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import styles from "./countdown.module.scss";
 import { useSelector } from "react-redux";
 
-export default function Countdown({ start, onEnd, paused = false }) {
+const Chrono = React.memo(({ start, onEnd, paused = false }) => {
   const players = useSelector((state) => state.players.players);
   const currentBluffer = useSelector((state) => state.players.currentBluffer);
   const startTimeRef = useRef(null); // Stocker le temps de départ
@@ -67,4 +67,6 @@ export default function Countdown({ start, onEnd, paused = false }) {
       </p>
     </div>
   );
-}
+});
+
+export default Chrono;

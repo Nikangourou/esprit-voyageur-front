@@ -9,9 +9,9 @@ import DraggablePawns from "../draggablePawns/draggablePawns";
 
 export default function GameFlow({ images, gameId }) {
   const { socket } = useContext(SocketContext);
-  const [currentPhase, setCurrentPhase] = useState(null);
+  const [currentPhase, setCurrentPhase] = useState("Conversation");
   const [contentSentence, setContentSentence] = useState();
-  const [chronoStart, setChronoStart] = useState(20);
+  const [chronoStart, setChronoStart] = useState(120);
   const [colorListTrue, setColorListTrue] = useState([]);
   const [isBlurry, setIsBlurry] = useState(true);
   const [render, setRender] = useState(null);
@@ -27,10 +27,10 @@ export default function GameFlow({ images, gameId }) {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const stateParams = urlParams.get("state");
+    socket.on("stateChanged", phaseManagement);
     if (stateParams) {
       phaseManagement(stateParams, gameId);
     }
-    socket.on("stateChanged", phaseManagement);
     return () => {
       socket.off("stateChanged", phaseManagement);
     };
@@ -48,9 +48,11 @@ export default function GameFlow({ images, gameId }) {
     console.log(state);
     switch (state) {
       case "Conversation":
+        setChronoStart(120);
         setCurrentPhase("Conversation");
         break;
       case "RevealImage":
+        setChronoStart(20);
         setCurrentPhase("RevealImage");
         break;
       case "QuestionsPhase":
@@ -93,7 +95,14 @@ export default function GameFlow({ images, gameId }) {
   function renderContent() {
     console.log(currentPhase, contentSentence, chronoStart);
     if (currentPhase == "Conversation") {
-      return <h1>La conversation est en cours</h1>;
+      return (
+        <>
+          <h1>La conversation est en cours</h1>
+          {currentPhase != "RevealPhase" && (
+            <Countdown start={chronoStart} onEnd={eventEndClock}></Countdown>
+          )}
+        </>
+      );
     } else if (
       currentPhase == "RevealImage" ||
       currentPhase == "QuestionsPhase" ||
@@ -103,8 +112,7 @@ export default function GameFlow({ images, gameId }) {
       return (
         <>
           <div className={styles.containerChrono}>
-            {(currentPhase == "QuestionPhase" ||
-              currentPhase == "VotePhase") && (
+            {currentPhase != "RevealPhase" && (
               <Countdown start={chronoStart} onEnd={eventEndClock}></Countdown>
             )}
           </div>

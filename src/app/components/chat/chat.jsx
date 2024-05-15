@@ -7,9 +7,7 @@ import RecordingComponent from "../recordingComponent/recordingComponent";
 import * as utils from "../../utils/micro";
 import { v4 as uuidv4 } from "uuid";
 import { pending } from "../../utils/utils";
-import Countdown from "../chrono/countdown";
 import { SocketContext } from "../../context/socketContext";
-import { div } from "three/nodes";
 import { useSelector } from "react-redux";
 
 const firstMessage = [
@@ -36,7 +34,7 @@ export default function Chat() {
   const [input, setInput] = useState("");
   const [base64, setBase64] = useState(null);
   const [messages, setMessages] = useState(firstMessage);
-  const [isPaused, setIsPaused] = useState(true);
+
   const [isFinished, setIsFinished] = useState("not");
 
   const threadKey = useRef(null);
@@ -50,38 +48,26 @@ export default function Chat() {
       return;
     }
 
-    function startChrono() {
-      setIsPaused(false);
-      console.log("ploppy");
+    if (!gameId.current) {
+      const urlParams = new URLSearchParams(window.location.search);
+      gameId.current = urlParams.get("gameId");
+      isReadyRef.current = true;
+      fetch(`${apiUrl}/thread/post/create`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          game_id: gameId.current,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Create Game");
+          console.log(data);
+          threadKey.current = data.key;
+        });
     }
-
-    const urlParams = new URLSearchParams(window.location.search);
-    gameId.current = urlParams.get("gameId");
-    isReadyRef.current = true;
-    fetch(`${apiUrl}/thread/post/create`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        game_id: gameId.current,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Create Game");
-        console.log(data);
-        threadKey.current = data.key;
-
-        // socket.on("startChrono", () => {
-        //   console.log("test");
-        //   startChrono();
-        // });
-      });
-
-    // return () => {
-    //   socket?.off("startChrono", startChrono);
-    // };
   }, [socket]);
 
   useEffect(() => {
@@ -117,7 +103,6 @@ export default function Chat() {
 
   useEffect(() => {
     if (trueImageId && falseImageId) {
-      console.log(trueImageId, falseImageId);
       socket.emit("sendActorAction", gameId.current, "ImagesGenerated", {
         TrueImageId: trueImageId,
         FalseImageId: falseImageId,
@@ -319,10 +304,6 @@ export default function Chat() {
     });
   };
 
-  const onEndCountdown = () => {
-    console.log("End countdown");
-  };
-
   const handleKeyDown = (event) => {
     if (event.key === "Enter" && !event.shiftKey) {
       // Vérifiez si Enter est pressé sans la touche Shift
@@ -334,9 +315,7 @@ export default function Chat() {
   return (
     <div className={styles.chat}>
       <div className={styles.background} />
-      <div className={styles.containerCountdown}>
-        <Countdown start={120} onEnd={onEndCountdown} paused={isPaused} />
-      </div>
+
       <div className={styles.containerMessages} ref={containerMessagesRef}>
         {messages.map((message) => {
           return (
