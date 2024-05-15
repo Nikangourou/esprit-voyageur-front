@@ -10,12 +10,10 @@ import { pending, generateImg } from "../../utils/utils";
 import Countdown from "../chrono/countdown";
 import { SocketContext } from "../../context/socketContext";
 import { div } from "three/nodes";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  setShaderPosition,
-  setLoadingImages,
-} from "../../store/reducers/gameReducer";
+import { useDispatch } from "react-redux";
+import { setShaderPosition } from "../../store/reducers/gameReducer";
 import { get } from "http";
+import { useRouter } from "next/navigation";
 
 const firstMessage = [
   {
@@ -35,10 +33,8 @@ const firstMessage = [
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function Chat() {
-  const trueImageId = useSelector((state) => state.players.trueImageId);
-  const falseImageId = useSelector((state) => state.players.falseImageId);
-
   const { socket } = useContext(SocketContext);
+  const router = useRouter();
   const [input, setInput] = useState("");
   const [base64, setBase64] = useState(null);
   const [messages, setMessages] = useState(firstMessage);
@@ -121,17 +117,6 @@ export default function Chat() {
         containerMessagesRef.current.scrollHeight;
     }
   }, [messages]);
-
-  useEffect(() => {
-    if (trueImageId && falseImageId) {
-      console.log(trueImageId, falseImageId);
-      socket.emit("sendActorAction", gameId.current, "ImagesGenerated", {
-        TrueImageId: trueImageId,
-        FalseImageId: falseImageId,
-      });
-      socket.emit("imagesAllGenerated", gameId.current);
-    }
-  }, [trueImageId, falseImageId]);
 
   const base64Reformat = (base64) => {
     const to_remove = "data:audio/webm;codecs=opus;base64,";
@@ -246,8 +231,8 @@ export default function Chat() {
             send: false,
           };
 
-          if(isImg) {
-            generateImg(apiUrl, content, gameId, type, socket);
+          if (isImg) {
+            generateImg(apiUrl, content, gameId, type, socket, dispatch);
           }
 
           if (content.includes("FIN_CONVERSATION")) {
@@ -269,6 +254,9 @@ export default function Chat() {
                       console.log("simpleGenerated");
                       setIsFinished("end");
                       dispatch(setShaderPosition(0));
+                      setTimeout(() => {
+                        router.push("chat/images?gameId=" + gameId.current);
+                      }, 1000);
                     });
                   }
                 })
@@ -315,7 +303,6 @@ export default function Chat() {
         .then((response) => response.json())
         .then((data) => {
           console.log("Generate prompt", data);
-          // Supposons que pending utilise également des promesses.
           pending(apiUrl, `/run/get/${data.id}`, threadKey.current, (data) => {
             getAnswer(true, type);
             resolve(data); // Résoudre la promesse avec les données reçues.

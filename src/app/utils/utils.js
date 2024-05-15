@@ -1,4 +1,3 @@
-import { useDispatch, useSelector } from "react-redux";
 import {
   setFalseImageId,
   setTrueImageId,
@@ -35,14 +34,13 @@ export const pending = (baseUrl, endpoint, threadKey, onCompletion) => {
   }, 1000); // Fréquence d'actualisation, ajustez selon les besoins
 };
 
-export const generateImg = (apiUrl, prompt, gameId, type, socket) => {
+export const generateImg = (apiUrl, prompt, gameId, type, socket, dispatch) => {
   let isLaunched = false;
-  const dispatch = useDispatch();
 
   let base64 = null;
 
-  if (gameId && !isLaunched.current && socket) {
-    isLaunched.current = true;
+  if (gameId && !isLaunched && socket) {
+    isLaunched = true;
     fetch(`${apiUrl}/image/post/create`, {
       method: "POST",
       headers: {
