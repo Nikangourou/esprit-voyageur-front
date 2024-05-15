@@ -19,6 +19,7 @@ export default function Images() {
   const [isBlurry, setIsBlurry] = useState(true);
   const [isTrue, setIsTrue] = useState(true);
   const [images, setImages] = useState([]);
+  const [disconnect, setDisconnect] = useState(false);
   const dispatch = useDispatch();
   const trueImageId = useSelector((state) => state.players.trueImageId);
   const falseImageId = useSelector((state) => state.players.falseImageId);
@@ -70,11 +71,17 @@ export default function Images() {
         FalseImageId: falseImageId,
       });
       socket.emit("imagesAllGenerated", gameId.current);
+      setIsPaused(false);
     }
   }, [images]);
 
   const onEndCountdown = () => {
     console.log("End countdown");
+    if (!disconnect) {
+      setDisconnect(true);
+      setIsPaused(true);
+      socket?.emit("sendActorAction", gameId.current, "EndChrono", {});
+    }
   };
 
   const onSlideChange = (swiper) => {
@@ -86,7 +93,7 @@ export default function Images() {
   return (
     <div className={styles.images}>
       <div className={styles.containerCountdown}>
-        <Countdown start={120} onEnd={onEndCountdown} paused={isPaused} />
+        <Countdown start={20} onEnd={onEndCountdown} paused={isPaused} />
       </div>
       <h2>Prépare ton bluff</h2>
       {isTrue ? (
