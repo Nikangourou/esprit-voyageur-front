@@ -93,6 +93,7 @@ export default function Button({
       return (
         <button
           className={`${styles.link} ${disabled && styles.disabled}`}
+          style={{boxShadow: `5px 5px 0 ${color}`}}
           {...events}
         >
           {children}

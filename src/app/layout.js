@@ -1,6 +1,5 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
-import FullScreen from "./components/fullScreen/fullScreen";
 import LoadShader from "./components/loadShader/loadShader";
 import { SocketProvider } from "./context/socketContext";
 
@@ -15,7 +14,6 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <FullScreen />
         <StoreProvider>
           <LoadShader />
           <SocketProvider>{children}</SocketProvider>

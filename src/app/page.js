@@ -5,6 +5,7 @@ import styles from "./page.module.scss";
 import { gsap, Sine } from "gsap";
 import Button from "./components/button/button";
 import Link from "next/link";
+import FullScreen from "./components/fullScreen/fullScreen";
 
 export default function Home() {
   const tlRef = useRef();
@@ -43,15 +44,20 @@ export default function Home() {
   }, []);
 
   return (
-    <main className={styles.main}>
-      <div className={styles.container}>
-        <img src="/Logo.svg" alt="Logo" />
-        <div>
-          <Link className={styles.btn} href="/intro">
-            <Button type="link"> Jouer </Button>
-          </Link>
+    <>
+      <FullScreen />
+      <main className={styles.main}>
+        <div className={styles.container}>
+          <img src="/Logo.svg" alt="Logo" />
+          <div>
+            <Link className={styles.btn} href="/intro">
+              <Button color={"#373FEF"} type="link">
+                Jouer
+              </Button>
+            </Link>
+          </div>
         </div>
-      </div>
-    </main>
+      </main>
+    </>
   );
 }

@@ -227,6 +227,7 @@ export default function Chat() {
             console.log("FIN_CONVERSATION");
             content = content.replace("FIN_CONVERSATION", "");
             setIsFinished("processing");
+            dispatch(setShaderPosition(0));
 
             // Utilisation d'une expression régulière pour rechercher la partie du texte après "Remember:"
 
@@ -241,10 +242,7 @@ export default function Chat() {
                     return generatePrompt("simple").then(() => {
                       console.log("simpleGenerated");
                       setIsFinished("end");
-                      dispatch(setShaderPosition(0));
-                      setTimeout(() => {
                         router.push("chat/images?gameId=" + gameId.current);
-                      }, 1000);
                     });
                   }
                 })

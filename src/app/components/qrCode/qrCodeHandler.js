@@ -9,6 +9,7 @@ import { useParams, useRouter } from "next/navigation";
 import { SocketContext } from "../../context/socketContext";
 import { useSearchParams } from "next/navigation";
 import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 export default function Code() {
   const router = useRouter();
@@ -16,6 +17,8 @@ export default function Code() {
   const searchParams = useSearchParams();
   const gameId = searchParams.get("gameId");
   const dispatch = useDispatch();
+
+  const currentBluffer = useSelector((state) => state.players.currentBluffer);
 
   // useEffect(() => {
   //   if (socket && !isReady.current) {
@@ -40,7 +43,7 @@ export default function Code() {
     <main className={styles.main}>
       <div className={styles.container}>
         <PageContainer pageCategory={"bluffer"}>
-          <QrCode gameId={gameId} />
+          <QrCode gameId={gameId} currentBluffer={currentBluffer} />
         </PageContainer>
       </div>
     </main>

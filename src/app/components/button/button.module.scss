@@ -22,16 +22,12 @@
   display: inline-block;
   color: #1C1C1E;
   border: 3px solid #1C1C1E;
-  border-radius: 5px;
+  border-radius: 8px;
+  width: 100%;
 
   &.disabled {
     color: rgba(128, 128, 128, 0.3);
     border-color: rgba(128, 128, 128, 0.3);
     cursor: not-allowed;
-  }
-
-  &:not(.disabled):hover {
-    color: #373FEF;
-    border-color: #373FEF;
   }
 }

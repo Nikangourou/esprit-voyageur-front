@@ -1,23 +1,4 @@
-.container{
-    position: absolute;
-    top: 25%;
-    left: 50%;
-    width: 100%;
-    height: 50%;
-    transform: translateX(-50%);
-
-    .content{
-        display: flex;
-        flex-direction: column;
-        gap: 2.5rem;
-        margin-bottom: 5rem;
-        .titleContent{
-            h3{
-                font-size:1rem;
-                font-weight: normal;
-                margin-bottom: .5rem;
-            }
-        }
-    }
-
+.btnContainer{
+    width: 270px;
+    margin: auto;
 }

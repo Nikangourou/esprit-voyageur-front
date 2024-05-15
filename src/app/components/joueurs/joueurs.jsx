@@ -3,15 +3,15 @@ import PageContainer from "../pageContainer/pageContainer";
 import AddPlayer from "./addPlayer/addPlayer";
 import Countdown from "../chrono/countdown";
 import { SocketContext } from "../../context/socketContext";
-import {setGameId } from "../../store/reducers/playersReducer";
-import {useContext} from "react";
-import {useSelector, useDispatch } from "react-redux";
+import { setGameId } from "../../store/reducers/playersReducer";
+import { useContext } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import Button from "../button/button";
+import Footer from "../footer/footer";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function Joueurs() {
-
   const { socket } = useContext(SocketContext);
   const dispatch = useDispatch();
   const players = useSelector((state) => state.players.players);
@@ -51,13 +51,18 @@ export default function Joueurs() {
     <>
       <AddPlayer></AddPlayer>
       <PageContainer pageCategory={"player"}>
-        <Button
-          type={"link"}
-          // disabled={playersInGame.length < 3}
-          events={{ onClick: onRedirectEvent }}
-        >
-          Valider
-        </Button>
+        <Footer>
+          <div className={styles.btnContainer}>
+            <Button
+              type={"link"}
+              color={"#373FEF"}
+              // disabled={playersInGame.length < 3}
+              events={{ onClick: onRedirectEvent }}
+            >
+              Valider
+            </Button>
+          </div>
+        </Footer>
       </PageContainer>
     </>
   );
