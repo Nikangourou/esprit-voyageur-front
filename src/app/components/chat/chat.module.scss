@@ -4,14 +4,12 @@
   height: 100vh;
   position: relative;
 
-  .background {
-    height: 18vh;
-    background-image: url("/bg-mobile.png");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: bottom;
+  .containerCountdown {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90px;
   }
-
 
   .containerMessages {
     display: flex;
