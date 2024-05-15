@@ -154,6 +154,7 @@ export default function AddPlayer() {
   return (
     <section
       className={styles.addingPlayer}
+      style={{height: "auto"}} // temporaire 
       ref={containerRef}
       onTouchMove={onTouchMove}
     >
