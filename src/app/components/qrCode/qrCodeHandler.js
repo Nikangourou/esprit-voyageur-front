@@ -7,8 +7,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { SocketContext } from "../../context/socketContext";
 import { useSearchParams } from "next/navigation";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Button from "../button/button";
 import Footer from "../footer/footer";
 
@@ -18,10 +17,11 @@ export default function Code() {
   const searchParams = useSearchParams();
   const gameId = searchParams.get("gameId");
   const dispatch = useDispatch();
-  const [colorStyle, setColorStyle] = useState("#373FEF");
 
   const currentBluffer = useSelector((state) => state.players.currentBluffer);
-
+  const colorStyle =
+    currentBluffer != "" ? players[currentBluffer].color : "#373FEF";
+  console.log(currentBluffer);
   const shape = (
     <svg
       width="432"
@@ -71,7 +71,7 @@ export default function Code() {
         </div>
       </section>
       <Footer>
-        <p> joueur enregistré</p>
+        <p> {currentBluffer} doit s'isoler</p>
       </Footer>
     </main>
   );

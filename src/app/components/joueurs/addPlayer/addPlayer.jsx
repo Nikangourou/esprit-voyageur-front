@@ -170,6 +170,7 @@ export default function AddPlayer() {
               events={eventsFunctions}
               color={colorName}
               dataColor={colorName}
+              dataName={value.color}
             ></Button>
           );
         })}

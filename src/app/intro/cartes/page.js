@@ -5,7 +5,7 @@ import AddPlayer from "../../components/joueurs/addPlayer/addPlayer";
 import Countdown from "../../components/chrono/countdown";
 import { SocketContext } from "../../context/socketContext";
 import { setGameId } from "../../store/reducers/playersReducer";
-import { useContext, useState } from "react";
+import { useContext, useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Button from "../../components/button/button";
 import Footer from "../../components/footer/footer";
@@ -18,10 +18,16 @@ export default function Cartes() {
   const dispatch = useDispatch();
   const players = useSelector((state) => state.players.players);
   const playersInGame = useSelector((state) => state.players.playersInGame);
-  const gameId = useSelector((state) => state.players.players);
+  const urlParams = new URLSearchParams(window.location.search);
+  const gameIdRef = useRef();
+  gameIdRef.current = urlParams.get("gameId");
+
+  const playersInGameObj = playersInGame.reduce((acc, color) => {
+    acc[color] = players[color];
+    return acc;
+  }, {});
+
   const [chronoStart, setChronoStart] = useState(120);
-
-
 
   return (
     <main className={styles.main}>
@@ -34,17 +40,28 @@ export default function Cartes() {
       </section>
       <div className={styles.footer}>
         <Footer>
-          <p>{playersInGame} joueur enregistré</p>
+          <div>
+            <p><b>Tous</b> les joueurs doivent piocher</p>
+            <div className={styles.playerColors}>
+              {Object.keys(playersInGameObj).map((player) => (
+                <div
+                  key={player}
+                  style={{ backgroundColor: players[player].color }}
+                  className={styles.playerColor}
+                />
+              ))}
+            </div>
+          </div>
           <div>
             <Link
               className={styles.btn}
-              href={`/game/qrcode?gameId=${gameId}`}
+              href={`/game/qrcode?gameId=${gameIdRef.current}`}
               onClick={() => {
                 dispatch(setDistanceCircle([0.1, 0.1]));
               }}
             >
               <Button color={"#373FEF"} type="link">
-              Continuer
+                Continuer
               </Button>
             </Link>
           </div>

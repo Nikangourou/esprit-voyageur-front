@@ -16,7 +16,12 @@ export default function Joueurs() {
   const dispatch = useDispatch();
   const players = useSelector((state) => state.players.players);
   const playersInGame = useSelector((state) => state.players.playersInGame);
-  const gameId = useSelector((state) => state.players.players);
+
+  const playersInGameObj = playersInGame.reduce((acc, color) => {
+    acc[color] = players[color];
+    return acc;
+  }, {});
+
 
   const onRedirectEvent = () => {
     if (socket) {
@@ -49,7 +54,7 @@ export default function Joueurs() {
 
   return (
     <main className={styles.main}>
-      {/* <AddPlayer></AddPlayer> */}
+      <AddPlayer></AddPlayer>
       <section className={styles.content}>
         <img src="/images/players.svg" alt="Joueurs" />
         <p>
@@ -59,7 +64,18 @@ export default function Joueurs() {
         </p>
       </section>
       <Footer>
-        <p>{playersInGame} joueur enregistré</p>
+        <div>
+          <p> <span className={styles.nbPlayers}>{playersInGame.length}</span> joueur enregistrés</p>
+          <div className={styles.playerColors}>
+            {Object.keys(playersInGameObj).map((player) => (
+              <div
+                key={player}
+                style={{ backgroundColor: players[player].color }}
+                className={styles.playerColor}
+              />
+            ))}
+          </div>
+        </div>
         <div>
           <Button
             type={"link"}

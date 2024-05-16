@@ -1,5 +1,5 @@
 .main {
-    height: 100vh;
+  height: 100vh;
 
   .content {
     height: calc(100% - 190px);
@@ -8,5 +8,21 @@
     align-items: center;
     justify-content: center;
     text-align: center;
+  }
+
+  .nbPlayers {
+    color: #373FEF;
+    font-weight: bold;
+  }
+
+  .playerColors {
+    margin-top: 10px;
+    display: flex;
+    gap: 25px;
+    .playerColor {
+      height: 25px;
+      width: 25px;
+      border-radius: 50%;
+    }
   }
 }
