@@ -13,17 +13,6 @@ export default function PageContainer({
 
   const pageContent = () => {
     switch (pageCategory) {
-      case "player":
-        return {
-          textureShader: "/images/players.svg",
-          content: (
-            <p>
-              Touchez un pion pour vous enregistrer en tant que joueur.
-              <br />
-              Il faut entre 3 et 7 joueurs par partie.
-            </p>
-          ),
-        };
       case "remember":
         return {
           subTitle: "À présent,",
@@ -46,24 +35,6 @@ export default function PageContainer({
             </p>
           ),
         };
-      case "bluffer":
-        return {
-          subTitle: "Découvrez le",
-          textureShader: "/images/bluff.png",
-          content: (
-            <p>
-              Oh, c’est toi{" "}
-              <b style={{ color: colorStyle, textTransform: "capitalize" }}>
-                {currentBluffer}
-              </b>{" "}
-              ! Te voilà désigné comme le bluffer.
-              <br />
-              Scanne vite le QR code avec ton portable et isole toi...
-              <br />
-              le temps t’es compté !
-            </p>
-          ),
-        };
       case "score":
         return {
           subTitle: "Voici le",
@@ -77,7 +48,7 @@ export default function PageContainer({
     <main className={styles.container}>
       <section className={styles.content}>
         <div className={styles.titleContent}>
-          {pageContent().subTitle && <h3>{pageContent().subTitle}</h3>}
+          <h3>{pageContent().subTitle}</h3>
           <img src={pageContent().textureShader} alt="" />
         </div>
         {pageContent().content}

@@ -1,13 +1,13 @@
-import styles from "./joueurs.module.scss";
-import PageContainer from "../pageContainer/pageContainer";
-import AddPlayer from "./addPlayer/addPlayer";
-import Countdown from "../chrono/countdown";
+"use client";
+
+import styles from "./page.module.scss";
+import AddPlayer from "../../components/joueurs/addPlayer/addPlayer";
 import { SocketContext } from "../../context/socketContext";
 import { setGameId } from "../../store/reducers/playersReducer";
 import { useContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import Button from "../button/button";
-import Footer from "../footer/footer";
+import Button from "../../components/button/button";
+import Footer from "../../components/footer/footer";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -48,23 +48,29 @@ export default function Joueurs() {
   };
 
   return (
-    <>
-      <AddPlayer></AddPlayer>
-      <PageContainer pageCategory={"player"}>
-        <Footer>
-          <p>{playersInGame} joueur enregistré</p>
-          <div>
-            <Button
-              type={"link"}
-              color={"#373FEF"}
-              // disabled={playersInGame.length < 3}
-              events={{ onClick: onRedirectEvent }}
-            >
-              Valider
-            </Button>
-          </div>
-        </Footer>
-      </PageContainer>
-    </>
+    <main className={styles.main}>
+      {/* <AddPlayer></AddPlayer> */}
+      <section className={styles.content}>
+        <img src="/images/players.svg" alt="Joueurs" />
+        <p>
+          Touchez un pion pour vous enregistrer en tant que joueur.
+          <br />
+          Il faut entre 3 et 7 joueurs par partie.
+        </p>
+      </section>
+      <Footer>
+        <p>{playersInGame} joueur enregistré</p>
+        <div>
+          <Button
+            type={"link"}
+            color={"#373FEF"}
+            // disabled={playersInGame.length < 3}
+            events={{ onClick: onRedirectEvent }}
+          >
+            Continuer
+          </Button>
+        </div>
+      </Footer>
+    </main>
   );
 }
