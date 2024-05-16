@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import { usePathname, useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,9 +14,13 @@ import {
   setOffset,
   setShaderPosition,
 } from "../store/reducers/gameReducer";
+import SoundManager from "../soundManager";
 
 // Créez le contexte
-const value = { socket: io("localhost:5001") };
+const value = {
+  socket: io("localhost:5001"),
+  soundManager: new SoundManager(),
+};
 const SocketContext = createContext(value);
 
 // Créez le fournisseur de contexte
@@ -25,6 +29,7 @@ const SocketProvider = ({ children }) => {
   const pathname = usePathname();
   const dispatch = useDispatch();
   const [hasBeenDisconnected, setHasBeenDisconnected] = useState(false);
+  const soundManager = useRef(null);
 
   function routeManagement(state, gameId) {
     console.log(gameId);
@@ -139,7 +144,6 @@ const SocketProvider = ({ children }) => {
   useEffect(() => {
     let storageGameId = localStorage.getItem("gameId");
     let isMobile = localStorage.getItem("isMobile");
-
     // if (storageGameId) {
     //   console.log("reconnection", storageGameId);
     //   value.socket.emit("reconnection", storageGameId, isMobile);

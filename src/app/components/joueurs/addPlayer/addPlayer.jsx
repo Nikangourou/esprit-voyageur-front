@@ -6,8 +6,10 @@ import Button from "../../button/button";
 import { gsap } from "gsap";
 import Link from "next/link";
 import Blob from "../../blob/blob";
+import { SocketContext } from "../../../context/socketContext";
 
 export default function AddPlayer() {
+  const { soundManager } = useContext(SocketContext);
   const players = useSelector((state) => state.players.players);
   const timerRef = useRef(null);
   const containerRef = useRef(null);
@@ -22,6 +24,7 @@ export default function AddPlayer() {
       gsap.to(e.target, {
         backgroundColor: players[colorName].color,
       });
+      soundManager.playSingleSound("pawn");
     }, 1000);
   };
 
@@ -154,7 +157,7 @@ export default function AddPlayer() {
   return (
     <section
       className={styles.addingPlayer}
-      style={{height: "auto"}} // temporaire 
+      style={{ height: "auto" }} // temporaire
       ref={containerRef}
       onTouchMove={onTouchMove}
     >

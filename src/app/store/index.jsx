@@ -1,4 +1,4 @@
-// store/index.js
+// store/soundBtn.js
 import { configureStore } from "@reduxjs/toolkit";
 import playersReducer from "./reducers/playersReducer";
 import gameReducer from "./reducers/gameReducer";

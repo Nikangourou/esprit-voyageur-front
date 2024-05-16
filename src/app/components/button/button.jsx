@@ -1,8 +1,9 @@
-import React, { useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import styles from "./button.module.scss";
 import Blob from "../blob/blob";
 import { gsap } from "gsap";
 import { Draggable } from "gsap/Draggable";
+import { SocketContext } from "../../context/socketContext";
 
 gsap.registerPlugin(Draggable);
 
@@ -17,6 +18,7 @@ export default function Button({
   dragEndEvent = null,
   dataColor = null,
 }) {
+  const { soundManager } = useContext(SocketContext);
   const buttonRef = useRef();
   const draggableRef = useRef();
 
@@ -93,8 +95,14 @@ export default function Button({
       return (
         <button
           className={`${styles.link} ${disabled && styles.disabled}`}
-          style={{boxShadow: `5px 5px 0 ${color}`}}
+          style={{ boxShadow: `5px 5px 0 ${color}` }}
           {...events}
+          onClick={(e) => {
+            if (events && events.onClick) {
+              events.onClick(e);
+              soundManager.playSingleSound("cta");
+            }
+          }}
         >
           {children}
         </button>
