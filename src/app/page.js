@@ -34,18 +34,18 @@ export default function Home() {
           duration: 3,
           delay: 0.25,
           ease: "power2.out",
-        })
-        .fromTo(
-          `.${styles.buttonBis}`,
-          { scale: 0.8, opacity: 0 },
-          { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(2)" },
-          ">-2.25",
-        )
-        .to(
-          `.${styles.principal}`,
-          { y: -4, x: -4, duration: 0.75, ease: "back.out(3)" },
-          "<.15",
-        );
+        });
+      // .fromTo(
+      //   `.${styles.buttonBis}`,
+      //   { scale: 0.8, opacity: 0 },
+      //   { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(2)" },
+      //   ">-2.25",
+      // )
+      // .to(
+      //   `.${styles.principal}`,
+      //   { y: -8, duration: 0.75, ease: "back.out(3)" },
+      //   "<.15",
+      // );
     }
   }, []);
 
@@ -56,12 +56,12 @@ export default function Home() {
         <div className={styles.container}>
           <img src="/Logo.svg" alt="Logo" />
           <div>
-            <div className={styles.buttonBis}>
-              <div className={styles.principal}>
-                <p>Jouer</p>
-              </div>
-              <div className={styles.sub}></div>
-            </div>
+            {/*<div className={styles.buttonBis}>*/}
+            {/*  <div className={styles.principal}>*/}
+            {/*    <p>Jouer</p>*/}
+            {/*  </div>*/}
+            {/*  <div className={styles.sub}></div>*/}
+            {/*</div>*/}
             <Link
               className={styles.btn}
               href="/intro"

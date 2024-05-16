@@ -6,6 +6,9 @@ import { fragmentShader, vertexShader } from "./shader/shader";
 import { gsap } from "gsap";
 import * as THREE from "three";
 import { useSelector } from "react-redux";
+import { CustomEase } from "gsap/CustomEase";
+
+gsap.registerPlugin(CustomEase);
 
 const LoaderShader = () => {
   const players = useSelector((state) => state.players.players);
@@ -142,8 +145,12 @@ const LoaderShader = () => {
     if (materialRef.current && materialRef.current.uniforms.uProgress) {
       gsap.to(materialRef.current.uniforms.uProgress, {
         value: shaderPosition,
-        duration: 2,
-        ease: "power1.inOut",
+        duration: 4,
+        ease: CustomEase.create(
+          "custom",
+          "M0,0 C0.238,0.185 0.242,0.784 0.445,0.921 0.517,0.986 0.682,0.989 1,1 ",
+        ),
+        // ease: "power1.out",
       });
     }
   }, [shaderPosition]);
