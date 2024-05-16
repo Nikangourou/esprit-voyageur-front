@@ -64,7 +64,7 @@ export default function Home() {
             {/*</div>*/}
             <Link
               className={styles.btn}
-              href="/intro"
+              href="/intro/joueurs"
               onClick={() => {
                 soundManager.startXp("global");
                 dispatch(setDistanceCircle([0.1, 0.1]));
