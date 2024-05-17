@@ -102,7 +102,7 @@ export default function Voyageur() {
         : "#373FEF";
 
     setColorStyle(color);
-    dispatch(setCurrentBluffer(currentBlufferRef.current));
+    dispatch(setCurrentBluffer({ CurrentBluffer: currentBlufferRef.current }));
     socket?.emit("connexionPhone", urlParams.get("gameId"));
   }, []);
 
