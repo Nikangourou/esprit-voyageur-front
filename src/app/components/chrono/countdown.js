@@ -8,7 +8,9 @@ const Chrono = React.memo(({ start, onEnd, paused = false }) => {
   const startTimeRef = useRef(null); // Stocker le temps de départ
 
   const colorStyle =
-    currentBluffer != "" ? players[currentBluffer].color : "#373FEF";
+    currentBluffer && currentBluffer != ""
+      ? players[currentBluffer].color
+      : "#373FEF";
   const [timeLeft, setTimeLeft] = useState(start);
 
   useEffect(() => {

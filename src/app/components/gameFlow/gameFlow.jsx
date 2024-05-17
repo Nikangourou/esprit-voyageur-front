@@ -22,7 +22,8 @@ export default function GameFlow({ images, gameId }) {
   const players = useSelector((state) => state.players.players);
   const currentBluffer = useSelector((state) => state.players.currentBluffer);
 
-  const colorStyle = currentBluffer != "" ? players[currentBluffer].color : "";
+  const colorStyle =
+    currentBluffer && currentBluffer != "" ? players[currentBluffer].color : "";
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);

@@ -8,13 +8,18 @@ import { useDispatch } from "react-redux";
 import { setGameId, setCurrentBluffer } from "../store/reducers/playersReducer";
 import Button from "../components/button/button";
 import { useSelector } from "react-redux";
-import { setDistanceCircle } from "../store/reducers/gameReducer";
+import {
+  setDistanceCircle,
+  setShaderPosition,
+} from "../store/reducers/gameReducer";
+import { gsap } from "gsap";
 
 export default function Voyageur() {
   const { socket } = useContext(SocketContext);
   const dispatch = useDispatch();
   const gameIdRef = useRef();
   const currentBlufferRef = useRef();
+  const tlRef = useRef();
 
   const players = useSelector((state) => state.players.players);
   const [colorStyle, setColorStyle] = useState("#373FEF");
@@ -71,10 +76,25 @@ export default function Voyageur() {
   );
 
   useEffect(() => {
+    tlRef.current = gsap
+      .timeline()
+      .call(
+        () => {
+          dispatch(setShaderPosition(1));
+        },
+        null,
+        1.5,
+      )
+      .to(".pageContainer", {
+        opacity: 1,
+        duration: 3,
+        delay: 0.25,
+        ease: "power2.out",
+      });
     dispatch(setDistanceCircle([0.4, 0.8]));
     const urlParams = new URLSearchParams(window.location.search);
     gameIdRef.current = urlParams.get("gameId");
-    dispatch(setGameId(gameIdRef.current));
+    dispatch(setGameId(urlParams.get("gameId")));
     currentBlufferRef.current = urlParams.get("bluffer");
     let color =
       currentBlufferRef.current != ""
@@ -94,12 +114,12 @@ export default function Voyageur() {
           <div
             className={styles.btn}
             onClick={() => {
-              () => {
-                socket?.emit("sendActorAction", gameIdRef.current, "Launch");
-              };
+              socket?.emit("sendActorAction", gameIdRef.current, "Launch");
             }}
           >
-            <Button type="link" color={colorStyle}> Jouer </Button>
+            <Button type="link" color={colorStyle}>
+              Jouer
+            </Button>
           </div>
         </div>
       </div>

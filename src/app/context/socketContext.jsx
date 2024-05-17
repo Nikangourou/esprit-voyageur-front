@@ -35,7 +35,11 @@ const SocketProvider = ({ children }) => {
     console.log(gameId);
     switch (state) {
       case "SetBluffer":
-        router.push(`/intro/cartes?gameId=${gameId}`);
+        if (pathname == "/intro/joueurs") {
+          router.push(`/intro/cartes?gameId=${gameId}`);
+        } else {
+          router.push(`/game/qrcode?gameId=${gameId}`);
+        }
         dispatch(setDistanceCircle([0.1, 0.1]));
         break;
       case "IntroductionPhone":

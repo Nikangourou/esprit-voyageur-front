@@ -9,7 +9,8 @@ export default function PageContainer({
   const players = useSelector((state) => state.players.players);
   const currentBluffer = useSelector((state) => state.players.currentBluffer);
 
-  const colorStyle = currentBluffer != "" ? players[currentBluffer].color : "";
+  const colorStyle =
+    currentBluffer && currentBluffer != "" ? players[currentBluffer].color : "";
 
   const pageContent = () => {
     switch (pageCategory) {

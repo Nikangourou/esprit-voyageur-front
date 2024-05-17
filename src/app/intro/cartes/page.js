@@ -5,7 +5,7 @@ import AddPlayer from "../../components/joueurs/addPlayer/addPlayer";
 import Countdown from "../../components/chrono/countdown";
 import { SocketContext } from "../../context/socketContext";
 import { setGameId } from "../../store/reducers/playersReducer";
-import { useContext, useState, useRef } from "react";
+import { useContext, useState, useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Button from "../../components/button/button";
 import Footer from "../../components/footer/footer";
@@ -14,18 +14,19 @@ import Link from "next/link";
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function Cartes() {
-  const { socket } = useContext(SocketContext);
-  const dispatch = useDispatch();
   const players = useSelector((state) => state.players.players);
   const playersInGame = useSelector((state) => state.players.playersInGame);
-  const urlParams = new URLSearchParams(window.location.search);
   const gameIdRef = useRef();
-  gameIdRef.current = urlParams.get("gameId");
 
   const playersInGameObj = playersInGame.reduce((acc, color) => {
     acc[color] = players[color];
     return acc;
   }, {});
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    gameIdRef.current = urlParams.get("gameId");
+  }, []);
 
   const [chronoStart, setChronoStart] = useState(120);
 
@@ -41,7 +42,9 @@ export default function Cartes() {
       <div className={styles.footer}>
         <Footer>
           <div>
-            <p><b>Tous</b> les joueurs doivent piocher</p>
+            <p>
+              <b>Tous</b> les joueurs doivent piocher
+            </p>
             <div className={styles.playerColors}>
               {Object.keys(playersInGameObj).map((player) => (
                 <div
@@ -55,10 +58,7 @@ export default function Cartes() {
           <div>
             <Link
               className={styles.btn}
-              href={`/game/qrcode?gameId=${gameIdRef.current}`}
-              onClick={() => {
-                dispatch(setDistanceCircle([0.1, 0.1]));
-              }}
+              href={`/game/qrcode?gameId=${localStorage.getItem("gameId")}`}
             >
               <Button color={"#373FEF"} type="link">
                 Continuer

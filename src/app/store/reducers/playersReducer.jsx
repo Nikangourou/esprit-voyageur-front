@@ -14,9 +14,9 @@ export const playersSlice = createSlice({
       noir: { color: "black", score: 0, alreadyPlay: false },
     },
     currentBluffer: "",
-    gameId: null,
-    trueImageId: null,
-    falseImageId: null,
+    gameId: "",
+    trueImageId: "",
+    falseImageId: "",
   },
   reducers: {
     addPlayer: (state, action) => {

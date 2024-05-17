@@ -28,8 +28,11 @@ const LoaderShader = () => {
   const offset = useSelector((state) => state.game.offset);
 
   useEffect(() => {
+    console.log(currentBluffer);
     const colorStyle =
-      currentBluffer != "" ? players[currentBluffer].color : "";
+      currentBluffer && currentBluffer != ""
+        ? players[currentBluffer].color
+        : "";
     if (colorStyle !== "") {
       colorRef.current.set(colorStyle);
     }

@@ -12,15 +12,15 @@ import Button from "../button/button";
 import Footer from "../footer/footer";
 
 export default function Code() {
-  const router = useRouter();
-  const isReady = useRef(false);
+  const players = useSelector((state) => state.players.players);
   const searchParams = useSearchParams();
   const gameId = searchParams.get("gameId");
-  const dispatch = useDispatch();
 
   const currentBluffer = useSelector((state) => state.players.currentBluffer);
   const colorStyle =
-    currentBluffer != "" ? players[currentBluffer].color : "#373FEF";
+    currentBluffer && currentBluffer != ""
+      ? players[currentBluffer].color
+      : "#373FEF";
   console.log(currentBluffer);
   const shape = (
     <svg
