@@ -29,7 +29,7 @@ export default function Cartes() {
   const [chronoStart, setChronoStart] = useState(120);
 
   function clickEvt(e) {
-    router.push(`game/qrcode?gameId=${localStorage.getItem("gameId")}`);
+    router.push(`/game/qrcode?gameId=${localStorage.getItem("gameId")}`);
   }
 
   return (

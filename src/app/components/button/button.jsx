@@ -108,7 +108,7 @@ const Button = forwardRef(function Button(
                 .to(`.${styles.principal}`, {
                   backgroundColor: "#dad6d3",
                   y: 0,
-                  duration: 0.25,
+                  duration: 0.15,
                   ease: "power2.out",
                 })
 

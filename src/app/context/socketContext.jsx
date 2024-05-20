@@ -28,14 +28,19 @@ const SocketProvider = ({ children }) => {
   const router = useRouter();
   const pathname = usePathname();
   const dispatch = useDispatch();
+  const path = useRef();
   const currentBluffer = useSelector((state) => state.players.currentBluffer);
+
+  useEffect(() => {
+    path.current = pathname;
+  }, [pathname]);
 
   function routeManagement(state, gameId) {
     console.log(gameId);
     switch (state) {
       case "SetBluffer":
-        console.log(pathname);
-        if (pathname == "/") {
+        console.log(path.current);
+        if (path.current == "/intro/joueurs") {
           router.push(`/intro/cartes?gameId=${gameId}`);
         } else {
           router.push(`/game/qrcode?gameId=${gameId}`);
@@ -43,13 +48,13 @@ const SocketProvider = ({ children }) => {
         dispatch(setDistanceCircle([0.1, 0.1]));
         break;
       case "IntroductionPhone":
-        if (pathname == "/game/qrcode") {
+        if (path.current == "/game/qrcode") {
           router.push(`/game?gameId=${gameId}`);
           dispatch(setDistanceCircle([0.1, 0.1]));
         }
         break;
       case "Conversation":
-        if (pathname == "/voyageur") {
+        if (path.current == "/voyageur") {
           router.push(`/voyageur/chat?gameId=${gameId}`);
           dispatch(setDistanceCircle([0.4, 0.65]));
           dispatch(setOffset(0.115));

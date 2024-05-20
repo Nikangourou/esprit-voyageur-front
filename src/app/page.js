@@ -42,7 +42,7 @@ export default function Home() {
         .fromTo(
           buttonRef.current,
           { scale: 0.8, opacity: 0 },
-          { scale: 1, opacity: 1, duration: 0.75, ease: "back.out(2)" },
+          { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(2)" },
           ">-2.5",
         )
         .fromTo(
