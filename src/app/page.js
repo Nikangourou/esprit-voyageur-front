@@ -12,14 +12,18 @@ import {
   setShaderPosition,
 } from "./store/reducers/gameReducer";
 import { SocketContext } from "./context/socketContext";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const tlRef = useRef();
   const dispatch = useDispatch();
+  const buttonRef = useRef();
+  const router = useRouter();
   const { soundManager } = useContext(SocketContext);
 
   useEffect(() => {
-    if (!tlRef.current) {
+    if (!tlRef.current && buttonRef.current) {
+      console.log(buttonRef.current);
       tlRef.current = gsap
         .timeline()
         .call(
@@ -34,20 +38,31 @@ export default function Home() {
           duration: 3,
           delay: 0.25,
           ease: "power2.out",
-        });
-      // .fromTo(
-      //   `.${styles.buttonBis}`,
-      //   { scale: 0.8, opacity: 0 },
-      //   { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(2)" },
-      //   ">-2.25",
-      // )
-      // .to(
-      //   `.${styles.principal}`,
-      //   { y: -8, duration: 0.75, ease: "back.out(3)" },
-      //   "<.15",
-      // );
+        })
+        .fromTo(
+          buttonRef.current,
+          { scale: 0.8, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.75, ease: "back.out(2)" },
+          ">-2.5",
+        )
+        .fromTo(
+          buttonRef.current.children[0],
+          { y: 0 },
+          { y: -8, duration: 0.5, ease: "back.out(3)" },
+          "<.15",
+        );
     }
   }, []);
+
+  const events = {
+    onClick: clickEvt,
+  };
+
+  function clickEvt(e) {
+    router.push("/intro/joueurs");
+    soundManager.startXp("global");
+    dispatch(setDistanceCircle([0.1, 0.1]));
+  }
 
   return (
     <>
@@ -56,24 +71,14 @@ export default function Home() {
         <div className={styles.container}>
           <img src="/Logo.svg" alt="Logo" />
           <div>
-            {/*<div className={styles.buttonBis}>*/}
-            {/*  <div className={styles.principal}>*/}
-            {/*    <p>Jouer</p>*/}
-            {/*  </div>*/}
-            {/*  <div className={styles.sub}></div>*/}
-            {/*</div>*/}
-            <Link
-              className={styles.btn}
-              href="/intro/joueurs"
-              onClick={() => {
-                soundManager.startXp("global");
-                dispatch(setDistanceCircle([0.1, 0.1]));
-              }}
+            <Button
+              color={"#373FEF"}
+              type="link"
+              ref={buttonRef}
+              events={events}
             >
-              <Button color={"#373FEF"} type="link">
-                Jouer
-              </Button>
-            </Link>
+              Jouer
+            </Button>
           </div>
         </div>
       </main>

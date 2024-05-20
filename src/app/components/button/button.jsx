@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from "react";
+import React, { forwardRef, useContext, useEffect, useRef } from "react";
 import styles from "./button.module.scss";
 import Blob from "../blob/blob";
 import { gsap } from "gsap";
@@ -7,17 +7,20 @@ import { SocketContext } from "../../context/socketContext";
 
 gsap.registerPlugin(Draggable);
 
-export default function Button({
-  events,
-  color = "none",
-  colorActive = false,
-  children,
-  type = "cta",
-  disabled = false,
-  dragContainer = null,
-  dragEndEvent = null,
-  dataColor = null,
-}) {
+const Button = forwardRef(function Button(
+  {
+    events,
+    color = "none",
+    colorActive = false,
+    children,
+    type = "cta",
+    disabled = false,
+    dragContainer = null,
+    dragEndEvent = null,
+    dataColor = null,
+  },
+  ref,
+) {
   const { soundManager } = useContext(SocketContext);
   const buttonRef = useRef();
   const draggableRef = useRef();
@@ -79,6 +82,7 @@ export default function Button({
     if (type == "blob") {
       return (
         <Blob
+          ref={ref}
           numPoints={4}
           width={200}
           height={100}
@@ -93,22 +97,57 @@ export default function Button({
 
     if (type == "link") {
       return (
-        <button
-          className={`${styles.link} ${disabled && styles.disabled}`}
-          style={{ boxShadow: `5px 5px 0 ${color}` }}
+        <div
+          ref={ref}
+          className={`${styles.buttonBis} ${disabled && styles.disabled}`}
           {...events}
           onClick={(e) => {
             if (events && events.onClick) {
-              events.onClick(e);
-              soundManager.playSingleSound("cta");
+              gsap
+                .timeline()
+                .to(`.${styles.principal}`, {
+                  backgroundColor: "#dad6d3",
+                  y: 0,
+                  duration: 0.25,
+                  ease: "power2.out",
+                })
+
+                .to(`.${styles.principal}`, {
+                  backgroundColor: "#EFEBE2",
+                  y: -8,
+                  duration: 0.25,
+                  ease: "power2.out",
+                })
+                .call(() => {
+                  soundManager.playSingleSound("cta");
+                })
+                .to(".pageContainer", {
+                  opacity: 0,
+                  duration: 1.5,
+                  ease: "power3.out",
+                })
+                .call(() => {
+                  events.onClick(e);
+                })
+                .to(".pageContainer", {
+                  opacity: 1,
+                  delay: 0.75,
+                  duration: 3,
+                  ease: "power2.out",
+                });
             }
           }}
         >
-          {children}
-        </button>
+          <div className={styles.principal}>
+            <p>{children}</p>
+          </div>
+          <div className={styles.sub} style={{ background: `${color}` }}></div>
+        </div>
       );
     }
   }
 
   return selectButtonType();
-}
+});
+
+export default Button;
