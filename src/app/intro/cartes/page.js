@@ -1,15 +1,12 @@
 "use client";
 
 import styles from "./page.module.scss";
-import AddPlayer from "../../components/joueurs/addPlayer/addPlayer";
 import Countdown from "../../components/chrono/countdown";
-import { SocketContext } from "../../context/socketContext";
-import { setGameId } from "../../store/reducers/playersReducer";
-import { useContext, useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Button from "../../components/button/button";
 import Footer from "../../components/footer/footer";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -17,6 +14,7 @@ export default function Cartes() {
   const players = useSelector((state) => state.players.players);
   const playersInGame = useSelector((state) => state.players.playersInGame);
   const gameIdRef = useRef();
+  const router = useRouter();
 
   const playersInGameObj = playersInGame.reduce((acc, color) => {
     acc[color] = players[color];
@@ -29,6 +27,10 @@ export default function Cartes() {
   }, []);
 
   const [chronoStart, setChronoStart] = useState(120);
+
+  function clickEvt(e) {
+    router.push(`game/qrcode?gameId=${localStorage.getItem("gameId")}`);
+  }
 
   return (
     <main className={styles.main}>
@@ -56,14 +58,13 @@ export default function Cartes() {
             </div>
           </div>
           <div>
-            <Link
-              className={styles.btn}
-              href={`/game/qrcode?gameId=${localStorage.getItem("gameId")}`}
+            <Button
+              color={"#373FEF"}
+              type="link"
+              events={{ onClick: clickEvt }}
             >
-              <Button color={"#373FEF"} type="link">
-                Continuer
-              </Button>
-            </Link>
+              Continuer
+            </Button>
           </div>
         </Footer>
       </div>

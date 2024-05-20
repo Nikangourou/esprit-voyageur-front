@@ -20,6 +20,7 @@ export default function Voyageur() {
   const gameIdRef = useRef();
   const currentBlufferRef = useRef();
   const tlRef = useRef();
+  const buttonRef = useRef();
 
   const players = useSelector((state) => state.players.players);
   const [colorStyle, setColorStyle] = useState("#373FEF");
@@ -90,7 +91,19 @@ export default function Voyageur() {
         duration: 3,
         delay: 0.25,
         ease: "power2.out",
-      });
+      })
+      .fromTo(
+        buttonRef.current,
+        { scale: 0.8, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.75, ease: "back.out(2)" },
+        ">-2.5",
+      )
+      .fromTo(
+        buttonRef.current.children[0],
+        { y: 0 },
+        { y: -8, duration: 0.5, ease: "back.out(3)" },
+        "<.15",
+      );
     dispatch(setDistanceCircle([0.4, 0.8]));
     const urlParams = new URLSearchParams(window.location.search);
     gameIdRef.current = urlParams.get("gameId");
@@ -106,21 +119,23 @@ export default function Voyageur() {
     socket?.emit("connexionPhone", urlParams.get("gameId"));
   }, []);
 
+  function clickEvt(e) {
+    socket?.emit("sendActorAction", gameIdRef.current, "Launch");
+  }
+
   return (
     <main className={styles.main}>
       <div className={styles.container}>
         {logo}
-        <div>
-          <div
-            className={styles.btn}
-            onClick={() => {
-              socket?.emit("sendActorAction", gameIdRef.current, "Launch");
-            }}
+        <div className={styles.buttonContainer}>
+          <Button
+            type="link"
+            color={colorStyle}
+            ref={buttonRef}
+            events={{ onClick: clickEvt }}
           >
-            <Button type="link" color={colorStyle}>
-              Jouer
-            </Button>
-          </div>
+            Jouer
+          </Button>
         </div>
       </div>
     </main>

@@ -28,14 +28,14 @@ const SocketProvider = ({ children }) => {
   const router = useRouter();
   const pathname = usePathname();
   const dispatch = useDispatch();
-  const [hasBeenDisconnected, setHasBeenDisconnected] = useState(false);
-  const soundManager = useRef(null);
+  const currentBluffer = useSelector((state) => state.players.currentBluffer);
 
   function routeManagement(state, gameId) {
     console.log(gameId);
     switch (state) {
       case "SetBluffer":
-        if (pathname == "/intro/joueurs") {
+        console.log(pathname);
+        if (pathname == "/") {
           router.push(`/intro/cartes?gameId=${gameId}`);
         } else {
           router.push(`/game/qrcode?gameId=${gameId}`);
