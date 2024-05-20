@@ -3,9 +3,13 @@
 import { useEffect, useRef } from "react";
 import styles from "./footer.module.scss";
 import { gsap } from "gsap";
+import { useSelector } from "react-redux";
 
-export default function Footer({ children }) {
+export default function Footer() {
   const pathRef = useRef(null);
+  const footerLeft = useSelector((state) => state.footer.footerLeft);
+  const footerRight = useSelector((state) => state.footer.footerRight);
+  
 
   useEffect(() => {
     gsap.to(pathRef.current, {
@@ -21,7 +25,10 @@ export default function Footer({ children }) {
 
   return (
     <div className={styles.footer}>
-      <div className={styles.content}>{children}</div>
+      <div className={styles.content}>
+        {footerLeft.left}
+        {footerRight.right}
+      </div>
       <div className={styles.bg}>
         <svg
           width="1366"

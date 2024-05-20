@@ -6,6 +6,7 @@ export const gameSlice = createSlice({
     shaderPosition: 1,
     distanceCircle: [0.65, 0.65],
     offset: 0,
+    footerLink : ""
   },
   reducers: {
     setShaderPosition: (state, action) => {
@@ -18,6 +19,9 @@ export const gameSlice = createSlice({
       console.log(action.payload);
       state.offset = action.payload;
     },
+    setFooterLink: (state, action) => {
+      state.footerLink = action.payload;
+    }
   },
 });
 

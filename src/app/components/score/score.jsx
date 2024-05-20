@@ -1,5 +1,4 @@
 import styles from "./score.module.scss";
-import PageContainer from "../pageContainer/pageContainer";
 import Countdown from "../chrono/countdown";
 import Button from "../button/button";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,7 +14,7 @@ export default function Score({ gameId }) {
   const dispatch = useDispatch();
 
   return (
-    <PageContainer pageCategory={"score"}>
+    <div className={styles.container}>
       <div className={styles.scoreList}>
         {playersInGame.map((color, i) => {
           return (
@@ -40,6 +39,6 @@ export default function Score({ gameId }) {
       >
         C'est Finiiii!
       </button>
-    </PageContainer>
+    </div>
   );
 }

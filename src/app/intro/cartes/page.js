@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from "react-redux";
 import Button from "../../components/button/button";
 import Footer from "../../components/footer/footer";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -47,27 +48,31 @@ export default function Cartes() {
             <p>
               <b>Tous</b> les joueurs doivent piocher
             </p>
-            <div className={styles.playerColors}>
+            <div className={stylesFooter.playerColors}>
               {Object.keys(playersInGameObj).map((player) => (
                 <div
                   key={player}
                   style={{ backgroundColor: players[player].color }}
-                  className={styles.playerColor}
+                  className={stylesFooter.playerColor}
                 />
               ))}
             </div>
           </div>
           <div>
-            <Button
-              color={"#373FEF"}
-              type="link"
-              events={{ onClick: clickEvt }}
+            <Link
+              className={styles.btn}
+              href={`/game/qrcode?gameId=${gameId}`}
+              onClick={() => {
+                dispatch(setDistanceCircle([0.1, 0.1]));
+              }}
             >
+              <Button color={"#373FEF"} type="link">
               Continuer
-            </Button>
+              </Button>
+            </Link>
           </div>
-        </Footer>
-      </div>
-    </main>
-  );
+          </Footer>
+          </div>
+          </main>
+        )
 }
