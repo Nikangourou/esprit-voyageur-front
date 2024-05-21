@@ -17,7 +17,6 @@ export default function Joueurs() {
   const players = useSelector((state) => state.players.players);
   const playersInGame = useSelector((state) => state.players.playersInGame);
 
-
   const playersInGameObj = playersInGame.reduce((acc, color) => {
     acc[color] = players[color];
     return acc;
