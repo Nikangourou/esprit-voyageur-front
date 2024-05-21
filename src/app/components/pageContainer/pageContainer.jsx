@@ -36,12 +36,6 @@ export default function PageContainer({
             </p>
           ),
         };
-      case "score":
-        return {
-          subTitle: "Voici le",
-          textureShader: "/images/score.png",
-          content: <p>Voici un petit résumé des scores !</p>,
-        };
     }
   };
 

@@ -71,7 +71,16 @@ export default function Code() {
         </div>
       </section>
       <Footer>
-        <p> {currentBluffer} doit s'isoler</p>
+        <div>
+        <p> <span className={styles.currentBluffer} style={{color : colorStyle}}>{currentBluffer}</span>  doit s'isoler</p>
+        <div className={styles.playerColors}>
+                <div
+                  key={currentBluffer}
+                  style={{ backgroundColor: colorStyle }}
+                  className={styles.playerColor}
+                />
+            </div>
+        </div>
       </Footer>
     </main>
   );

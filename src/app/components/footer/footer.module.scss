@@ -3,7 +3,6 @@
     position: relative;
     display: flex;
     align-items: flex-end;
-    background: linear-gradient(0deg, #E8E3D8 20%, transparent 51%);
 
     .content{
         display: flex;
@@ -13,13 +12,11 @@
         z-index: 1;
         width: 100%;
     }
+}
 
-    .bg{
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-
-    }
+.bg{
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
