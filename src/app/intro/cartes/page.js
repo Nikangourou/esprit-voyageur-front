@@ -48,12 +48,12 @@ export default function Cartes() {
             <p>
               <b>Tous</b> les joueurs doivent piocher
             </p>
-            <div className={stylesFooter.playerColors}>
+            <div className={styles.playerColors}>
               {Object.keys(playersInGameObj).map((player) => (
                 <div
                   key={player}
                   style={{ backgroundColor: players[player].color }}
-                  className={stylesFooter.playerColor}
+                  className={styles.playerColor}
                 />
               ))}
             </div>

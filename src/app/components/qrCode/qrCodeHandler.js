@@ -1,7 +1,6 @@
 "use client";
 
 import styles from "./qrCodeHandler.module.scss";
-import stylesFooter from "../footer/footer.module.scss";
 import QrCode from "./qrCode";
 
 import { useContext, useEffect, useRef, useState } from "react";
@@ -10,16 +9,12 @@ import { SocketContext } from "../../context/socketContext";
 import { useSearchParams } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import Button from "../button/button";
-import {
-  setFooterLeft,
-  setFooterRight,
-} from "../../store/reducers/footerReducer";
+import Footer from "../footer/footer";
 
 export default function Code() {
   const players = useSelector((state) => state.players.players);
   const searchParams = useSearchParams();
   const gameId = searchParams.get("gameId");
-  const dispatch = useDispatch();
 
   const currentBluffer = useSelector((state) => state.players.currentBluffer);
   const colorStyle =
@@ -65,55 +60,28 @@ export default function Code() {
   //   };
   // }, [socket, gameId]);
 
-  useEffect(() => {
-    dispatch(
-      setFooterLeft({
-        left: (
-          <div>
-            <p>
-              {" "}
-              <span style={{ color: colorStyle }}>{currentBluffer}</span> doit
-              s'isoler
-            </p>
-            <div className={stylesFooter.playerColors}>
-              <div
-                key={currentBluffer}
-                style={{ backgroundColor: colorStyle }}
-                className={stylesFooter.playerColor}
-              />
-            </div>
-          </div>
-        ),
-      })
-    );
-    // dispatch(
-    //   setFooterRight({
-    //     right: (
-    //       <div>
-    //         <Button
-    //           type={"link"}
-    //           color={"#373FEF"}
-    //           // disabled={playersInGame.length < 3}
-    //           events={{ onClick: onRedirectEvent }}
-    //         >
-    //           Continuer
-    //         </Button>
-    //       </div>
-    //     ),
-    //   })
-    // );
-  }, [currentBluffer]);
-
   return (
-      <main className={styles.main}>
-        <div className={styles.shape}>{shape}</div>
-        <section className={styles.content}>
-          <img src="/images/bluffer-title.svg" alt="Joueurs" />
-          <p>Scanne le QR code et isole toi...</p>
-          <div className={styles.qrCode}>
-            <QrCode gameId={gameId} currentBluffer={currentBluffer} />
-          </div>
-        </section>
-      </main>
+    <main className={styles.main}>
+      <div className={styles.shape}>{shape}</div>
+      <section className={styles.content}>
+        <img src="/images/bluffer-title.svg" alt="Joueurs" />
+        <p>Scanne le QR code et isole toi...</p>
+        <div className={styles.qrCode}>
+          <QrCode gameId={gameId} currentBluffer={currentBluffer} />
+        </div>
+      </section>
+      <Footer>
+        <div>
+        <p> <span className={styles.currentBluffer} style={{color : colorStyle}}>{currentBluffer}</span>  doit s'isoler</p>
+        <div className={styles.playerColors}>
+                <div
+                  key={currentBluffer}
+                  style={{ backgroundColor: colorStyle }}
+                  className={styles.playerColor}
+                />
+            </div>
+        </div>
+      </Footer>
+    </main>
   );
 }

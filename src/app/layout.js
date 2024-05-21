@@ -2,6 +2,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import LoadShader from "./components/loadShader/loadShader";
 import { SocketProvider } from "./context/socketContext";
+import FooterBg from "./components/footer/footerBg";
 
 const inter = Inter({ subsets: ["latin"] });
 import StoreProvider from "./store/storeProvider";
@@ -18,6 +19,7 @@ export default function RootLayout({ children }) {
           <LoadShader />
           <SocketProvider>
             <div className="pageContainer">{children}</div>
+            <FooterBg />
           </SocketProvider>
         </StoreProvider>
       </body>
