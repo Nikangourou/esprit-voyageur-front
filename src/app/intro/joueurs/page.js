@@ -1,15 +1,10 @@
 "use client";
 
 import styles from "./page.module.scss";
-import stylesFooter from "../../components/footer/footer.module.scss";
 import AddPlayer from "../../components/joueurs/addPlayer/addPlayer";
 import { SocketContext } from "../../context/socketContext";
 import { setGameId } from "../../store/reducers/playersReducer";
-import {
-  setFooterLeft,
-  setFooterRight,
-} from "../../store/reducers/footerReducer";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Button from "../../components/button/button";
 import Footer from "../../components/footer/footer";
@@ -22,52 +17,12 @@ export default function Joueurs() {
   const players = useSelector((state) => state.players.players);
   const playersInGame = useSelector((state) => state.players.playersInGame);
 
+
   const playersInGameObj = playersInGame.reduce((acc, color) => {
     acc[color] = players[color];
     return acc;
   }, {});
 
-  useEffect(() => {
-    dispatch(
-      setFooterLeft({
-        left: (
-          <div>
-            <p>
-              <span className={stylesFooter.nbPlayers}>
-                {playersInGame.length}{" "}
-              </span>
-              joueur enregistrés
-            </p>
-            <div className={stylesFooter.playerColors}>
-              {Object.keys(playersInGameObj).map((player) => (
-                <div
-                  key={player}
-                  style={{ backgroundColor: players[player].color }}
-                  className={stylesFooter.playerColor}
-                />
-              ))}
-            </div>
-          </div>
-        ),
-      })
-    );
-    dispatch(
-      setFooterRight({
-        right: (
-          <div>
-              <Button
-                type={"link"}
-                color={"#373FEF"}
-                // disabled={playersInGame.length < 3}
-                events={{ onClick: onRedirectEvent }}
-              >
-                Continuer
-              </Button>
-          </div>
-        ),
-      })
-    );
-  }, [playersInGame]);
 
   const onRedirectEvent = () => {
     if (socket) {
@@ -109,7 +64,7 @@ export default function Joueurs() {
           Il faut entre 3 et 7 joueurs par partie.
         </p>
       </section>
-      {/* <Footer>
+      <Footer>
         <div>
           <p> <span className={styles.nbPlayers}>{playersInGame.length}</span> joueur enregistrés</p>
           <div className={styles.playerColors}>
@@ -132,7 +87,7 @@ export default function Joueurs() {
             Continuer
           </Button>
         </div>
-      </Footer> */}
+      </Footer>
     </main>
   );
 }

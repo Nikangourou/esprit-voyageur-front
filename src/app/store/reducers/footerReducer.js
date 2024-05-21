@@ -3,20 +3,16 @@ import { createSlice } from "@reduxjs/toolkit";
 export const footerSlice = createSlice({
   name: "footer",
   initialState: {
-    footerLeft: "",
-    footerRight: "",
+    showFooter: false
   },
   reducers: {
-    setFooterLeft: (state, action) => {
-      state.footerLeft = action.payload;
-    },
-    setFooterRight: (state, action) => {
-      state.footerRight = action.payload;
+    setShowFooter: (state, action) => {
+      state.showFooter = action.payload;
     },
   },
 });
 
-export const { setFooterLeft, setFooterRight } =
+export const { setShowFooter } =
   footerSlice.actions;
 
 export default footerSlice.reducer;

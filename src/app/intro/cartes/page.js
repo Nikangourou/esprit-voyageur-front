@@ -1,7 +1,6 @@
 "use client";
 
 import styles from "./page.module.scss";
-import stylesFooter from "../../components/footer/footer.module.scss";
 import AddPlayer from "../../components/joueurs/addPlayer/addPlayer";
 import Countdown from "../../components/chrono/countdown";
 import { SocketContext } from "../../context/socketContext";
@@ -11,10 +10,6 @@ import { useSelector, useDispatch } from "react-redux";
 import Button from "../../components/button/button";
 import Footer from "../../components/footer/footer";
 import Link from "next/link";
-import {
-  setFooterLeft,
-  setFooterRight,
-} from "../../store/reducers/footerReducer";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -22,7 +17,6 @@ export default function Cartes() {
   const players = useSelector((state) => state.players.players);
   const playersInGame = useSelector((state) => state.players.playersInGame);
   const gameIdRef = useRef();
-  const dispatch = useDispatch();
 
   const playersInGameObj = playersInGame.reduce((acc, color) => {
     acc[color] = players[color];
@@ -33,45 +27,6 @@ export default function Cartes() {
     const urlParams = new URLSearchParams(window.location.search);
     gameIdRef.current = urlParams.get("gameId");
   }, []);
-
-  useEffect(() => {
-    dispatch(
-      setFooterLeft({
-        left: (
-          <div>
-            <p>
-              <b>Tous</b> les joueurs doivent piocher
-            </p>
-            <div className={stylesFooter.playerColors}>
-              {Object.keys(playersInGameObj).map((player) => (
-                <div
-                  key={player}
-                  style={{ backgroundColor: players[player].color }}
-                  className={stylesFooter.playerColor}
-                />
-              ))}
-            </div>
-          </div>
-        ),
-      })
-    );
-    dispatch(
-      setFooterRight({
-        right: (
-          <div>
-            <Link
-              className={styles.btn}
-              href={`/game/qrcode?gameId=${localStorage.getItem("gameId")}`}
-            >
-              <Button color={"#373FEF"} type="link">
-                Continuer
-              </Button>
-            </Link>
-          </div>
-        ),
-      })
-    );
-  }, [playersInGame]);
 
   const [chronoStart, setChronoStart] = useState(120);
 
@@ -84,6 +39,34 @@ export default function Cartes() {
         <p>Aidez-vous de celles-ci pour vous remémorer un souvenir...</p>
         <img src="/images/cartes.svg"></img>
       </section>
+      <div className={styles.footer}>
+        <Footer>
+          <div>
+            <p>
+              <b>Tous</b> les joueurs doivent piocher
+            </p>
+            <div className={styles.playerColors}>
+              {Object.keys(playersInGameObj).map((player) => (
+                <div
+                  key={player}
+                  style={{ backgroundColor: players[player].color }}
+                  className={styles.playerColor}
+                />
+              ))}
+            </div>
+          </div>
+          <div>
+            <Link
+              className={styles.btn}
+              href={`/game/qrcode?gameId=${localStorage.getItem("gameId")}`}
+            >
+              <Button color={"#373FEF"} type="link">
+                Continuer
+              </Button>
+            </Link>
+          </div>
+        </Footer>
+      </div>
     </main>
   );
 }
