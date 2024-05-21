@@ -1,20 +1,98 @@
 .main {
-    position: relative;
-    height: 100vh;
-    width: 100vw;
-    z-index: 10;
-  
-    .content {
-      height: calc(100% - 190px);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+  z-index: 10;
 
-      .podium{
+  .content {
+    height: calc(100% - 190px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    .scoreList {
+      font-family: ContrailOne;
+
+      .rank {
+        color: #efebe2;
+        font-size: 32px;
+        -webkit-text-stroke: 2px #000;
+      }
+
+      .podium {
         display: flex;
+        align-items: end;
+        gap: 40px;
+
+        .column {
+          font-size: 20px;
+          width: 160px;
+          height: 314px;
+          position: relative;
+
+          .name {
+            font-size: 56px;
+          }
+
+          &.column2 {
+            height: 214px;
+
+            .name {
+                font-size: 40px;
+              }
+          }
+
+          &.column3 {
+            height: 176px;
+
+            .name {
+                font-size: 32px;
+              }
+          }
+
+          .rank {
+            font-size: 56px;
+          }
+
+          .columnMain{
+            position: absolute;
+            background-color: var(--backgroundColor);
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            border: 3px solid #1c1c1e;
+            border-radius: 0.5em;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+          }
+
+          .sub {
+            background-color: #373fef;
+            width: 100%;
+            height: 100%;
+            position: relative;
+            border-radius: 0.5em;
+            border: 2px solid #1c1c1e;
+          }
+
+        
+        }
+      }
+
+      .row {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 2px solid #1c1c1e;
+        margin-top: 16px;
+
+        .flex {
+          display: flex;
+          gap: 16px;
+        }
       }
     }
   }
-  
+}

@@ -3,6 +3,11 @@
   src: url("./font/Nightydemo.otf") format("opentype");
 }
 
+@font-face {
+  font-family: ContrailOne;
+  src: url("./font/ContrailOne-Regular.ttf") format("truetype");
+}
+
 :root {
   --max-width: 1100px;
   --border-radius: 12px;
