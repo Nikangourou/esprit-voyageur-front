@@ -4,6 +4,7 @@ import React, { createContext, useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import { usePathname, useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
+import { gsap } from "gsap";
 import {
   newGame,
   setCurrentBluffer,
@@ -47,12 +48,6 @@ const SocketProvider = ({ children }) => {
         }
         dispatch(setDistanceCircle([0.1, 0.1]));
         break;
-      case "IntroductionPhone":
-        if (path.current == "/game/qrcode") {
-          router.push(`/game?gameId=${gameId}`);
-          dispatch(setDistanceCircle([0.1, 0.1]));
-        }
-        break;
       case "Conversation":
         if (path.current == "/voyageur") {
           router.push(`/voyageur/chat?gameId=${gameId}`);
@@ -60,12 +55,22 @@ const SocketProvider = ({ children }) => {
           dispatch(setOffset(0.115));
         } else {
           router.push(`/game?gameId=${gameId}`);
-          console.log("Conversation");
           dispatch(setDistanceCircle([0.65, 0.65]));
           dispatch(setShaderPosition(0));
-          setTimeout(() => {
-            dispatch(setShaderPosition(1));
-          }, 2000);
+          const tl = gsap
+            .timeline()
+            .to(".pageContainer", {
+              opacity: 0,
+              duration: 1.5,
+              ease: "power2.out",
+            })
+            .call(
+              () => {
+                dispatch(setShaderPosition(1));
+              },
+              null,
+              2,
+            );
         }
         break;
       case "WinnerScreen":
@@ -86,7 +91,7 @@ const SocketProvider = ({ children }) => {
         dispatch(setDistanceCircle([0.1, 0.1]));
         break;
       case "IntroductionPhone":
-        if (!isMobile && pathname != "/voyageur") {
+        if (!isMobile && path.current != "/voyageur") {
           router.push(`/game?gameId=${gameId}`);
           dispatch(setDistanceCircle([0.1, 0.1]));
         } else {
@@ -96,7 +101,7 @@ const SocketProvider = ({ children }) => {
 
         break;
       case "Conversation":
-        if (pathname == "/voyageur" && isMobile) {
+        if (path.current == "/voyageur" && isMobile) {
           router.push(`/voyageur/chat?gameId=${gameId}`);
           dispatch(setDistanceCircle([0.1, 0.1]));
         } else {

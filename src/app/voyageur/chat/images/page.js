@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { SocketContext } from "../../../context/socketContext";
 import { useState, useRef, useEffect, useContext } from "react";
 import { v4 as uuidv4 } from "uuid";
+import { gsap } from "gsap";
 
 import "swiper/css";
 
@@ -55,6 +56,7 @@ export default function Images() {
                 isTrue: data.isTrue,
               },
             ]);
+            dispatch(setShaderPosition(1));
           });
       });
     }
@@ -62,7 +64,17 @@ export default function Images() {
 
   useEffect(() => {
     if (images.length === 2) {
-      dispatch(setShaderPosition(1));
+      const tl = gsap
+        .timeline()
+        .to(".pageContainer", { opacity: 1, duration: 3, ease: "power3.out" })
+        .call(
+          () => {
+            dispatch(setShaderPosition(1));
+          },
+          null,
+          "<0.5",
+        );
+
       setTimeout(() => {
         setIsBlurry(false);
       }, 500);

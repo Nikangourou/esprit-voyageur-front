@@ -14,6 +14,7 @@ import { useDispatch } from "react-redux";
 import { setShaderPosition } from "../../store/reducers/gameReducer";
 import { get } from "http";
 import { useRouter } from "next/navigation";
+import { gsap } from "gsap";
 
 const firstMessage = [
   {
@@ -227,7 +228,16 @@ export default function Chat() {
             console.log("FIN_CONVERSATION");
             content = content.replace("FIN_CONVERSATION", "");
             setIsFinished("processing");
-            dispatch(setShaderPosition(0));
+            const tl = gsap
+              .timeline()
+              .to(".pageContainer", {
+                opacity: 0,
+                duration: 3,
+                ease: "power2.out",
+              })
+              .call(() => {
+                dispatch(setShaderPosition(0));
+              });
 
             // Utilisation d'une expression régulière pour rechercher la partie du texte après "Remember:"
 
@@ -242,7 +252,7 @@ export default function Chat() {
                     return generatePrompt("simple").then(() => {
                       console.log("simpleGenerated");
                       setIsFinished("end");
-                        router.push("chat/images?gameId=" + gameId.current);
+                      router.push("chat/images?gameId=" + gameId.current);
                     });
                   }
                 })
