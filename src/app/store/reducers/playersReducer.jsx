@@ -3,14 +3,14 @@ import { createSlice } from "@reduxjs/toolkit";
 export const playersSlice = createSlice({
   name: "counter",
   initialState: {
-    playersInGame: [],
+    playersInGame: [ "rouge", "bleu", "violet", "jaune", "vert", "cyan", "noir" ],
     players: {
-      rouge: { color: "red", score: 0, alreadyPlay: false },
-      bleu: { color: "blue", score: 0, alreadyPlay: false },
-      violet: { color: "purple", score: 0, alreadyPlay: false },
-      jaune: { color: "yellow", score: 0, alreadyPlay: false },
-      vert: { color: "green", score: 0, alreadyPlay: false },
-      cyan: { color: "#1ecbe1", score: 0, alreadyPlay: false },
+      rouge: { color: "red", score: 12, alreadyPlay: false },
+      bleu: { color: "blue", score: 9, alreadyPlay: false },
+      violet: { color: "purple", score: 4, alreadyPlay: false },
+      jaune: { color: "yellow", score: 6, alreadyPlay: false },
+      vert: { color: "green", score: 7, alreadyPlay: false },
+      cyan: { color: "#1ecbe1", score: 3, alreadyPlay: false },
       noir: { color: "black", score: 0, alreadyPlay: false },
     },
     currentBluffer: "",
