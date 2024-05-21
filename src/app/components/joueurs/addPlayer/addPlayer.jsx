@@ -20,9 +20,10 @@ export default function AddPlayer() {
   const handleTouchStart = (e) => {
     timerRef.current = setTimeout(() => {
       const colorName = e.target.getAttribute("data-color");
+      console.log(e.target);
       dispatch(addPlayer({ color: colorName }));
       gsap.to(e.target, {
-        backgroundColor: players[colorName].color,
+        fill: players[colorName].color,
       });
       soundManager.playSingleSound("pawn");
     }, 1000);
@@ -157,42 +158,32 @@ export default function AddPlayer() {
   return (
     <section
       className={styles.addingPlayer}
-      style={{ height: "auto" }} // temporaire
+      // style={{ height: "auto" }} // temporaire
       ref={containerRef}
       onTouchMove={onTouchMove}
     >
       <div className={styles.playerChoice}>
         {Object.entries(players).map(([colorName, value], id) => {
           return (
-            <Button
-              key={id}
-              type={"player"}
-              events={eventsFunctions}
-              color={colorName}
-              dataColor={colorName}
-              dataName={value.color}
-            ></Button>
+            <div
+              className={styles.blob}
+              key={colorName}
+              // style={{ top: blob.top, left: blob.left }}
+            >
+              <Blob
+                numPoints={12}
+                minRadius={35}
+                maxRadius={40}
+                minDuration={1}
+                maxDuration={2}
+                color={value.color}
+                dataColor={colorName}
+                events={eventsFunctions}
+              />
+            </div>
           );
         })}
       </div>
-      {blobs.map((blob) => {
-        return (
-          <div
-            className={styles.blob}
-            key={blob.color}
-            style={{ top: blob.top, left: blob.left }}
-          >
-            <Blob
-              numPoints={7}
-              minRadius={40}
-              maxRadius={42}
-              minDuration={1}
-              maxDuration={2}
-              color={blob.color}
-            />
-          </div>
-        );
-      })}
     </section>
   );
 }

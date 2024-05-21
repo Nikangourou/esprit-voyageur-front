@@ -1,19 +1,28 @@
 // BlobComponent.jsx
 import React, { useRef, useEffect } from "react";
 import { gsap, Sine } from "gsap";
+import { useSelector } from "react-redux";
 
 export default function Blob({
   numPoints,
-  width = 200,
-  height = 200,
+  width = 100,
+  height = 100,
   minRadius,
   maxRadius,
   minDuration,
   maxDuration,
-  color,
+  dataColor = "none",
+  colorActive = false,
+  color = "none",
+  events = {},
 }) {
   const blobPathRef = useRef();
   const tlRef = useRef();
+  const yoyoAnim = useRef();
+  const yoyoAnim2 = useRef();
+  const buttonRef = useRef();
+  const buttonTl = useRef();
+  const playersInGame = useSelector((state) => state.players.playersInGame);
 
   useEffect(() => {
     const blob = createBlob({
@@ -29,7 +38,6 @@ export default function Blob({
 
     tlRef.current = blob.tl;
     tlRef.current.play();
-
     return () => {
       if (tlRef.current) {
         tlRef.current.kill();
@@ -45,6 +53,13 @@ export default function Blob({
     maxDuration,
   ]);
 
+  useEffect(() => {
+    if (playersInGame.includes(dataColor) && yoyoAnim.current) {
+      yoyoAnim.current.play();
+      yoyoAnim2.current.pause();
+    }
+  }, [playersInGame]);
+
   function createBlob(options) {
     const points = []; // This array will hold the center points for the blob
 
@@ -59,6 +74,9 @@ export default function Blob({
       paused: true,
     });
 
+    yoyoAnim.current = gsap.timeline();
+    yoyoAnim2.current = gsap.timeline();
+
     // Use the slice of a circle to calculate initial and target positions for the blob points
     const slice = (Math.PI * 2) / options.numPoints;
     for (let i = 0; i < options.numPoints; i++) {
@@ -71,19 +89,58 @@ export default function Blob({
       const targetX = options.width / 2 + Math.cos(angle) * options.maxRadius;
       const targetY = options.height / 2 + Math.sin(angle) * options.maxRadius;
 
+      const targetX2 =
+        options.width / 2 + Math.cos(angle) * (options.maxRadius - 2.5);
+      const targetY2 =
+        options.height / 2 + Math.sin(angle) * (options.maxRadius - 2.5);
+
       // Create a GSAP tween for the point using `to` method chaining it with `yoyo` and `repeat` to make it bounce between minRadius and maxRadius
-      gsap.to(point, {
-        x: targetX,
-        y: targetY,
-        duration: random(options.minDuration, options.maxDuration),
-        yoyo: true,
-        repeat: -1,
-        ease: Sine.easeInOut,
-      });
+      yoyoAnim.current.to(
+        point,
+        {
+          x: targetX,
+          y: targetY,
+          duration: random(options.minDuration, options.maxDuration),
+          yoyo: true,
+          repeat: -1,
+          ease: Sine.easeInOut,
+        },
+        "<",
+      );
+
+      yoyoAnim2.current.to(
+        point,
+        {
+          x: targetX2,
+          y: targetY2,
+          duration: random(options.minDuration, options.maxDuration) * 2,
+          yoyo: true,
+          repeat: -1,
+          ease: Sine.easeInOut,
+        },
+        "<",
+      );
     }
+    yoyoAnim.current.pause();
+    yoyoAnim2.current.play();
 
     tl.to({}, { duration: 1, repeat: -1 }); // Dummy tween to keep the timeline active
     tl.play(); // Start the animation
+
+    if (buttonTl.current) {
+      buttonTl.current.kill();
+    }
+    buttonTl.current = gsap.timeline().fromTo(
+      buttonRef.current,
+      { opacity: 0, scale: 0 },
+      {
+        scale: 1,
+        opacity: 1,
+        duration: 0.5,
+        ease: "back.out(1.4)",
+        delay: 1,
+      },
+    );
 
     return { tl: tl, points: points };
   }
@@ -140,13 +197,33 @@ export default function Blob({
   }
 
   return (
-    <svg
-      id="svg"
-      viewBox={`0 0 ${width} ${height}`}
-      width={width}
-      height={height}
+    <button
+      ref={buttonRef}
+      style={{
+        border: "none",
+        background: "none",
+        padding: "0 0",
+        cursor: "pointer",
+      }}
     >
-      <path id="blob" ref={blobPathRef} fill={color} />
-    </svg>
+      <svg
+        id="svg"
+        viewBox={`0 0 ${width} ${height}`}
+        width={width}
+        height={height}
+        // style={{ transform: `translateX(${Math.sin()})` }}
+      >
+        <path
+          id="blob"
+          ref={blobPathRef}
+          fill={colorActive ? color : "black"}
+          style={{
+            transition: "fill 1s ease-out",
+          }}
+          data-color={dataColor != "none" ? dataColor : "none"}
+          {...events}
+        />
+      </svg>
+    </button>
   );
 }

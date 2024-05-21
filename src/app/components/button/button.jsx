@@ -108,6 +108,7 @@ const Button = forwardRef(function Button(
                 .to(`.${styles.principal}`, {
                   backgroundColor: "#dad6d3",
                   y: 0,
+                  pointerEvents: "none",
                   duration: 0.15,
                   ease: "power2.out",
                 })
@@ -131,8 +132,9 @@ const Button = forwardRef(function Button(
                 })
                 .to(".pageContainer", {
                   opacity: 1,
-                  delay: 0.75,
+                  delay: 1,
                   duration: 3,
+                  pointerEvents: "auto",
                   ease: "power2.out",
                 });
             }

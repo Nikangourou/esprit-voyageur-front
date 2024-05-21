@@ -148,7 +148,7 @@ const LoaderShader = () => {
     if (materialRef.current && materialRef.current.uniforms.uProgress) {
       gsap.to(materialRef.current.uniforms.uProgress, {
         value: shaderPosition,
-        duration: 4,
+        duration: 6,
         ease: CustomEase.create(
           "custom",
           "M0,0 C0.238,0.185 0.242,0.784 0.445,0.921 0.517,0.986 0.682,0.989 1,1 ",

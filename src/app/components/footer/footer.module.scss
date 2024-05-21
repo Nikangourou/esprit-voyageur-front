@@ -4,6 +4,7 @@
     display: flex;
     align-items: flex-end;
 
+
     .content{
         display: flex;
         justify-content: space-between;
@@ -19,4 +20,8 @@
   left: 0;
   right: 0;
   bottom: 0;
+  transition: opacity 1s ease-out;
+  &.hidden{
+    opacity: 0;
+  }
 }

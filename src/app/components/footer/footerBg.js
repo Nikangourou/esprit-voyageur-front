@@ -21,18 +21,15 @@ export default function FooterSvg() {
     });
   }, [showFooter]);
 
-  if (!showFooter) {
-    return null;
-  }
-
   return (
-    <div className={styles.bg}>
+    <div className={`${styles.bg} ${!showFooter ? styles.hidden : ""}`}>
       <svg
-        width="1366"
+        width="100%"
         height="180"
         viewBox="0 0 1366 180"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
+        preserveAspectRatio={"none"}
       >
         <path
           ref={pathRef}

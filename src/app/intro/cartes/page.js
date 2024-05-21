@@ -41,33 +41,27 @@ export default function Cartes() {
         <p>Aidez-vous de celles-ci pour vous remémorer un souvenir...</p>
         <img src="/images/cartes.svg"></img>
       </section>
-      <div className={styles.footer}>
-        <Footer>
-          <div>
-            <p>
-              <b>Tous</b> les joueurs doivent piocher
-            </p>
-            <div className={styles.playerColors}>
-              {Object.keys(playersInGameObj).map((player) => (
-                <div
-                  key={player}
-                  style={{ backgroundColor: players[player].color }}
-                  className={styles.playerColor}
-                />
-              ))}
-            </div>
+      <Footer>
+        <div>
+          <p>
+            <b>Tous</b> les joueurs doivent piocher
+          </p>
+          <div className={styles.playerColors}>
+            {Object.keys(playersInGameObj).map((player) => (
+              <div
+                key={player}
+                style={{ backgroundColor: players[player].color }}
+                className={styles.playerColor}
+              />
+            ))}
           </div>
-          <div>
-            <Button
-              color={"#373FEF"}
-              type="link"
-              events={{ onClick: clickEvt }}
-            >
-              Continuer
-            </Button>
-          </div>
-        </Footer>
-      </div>
+        </div>
+        <div>
+          <Button color={"#373FEF"} type="link" events={{ onClick: clickEvt }}>
+            Continuer
+          </Button>
+        </div>
+      </Footer>
     </main>
   );
 }
