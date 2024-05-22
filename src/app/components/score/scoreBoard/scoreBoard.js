@@ -1,12 +1,12 @@
-import styles from "./score.module.scss";
-import Countdown from "../chrono/countdown";
-import Button from "../button/button";
+import styles from "./scoreBoard.module.scss";
+import Countdown from "../../chrono/countdown";
+import Button from "../../button/button";
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
 import { useContext, useMemo, useRef, useLayoutEffect } from "react";
-import { SocketContext } from "../../context/socketContext";
-import { newRound } from "../../store/reducers/playersReducer";
-import Footer from "../footer/footer";
+import { SocketContext } from "../../../context/socketContext";
+import { newRound } from "../../../store/reducers/playersReducer";
+import Footer from "../../footer/footer";
 import { gsap } from "gsap";
 
 export default function ScoreBoard({ gameId }) {
@@ -77,7 +77,7 @@ export default function ScoreBoard({ gameId }) {
   const player3 = sortedPlayersInGame[2];
 
   return (
-      <div className={styles.content}>
+      <div className={styles.contentBoard}>
         <div className={styles.scoreList}>
           {/* Podium for top 3 players */}
           <div className={styles.podium}>
@@ -90,7 +90,7 @@ export default function ScoreBoard({ gameId }) {
                   <p
                     className={styles.rank}
                     style={{
-                      filter: ` drop-shadow(2px 2px 0px ${players[player2].color})`,
+                      filter: ` drop-shadow(1px 1px 0px ${players[player2].color})`,
                     }}
                   >
                     2
