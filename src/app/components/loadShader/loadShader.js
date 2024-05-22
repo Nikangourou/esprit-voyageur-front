@@ -181,13 +181,11 @@ const LoaderShader = () => {
   }, [distanceCircle]);
 
   return (
-    <div className={styles.LoaderShader}>
-      <canvas
-        className={styles.canvas}
-        ref={canvasRef}
-        style={{ width: "100svw", height: "100svh", background: "transparent" }}
-      ></canvas>
-    </div>
+    <canvas
+      className={styles.canvas}
+      ref={canvasRef}
+      style={{ width: "100svw", height: "100svh", background: "transparent" }}
+    ></canvas>
   );
 };
 

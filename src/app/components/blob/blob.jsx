@@ -130,6 +130,14 @@ export default function Blob({
     if (buttonTl.current) {
       buttonTl.current.kill();
     }
+    let delay = 1;
+    if (Math.random() < 0.33) {
+      delay = 1;
+    } else if (Math.random() < 0.66) {
+      delay = 1.75;
+    } else {
+      delay = 2.25;
+    }
     buttonTl.current = gsap.timeline().fromTo(
       buttonRef.current,
       { opacity: 0, scale: 0 },
@@ -138,7 +146,7 @@ export default function Blob({
         opacity: 1,
         duration: 0.5,
         ease: "back.out(1.4)",
-        delay: 1,
+        delay: delay,
       },
     );
 

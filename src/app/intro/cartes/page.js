@@ -39,8 +39,15 @@ export default function Cartes() {
         <Countdown start={chronoStart}></Countdown>
         <img src="/images/cartes-title.svg" alt="Joueurs" />
         <p>Aidez-vous de celles-ci pour vous remémorer un souvenir...</p>
-        <img src="/images/cartes.svg"></img>
       </section>
+      {/*<div className={styles.cardAnim}>*/}
+      {/*  <div className={styles.cards}>*/}
+      {/*    <img src="/images/card.svg"></img>*/}
+      {/*    <img src="/images/card.svg"></img>*/}
+      {/*    <img src="/images/card.svg"></img>*/}
+      {/*  </div>*/}
+      {/*  <img src="/images/hand.svg" className={styles.hand}></img>*/}
+      {/*</div>*/}
       <Footer>
         <div>
           <p>
