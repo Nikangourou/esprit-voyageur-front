@@ -29,20 +29,20 @@ export default function Score({ gameId }) {
   }
   const width = window.innerWidth * 0.3;
 
-  // useEffect(() => {
+  useEffect(() => {
 
-  //       fetch(`${apiUrl}/image/get/${trueImageId}`, {
-  //         method: "GET",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //       })
-  //         .then((response) => response.json())
-  //         .then((data) => {
-  //           console.log(data);
-  //           setTrueImageUrl(`${apiUrl}${data.url}`);
-  //         });
-  // }, [trueImageId]);
+        fetch(`${apiUrl}/image/get/${trueImageId}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+            setTrueImageUrl(`${apiUrl}${data.url}`);
+          });
+  }, [trueImageId]);
 
  
   const currentBluffer = useSelector((state) => state.players.currentBluffer);
