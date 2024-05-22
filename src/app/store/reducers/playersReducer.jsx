@@ -15,7 +15,7 @@ export const playersSlice = createSlice({
     },
     currentBluffer: "rouge",
     gameId: "",
-    trueImageId: "",
+    trueImageId: "07db9ba1-4818-4885-a527-e741e943d6a5.jpg",
     falseImageId: "",
   },
   reducers: {
