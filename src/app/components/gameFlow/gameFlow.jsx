@@ -22,8 +22,12 @@ export default function GameFlow({ images, gameId }) {
   const players = useSelector((state) => state.players.players);
   const currentBluffer = useSelector((state) => state.players.currentBluffer);
 
+  console.log(currentBluffer);
+
   const colorStyle =
     currentBluffer && currentBluffer != "" ? players[currentBluffer].color : "";
+
+  console.log(colorStyle);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -64,7 +68,7 @@ export default function GameFlow({ images, gameId }) {
           <p>
             Attention !<br />
             <i>Ne vous laissez pas berner...</i>
-          </p>,
+          </p>
         );
         break;
       case "VotePhase":
@@ -74,7 +78,7 @@ export default function GameFlow({ images, gameId }) {
           <p>
             Vite, c’est l’heure de voter !<br />
             <i>Déplace ton pion Joueur sur le véritable souvenir.</i>
-          </p>,
+          </p>
         );
         break;
       case "RevealPhase":
@@ -83,7 +87,7 @@ export default function GameFlow({ images, gameId }) {
           <p>
             Le véritable souvenir se dévoile !<br />
             <i>Conteur, raconte ton souvenir...</i>
-          </p>,
+          </p>
         );
         break;
       case "ScorePhase":
@@ -166,7 +170,7 @@ export default function GameFlow({ images, gameId }) {
       "sendActorAction",
       gameId,
       currentPhase == "RevealImage" ? "EndChrono" : "EndPhase",
-      currentPhase == "VotePhase" ? { ImageTrueVotes: colorListTrue } : {},
+      currentPhase == "VotePhase" ? { ImageTrueVotes: colorListTrue } : {}
     );
   }
 

@@ -13,7 +13,7 @@ export const playersSlice = createSlice({
       cyan: { color: "#1ecbe1", score: 3, alreadyPlay: false },
       noir: { color: "black", score: 0, alreadyPlay: false },
     },
-    currentBluffer: "",
+    currentBluffer: "rouge",
     gameId: "",
     trueImageId: "",
     falseImageId: "",
@@ -42,7 +42,7 @@ export const playersSlice = createSlice({
         cyan: { color: "#1ecbe1", score: 0, alreadyPlay: false },
         noir: { color: "black", score: 0, alreadyPlay: false },
       };
-      state.currentBluffer = "";
+      state.currentBluffer = null;
       state.gameId = null;
       state.trueImageId = null;
       state.falseImageId = null;
