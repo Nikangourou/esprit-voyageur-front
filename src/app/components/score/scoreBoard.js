@@ -9,7 +9,7 @@ import { newRound } from "../../store/reducers/playersReducer";
 import Footer from "../footer/footer";
 import { gsap } from "gsap";
 
-export default function Score({ gameId }) {
+export default function ScoreBoard({ gameId }) {
   const { socket } = useContext(SocketContext);
   const playersInGame = useSelector((state) => state.players.playersInGame);
   const players = useSelector((state) => state.players.players);
@@ -76,13 +76,7 @@ export default function Score({ gameId }) {
   const player2 = sortedPlayersInGame[1];
   const player3 = sortedPlayersInGame[2];
 
-  function clickEvt(e) {
-    dispatch(newRound());
-    socket?.emit("sendActorAction", gameId, "Click End");
-  }
-
   return (
-    <div className={styles.main}>
       <div className={styles.content}>
         <div className={styles.scoreList}>
           {/* Podium for top 3 players */}
@@ -108,7 +102,7 @@ export default function Score({ gameId }) {
                     {player2}
                   </p>
                 </div>
-                <p className={styles.score}>{players[player2].score} pts</p>
+                <p className={styles.score}>{players[player2].score} <span className={styles.pts}>pts</span></p>
               </div>
               <div className={styles.sub}></div>
             </div>
@@ -133,7 +127,7 @@ export default function Score({ gameId }) {
                     {player1}
                   </p>
                 </div>
-                <p className={styles.score}>{players[player1].score} pts</p>
+                <p className={styles.score}>{players[player1].score} <span className={styles.pts}>pts</span></p>
               </div>
               <div className={styles.sub}></div>
             </div>
@@ -158,7 +152,7 @@ export default function Score({ gameId }) {
                     {player3}
                   </p>
                 </div>
-                <p className={styles.score}>{players[player3].score} pts</p>
+                <p className={styles.score}>{players[player3].score} <span className={styles.pts}>pts</span></p>
               </div>
               <div className={styles.sub}></div>
             </div>
@@ -182,19 +176,11 @@ export default function Score({ gameId }) {
                     {playerId}
                   </p>
                 </div>
-                <p>{player.score} pts</p>
+                <p className={styles.score}>{player.score} <span className={styles.pts}>pts</span> </p>
               </div>
             );
           })}
         </div>
       </div>
-
-      <Footer>
-        <p>Félicitations Bleu !</p>
-        <Button color={"#373FEF"} type="link" events={{ onClick: clickEvt }}>
-          Terminer
-        </Button>
-      </Footer>
-    </div>
   );
 }
