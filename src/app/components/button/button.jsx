@@ -17,15 +17,49 @@ const Button = forwardRef(function Button(
     disabled = false,
     dragContainer = null,
     dragEndEvent = null,
-    dataColor = null,
+    dataColor = "none",
+    blobParams = {
+      width: 100,
+      height: 100,
+      numPoints: 12,
+      minRadius: 35,
+      maxRadius: 40,
+      minDuration: 1,
+      maxDuration: 2,
+    },
   },
   ref,
 ) {
   const { soundManager } = useContext(SocketContext);
   const buttonRef = useRef();
+  const buttonTl = useRef();
   const draggableRef = useRef();
 
   useEffect(() => {
+    if (type == "blob") {
+      buttonTl.current?.kill();
+
+      let delay = 1;
+      if (Math.random() < 0.33) {
+        delay = 1;
+      } else if (Math.random() < 0.66) {
+        delay = 1.75;
+      } else {
+        delay = 2.25;
+      }
+      buttonTl.current = gsap.timeline().fromTo(
+        buttonRef.current,
+        { opacity: 0, scale: 0 },
+        {
+          scale: 1,
+          opacity: 1,
+          duration: 0.5,
+          ease: "back.out(1.4)",
+          delay: delay,
+        },
+      );
+    }
+
     if (dragContainer) {
       draggableRef.current = Draggable.create(buttonRef.current, {
         type: "x,y",
@@ -81,17 +115,29 @@ const Button = forwardRef(function Button(
 
     if (type == "blob") {
       return (
-        <Blob
-          ref={ref}
-          numPoints={4}
-          width={200}
-          height={100}
-          minRadius={40}
-          maxRadius={42}
-          minDuration={1}
-          maxDuration={2}
-          color={color}
-        />
+        <button
+          ref={buttonRef}
+          style={{
+            border: "none",
+            background: "none",
+            padding: "0 0",
+            cursor: "pointer",
+          }}
+        >
+          <svg
+            id="svg"
+            viewBox={`0 0 ${blobParams.width} ${blobParams.height}`}
+            width={blobParams.width}
+            height={blobParams.height}
+          >
+            <Blob
+              {...blobParams}
+              color={color}
+              dataColor={dataColor}
+              events={events}
+            />
+          </svg>
+        </button>
       );
     }
 

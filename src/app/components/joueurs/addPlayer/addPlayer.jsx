@@ -170,17 +170,12 @@ export default function AddPlayer() {
               key={colorName}
               // style={{ top: blob.top, left: blob.left }}
             >
-              <Blob
-                seed={index}
-                numPoints={12}
-                minRadius={35}
-                maxRadius={40}
-                minDuration={1}
-                maxDuration={2}
+              <Button
+                type={"blob"}
                 color={value.color}
                 dataColor={colorName}
                 events={eventsFunctions}
-              />
+              ></Button>
             </div>
           );
         })}

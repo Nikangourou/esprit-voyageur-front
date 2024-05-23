@@ -23,8 +23,6 @@ export default function Blob({
   const tlRef = useRef();
   const yoyoAnim = useRef();
   const yoyoAnim2 = useRef();
-  const buttonRef = useRef();
-  const buttonTl = useRef();
   const randSeed = useRef();
   const playersInGame = useSelector((state) => state.players.playersInGame);
 
@@ -136,34 +134,16 @@ export default function Blob({
         "<",
       );
     }
-    yoyoAnim.current.pause();
-    yoyoAnim2.current.play();
+    if (seed) {
+      yoyoAnim.current.pause();
+      yoyoAnim2.current.play();
+    } else {
+      yoyoAnim.current.play();
+      yoyoAnim2.current.pause();
+    }
 
     tl.to({}, { duration: 1, repeat: -1 }); // Dummy tween to keep the timeline active
     tl.play(); // Start the animation
-
-    if (buttonTl.current) {
-      buttonTl.current.kill();
-    }
-    let delay = 1;
-    if (Math.random() < 0.33) {
-      delay = 1;
-    } else if (Math.random() < 0.66) {
-      delay = 1.75;
-    } else {
-      delay = 2.25;
-    }
-    buttonTl.current = gsap.timeline().fromTo(
-      buttonRef.current,
-      { opacity: 0, scale: 0 },
-      {
-        scale: 1,
-        opacity: 1,
-        duration: 0.5,
-        ease: "back.out(1.4)",
-        delay: delay,
-      },
-    );
 
     return { tl: tl, points: points };
   }
@@ -221,33 +201,16 @@ export default function Blob({
   }
 
   return (
-    <button
-      ref={buttonRef}
+    <path
+      id="blob"
+      ref={blobPathRef}
+      fill={seed ? color : colorActive ? color : "black"}
       style={{
-        border: "none",
-        background: "none",
-        padding: "0 0",
-        cursor: "pointer",
+        transition: "fill 1s ease-out",
       }}
-    >
-      <svg
-        id="svg"
-        viewBox={`0 0 ${width} ${height}`}
-        width={width}
-        height={height}
-        // style={{ transform: `translateX(${Math.sin()})` }}
-      >
-        <path
-          id="blob"
-          ref={blobPathRef}
-          fill={colorActive ? color : "black"}
-          style={{
-            transition: "fill 1s ease-out",
-          }}
-          data-color={dataColor != "none" ? dataColor : "none"}
-          {...events}
-        />
-      </svg>
-    </button>
+      data-color={dataColor != "none" ? dataColor : "none"}
+      mask={mask && `url(${mask})`}
+      {...events}
+    />
   );
 }

@@ -122,14 +122,13 @@ export default function Chat() {
   const addMessage = (messageAdded) => {
     const tl = gsap
       .timeline()
-      .to(containerMessagesRef.current, { opacity: 0, duration: 1 })
-      .call(
-        () => {
+      .to(containerMessagesRef.current, {
+        opacity: 0,
+        duration: 1,
+        onComplete: () => {
           setMessage(messageAdded);
         },
-        null,
-        0.25,
-      )
+      })
       .to(containerMessagesRef.current, { opacity: 1, duration: 1, delay: 1 });
   };
 
