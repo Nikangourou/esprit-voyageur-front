@@ -8,6 +8,9 @@ import GameFlow from "../components/gameFlow/gameFlow";
 import { useDispatch } from "react-redux";
 import { SocketContext } from "../context/socketContext";
 import Score from "../components/score/score";
+import {
+  setTrueImageId,
+} from "../store/reducers/playersReducer";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -15,10 +18,13 @@ export default function Intro() {
   const { socket } = useContext(SocketContext);
   const [images, setImages] = useState([]);
   const [gameId, setGameId] = useState(null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const handleImagesAllGenerated = (trueImageId, falseImageId) => {
       const arrayTmp = [trueImageId, falseImageId];
+      console.log("page.js" + trueImageId);
+      dispatch(setTrueImageId({id:trueImageId}));
       arrayTmp.forEach((imageId) => {
         fetch(`${apiUrl}/image/get/${imageId}`, {
           method: "GET",

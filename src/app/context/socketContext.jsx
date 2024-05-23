@@ -26,6 +26,7 @@ const SocketContext = createContext(value);
 
 // Créez le fournisseur de contexte
 const SocketProvider = ({ children }) => {
+  const [advancementRound,setAdvancementRound] = useState(0);
   const router = useRouter();
   const pathname = usePathname();
   const dispatch = useDispatch();
@@ -60,7 +61,7 @@ const SocketProvider = ({ children }) => {
           const tl = gsap
             .timeline()
             .to(".pageContainer", {
-              opacity: 0,
+              opacity: 1,
               duration: 1.5,
               ease: "power2.out",
             })
@@ -80,6 +81,11 @@ const SocketProvider = ({ children }) => {
       default:
         break;
     }
+  }
+
+  function incrementRound(state, gameId){
+      setAdvancementRound((prev => prev + 1));
+
   }
 
   function backToRoute(state) {

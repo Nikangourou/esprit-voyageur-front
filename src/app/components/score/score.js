@@ -30,7 +30,7 @@ export default function Score({ gameId }) {
   const width = window.innerWidth * 0.3;
 
   useEffect(() => {
-
+    if (trueImageId != null && trueImageId != "") {
         fetch(`${apiUrl}/image/get/${trueImageId}`, {
           method: "GET",
           headers: {
@@ -41,7 +41,13 @@ export default function Score({ gameId }) {
           .then((data) => {
             console.log(data);
             setTrueImageUrl(`${apiUrl}${data.url}`);
+
+            const timer = setTimeout(() => {
+              setIsBlurry(false);
+            }, 1000);
+
           });
+    }
   }, [trueImageId]);
 
  
@@ -83,7 +89,7 @@ export default function Score({ gameId }) {
         <div className={styles.scoreBoardContainer}>
           {final && (
             <ImageShader
-              url="/image.jpeg"
+              url={trueImageUrl}
               isBlurry={isBlurry}
               width={width}
               height={width}
