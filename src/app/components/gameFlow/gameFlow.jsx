@@ -9,7 +9,7 @@ import DraggablePawns from "../draggablePawns/draggablePawns";
 
 export default function GameFlow({ images, gameId }) {
   const { socket } = useContext(SocketContext);
-  const [currentPhase, setCurrentPhase] = useState("ScorePhase");
+  const [currentPhase, setCurrentPhase] = useState("Conversation");
   const [contentSentence, setContentSentence] = useState();
   const [chronoStart, setChronoStart] = useState(120);
   const [colorListTrue, setColorListTrue] = useState([]);
