@@ -18,6 +18,9 @@ export default function Blob({
   events = {},
   seed = 0,
   mask,
+  active = false,
+  x = 0,
+  y = 0,
 }) {
   const blobPathRef = useRef();
   const tlRef = useRef();
@@ -67,7 +70,7 @@ export default function Blob({
   ]);
 
   useEffect(() => {
-    if (playersInGame.includes(dataColor) && yoyoAnim.current) {
+    if ((playersInGame.includes(dataColor) || active) && yoyoAnim.current) {
       yoyoAnim.current.play();
       yoyoAnim2.current.pause();
     }
@@ -134,13 +137,9 @@ export default function Blob({
         "<",
       );
     }
-    if (seed) {
-      yoyoAnim.current.pause();
-      yoyoAnim2.current.play();
-    } else {
-      yoyoAnim.current.play();
-      yoyoAnim2.current.pause();
-    }
+
+    yoyoAnim.current.play();
+    yoyoAnim2.current.pause();
 
     tl.to({}, { duration: 1, repeat: -1 }); // Dummy tween to keep the timeline active
     tl.play(); // Start the animation
@@ -208,6 +207,8 @@ export default function Blob({
       style={{
         transition: "fill 1s ease-out",
       }}
+      x={x}
+      y={y}
       data-color={dataColor != "none" ? dataColor : "none"}
       mask={mask && `url(${mask})`}
       {...events}

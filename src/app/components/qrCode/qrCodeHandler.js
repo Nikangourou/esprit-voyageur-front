@@ -3,7 +3,7 @@
 import styles from "./qrCodeHandler.module.scss";
 import QrCode from "./qrCode";
 
-import { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { SocketContext } from "../../context/socketContext";
 import { useSearchParams } from "next/navigation";
@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Button from "../button/button";
 import Footer from "../footer/footer";
 import Title from "../../components/title/title";
+import ClipBlob from "../../components/clipBlob/clipBlob";
 
 export default function Code() {
   const players = useSelector((state) => state.players.players);
@@ -63,7 +64,19 @@ export default function Code() {
 
   return (
     <main className={styles.main}>
-      <div className={styles.shape}>{shape}</div>
+      <div className={styles.shape}>
+        <ClipBlob
+          numPoints={20}
+          color={colorStyle}
+          minDuration={3}
+          maxDuration={4}
+          width={600}
+          height={600}
+          maxRadius={300}
+          minRadius={250}
+          active={true}
+        ></ClipBlob>
+      </div>
       <section className={styles.content}>
         <Title
           text={""}
