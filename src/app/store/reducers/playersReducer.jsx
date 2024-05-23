@@ -3,19 +3,19 @@ import { createSlice } from "@reduxjs/toolkit";
 export const playersSlice = createSlice({
   name: "counter",
   initialState: {
-    playersInGame: [ "rouge", "bleu", "violet", "jaune", "vert", "cyan", "noir" ],
+    playersInGame: [],
     players: {
-      rouge: { color: "red", score: 12, alreadyPlay: false },
-      bleu: { color: "blue", score: 9, alreadyPlay: false },
-      violet: { color: "purple", score: 4, alreadyPlay: false },
-      jaune: { color: "yellow", score: 6, alreadyPlay: false },
-      vert: { color: "green", score: 7, alreadyPlay: false },
-      cyan: { color: "#1ecbe1", score: 3, alreadyPlay: false },
+      rouge: { color: "red", score: 0, alreadyPlay: false },
+      bleu: { color: "blue", score: 0, alreadyPlay: false },
+      violet: { color: "purple", score: 0, alreadyPlay: false },
+      jaune: { color: "yellow", score: 0, alreadyPlay: false },
+      vert: { color: "green", score: 0, alreadyPlay: false },
+      cyan: { color: "#1ecbe1", score: 0, alreadyPlay: false },
       noir: { color: "black", score: 0, alreadyPlay: false },
     },
-    currentBluffer: "rouge",
+    currentBluffer: "",
     gameId: "",
-    trueImageId: "07db9ba1-4818-4885-a527-e741e943d6a5.jpg",
+    trueImageId: "",
     falseImageId: "",
   },
   reducers: {
@@ -42,7 +42,7 @@ export const playersSlice = createSlice({
         cyan: { color: "#1ecbe1", score: 0, alreadyPlay: false },
         noir: { color: "black", score: 0, alreadyPlay: false },
       };
-      state.currentBluffer = null;
+      state.currentBluffer = "";
       state.gameId = null;
       state.trueImageId = null;
       state.falseImageId = null;
