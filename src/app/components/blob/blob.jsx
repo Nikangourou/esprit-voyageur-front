@@ -1,3 +1,4 @@
+"use client";
 // BlobComponent.jsx
 import React, { useRef, useEffect } from "react";
 import { gsap, Sine } from "gsap";
@@ -15,6 +16,8 @@ export default function Blob({
   colorActive = false,
   color = "none",
   events = {},
+  seed = 0,
+  mask,
 }) {
   const blobPathRef = useRef();
   const tlRef = useRef();
@@ -22,9 +25,21 @@ export default function Blob({
   const yoyoAnim2 = useRef();
   const buttonRef = useRef();
   const buttonTl = useRef();
+  const randSeed = useRef();
   const playersInGame = useSelector((state) => state.players.playersInGame);
 
+  function mulberry32(seedVal) {
+    return function () {
+      seedVal |= 0;
+      seedVal = (seedVal + 0x6d2b79f5) | 0;
+      let t = Math.imul(seedVal ^ (seedVal >>> 15), 1 | seedVal);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
   useEffect(() => {
+    randSeed.current = mulberry32(seed);
     const blob = createBlob({
       element: blobPathRef.current,
       numPoints,
@@ -201,7 +216,8 @@ export default function Blob({
       min = max;
       max = tmp;
     }
-    return min + (max - min) * Math.random();
+    const rand = min + (max - min) * randSeed.current();
+    return rand;
   }
 
   return (

@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from "react-redux";
 import Button from "../../components/button/button";
 import Footer from "../../components/footer/footer";
 import { useRouter } from "next/navigation";
+import Title from "../../components/title/title";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -37,7 +38,11 @@ export default function Cartes() {
       {/* <AddPlayer></AddPlayer> */}
       <section className={styles.content}>
         <Countdown start={chronoStart}></Countdown>
-        <img src="/images/cartes-title.svg" alt="Joueurs" />
+        <Title
+          text={"Chacun pioche \n"}
+          important={"3 "}
+          text2={"cartes "}
+        ></Title>
         <p>Aidez-vous de celles-ci pour vous remémorer un souvenir...</p>
       </section>
       {/*<div className={styles.cardAnim}>*/}

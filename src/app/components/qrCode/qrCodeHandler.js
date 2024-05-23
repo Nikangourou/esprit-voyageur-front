@@ -10,6 +10,7 @@ import { useSearchParams } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import Button from "../button/button";
 import Footer from "../footer/footer";
+import Title from "../../components/title/title";
 
 export default function Code() {
   const players = useSelector((state) => state.players.players);
@@ -64,7 +65,11 @@ export default function Code() {
     <main className={styles.main}>
       <div className={styles.shape}>{shape}</div>
       <section className={styles.content}>
-        <img src="/images/bluffer-title.svg" alt="Joueurs" />
+        <Title
+          text={""}
+          important={`${currentBluffer} `}
+          text2={"tu es le\n bluffer "}
+        ></Title>
         <p>Scanne le QR code et isole toi...</p>
         <div className={styles.qrCode}>
           <QrCode gameId={gameId} currentBluffer={currentBluffer} />
@@ -72,14 +77,23 @@ export default function Code() {
       </section>
       <Footer>
         <div>
-        <p> <span className={styles.currentBluffer} style={{color : colorStyle}}>{currentBluffer}</span>  doit s'isoler</p>
-        <div className={styles.playerColors}>
-                <div
-                  key={currentBluffer}
-                  style={{ backgroundColor: colorStyle }}
-                  className={styles.playerColor}
-                />
-            </div>
+          <p>
+            {" "}
+            <span
+              className={styles.currentBluffer}
+              style={{ color: colorStyle }}
+            >
+              {currentBluffer}
+            </span>{" "}
+            doit s'isoler
+          </p>
+          <div className={styles.playerColors}>
+            <div
+              key={currentBluffer}
+              style={{ backgroundColor: colorStyle }}
+              className={styles.playerColor}
+            />
+          </div>
         </div>
       </Footer>
     </main>

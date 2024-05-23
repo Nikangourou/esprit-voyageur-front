@@ -6,6 +6,8 @@ import Chat from "../../components/chat/chat";
 import { div } from "three/nodes";
 import Countdown from "../../components/chrono/countdown";
 import { SocketContext } from "../../context/socketContext";
+import Footer from "../../components/footer/footer";
+import Title from "../../components/title/title";
 
 export default function Voyageur() {
   const { socket } = useContext(SocketContext);
@@ -43,11 +45,15 @@ export default function Voyageur() {
   const onEndCountdown = () => {};
 
   return (
-    <main>
+    <main className={styles.container}>
       <div className={styles.containerCountdown}>
         <Countdown start={chronoStart} onEnd={onEndCountdown} />
+        <div className={styles.title}>
+          <Title text={"Raconte ton"} important={"souvenir"}></Title>
+        </div>
       </div>
       <Chat />
+      <Footer></Footer>
     </main>
   );
 }

@@ -1,13 +1,16 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./footer.module.scss";
 import { gsap } from "gsap";
 import { useSelector } from "react-redux";
+import { usePathname } from "next/navigation";
 
 export default function FooterSvg() {
   const pathRef = useRef(null);
   const showFooter = useSelector((state) => state.footer.showFooter);
+  const pathname = usePathname();
+  const [path, setPath] = useState();
 
   useEffect(() => {
     gsap.to(pathRef.current, {
@@ -21,11 +24,15 @@ export default function FooterSvg() {
     });
   }, [showFooter]);
 
+  useEffect(() => {
+    setPath(pathname);
+  }, [pathname]);
+
   return (
     <div className={`${styles.bg} ${!showFooter ? styles.hidden : ""}`}>
       <svg
         width="100%"
-        height="180"
+        height={path == "/voyageur/chat" ? "60svh" : 180}
         viewBox="0 0 1366 180"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"

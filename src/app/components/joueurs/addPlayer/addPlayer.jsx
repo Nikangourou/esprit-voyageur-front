@@ -163,7 +163,7 @@ export default function AddPlayer() {
       onTouchMove={onTouchMove}
     >
       <div className={styles.playerChoice}>
-        {Object.entries(players).map(([colorName, value], id) => {
+        {Object.entries(players).map(([colorName, value], index) => {
           return (
             <div
               className={styles.blob}
@@ -171,6 +171,7 @@ export default function AddPlayer() {
               // style={{ top: blob.top, left: blob.left }}
             >
               <Blob
+                seed={index}
                 numPoints={12}
                 minRadius={35}
                 maxRadius={40}

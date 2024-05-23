@@ -8,6 +8,7 @@ import { useContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Button from "../../components/button/button";
 import Footer from "../../components/footer/footer";
+import Title from "../../components/title/title";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -17,12 +18,10 @@ export default function Joueurs() {
   const players = useSelector((state) => state.players.players);
   const playersInGame = useSelector((state) => state.players.playersInGame);
 
-
   const playersInGameObj = playersInGame.reduce((acc, color) => {
     acc[color] = players[color];
     return acc;
   }, {});
-
 
   const onRedirectEvent = () => {
     if (socket) {
@@ -41,7 +40,7 @@ export default function Joueurs() {
           dispatch(
             setGameId({
               gameId: data.game_id,
-            })
+            }),
           );
           localStorage.setItem("gameId", data.game_id);
 
@@ -57,7 +56,7 @@ export default function Joueurs() {
     <main className={styles.main}>
       <AddPlayer></AddPlayer>
       <section className={styles.content}>
-        <img src="/images/players.svg" alt="Joueurs" />
+        <Title text={"sélection \ndes"} important={"joueurs "}></Title>
         <p>
           Touchez un pion pour vous enregistrer en tant que joueur.
           <br />
@@ -66,7 +65,13 @@ export default function Joueurs() {
       </section>
       <Footer>
         <div>
-          <p> <span className={styles.nbPlayers}>{playersInGame.length}</span> joueur enregistrés</p>
+          <p>
+            {" "}
+            <span className={styles.nbPlayers}>
+              {playersInGame.length}
+            </span>{" "}
+            joueur enregistrés
+          </p>
           <div className={styles.playerColors}>
             {Object.keys(playersInGameObj).map((player) => (
               <div

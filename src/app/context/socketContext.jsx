@@ -51,8 +51,8 @@ const SocketProvider = ({ children }) => {
       case "Conversation":
         if (path.current == "/voyageur") {
           router.push(`/voyageur/chat?gameId=${gameId}`);
-          dispatch(setDistanceCircle([0.4, 0.65]));
-          dispatch(setOffset(0.115));
+          dispatch(setDistanceCircle([0.1, 0.1]));
+          // dispatch(setOffset(0.115));
         } else {
           router.push(`/game?gameId=${gameId}`);
           dispatch(setDistanceCircle([0.65, 0.65]));

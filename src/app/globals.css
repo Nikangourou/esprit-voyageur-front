@@ -34,6 +34,11 @@ body {
   overflow-x: hidden;
   background: var(--backgroundColor);
   overflow: hidden;
+  font-family: var(--font-work-sans);
+}
+
+h1,h2,h3,h4{
+  font-family: var(--font-contrail-one);
 }
 
 a {
@@ -56,3 +61,4 @@ a {
   z-index: 1;
 
 }
+

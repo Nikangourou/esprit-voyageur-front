@@ -1,31 +1,26 @@
 .countdown{
-  font-family: Nighty;
   font-weight:bold;
-
+  font-family: var(--font-contrail-one);
   p{
     position: relative;
-    font-size:5rem;
+    font-size:4rem;
     display: inline-block;
     &:nth-child(1){
       z-index: 90;
-      transform: translateX(0.1em);
     }
     &:nth-child(2){
       z-index: 80;
     }
     &:nth-child(3){
       z-index: 70;
-      transform: translateX(-0.1em);
     }
 
     &:nth-child(4){
       z-index: 60;
-      transform: translateX(-0.2em);
     }
 
     &:nth-child(5){
       z-index: 50;
-      transform: translateX(-0.3em);
     }
     span{
       position: absolute;

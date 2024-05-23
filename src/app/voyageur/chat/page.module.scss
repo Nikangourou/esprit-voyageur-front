@@ -1,7 +1,17 @@
+.container{
+  position: relative;
+  height: 100%;
+  width:  100%;
+}
 
 .containerCountdown {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 90px;
+  flex-direction: column;
+  padding-top: 4rem;
+
+  .title{
+    margin-bottom: 3rem;
+  }
 }
