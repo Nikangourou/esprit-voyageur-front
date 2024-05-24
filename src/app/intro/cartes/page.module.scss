@@ -3,15 +3,14 @@
     height: 100vh;
 
   .content {
-    height: 100%;
+    height: calc(100% - 190px);
     width: 100%;
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
+    position: relative;
     text-align: center;
-    z-index: 1;
+
+    .text{
+      margin-top: 100px;
+    }
   }
 
 

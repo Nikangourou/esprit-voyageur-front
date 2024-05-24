@@ -6,6 +6,8 @@ import Countdown from "../chrono/countdown";
 import { SocketContext } from "../../context/socketContext";
 import Score from "../score/score";
 import DraggablePawns from "../draggablePawns/draggablePawns";
+import Footer from "../footer/footer";
+import Button from "../button/button";
 
 export default function GameFlow({ images, gameId }) {
   const { socket } = useContext(SocketContext);
@@ -18,6 +20,11 @@ export default function GameFlow({ images, gameId }) {
   const containerRef = useRef();
   const imageRef1 = useRef();
   const imageRef2 = useRef();
+
+  if (typeof window === "undefined") {
+    return <div></div>;
+  }
+  const width = window.innerWidth * 0.4;
 
   const players = useSelector((state) => state.players.players);
   const currentBluffer = useSelector((state) => state.players.currentBluffer);
@@ -64,7 +71,7 @@ export default function GameFlow({ images, gameId }) {
           <p>
             Attention !<br />
             <i>Ne vous laissez pas berner...</i>
-          </p>,
+          </p>
         );
         break;
       case "VotePhase":
@@ -74,7 +81,7 @@ export default function GameFlow({ images, gameId }) {
           <p>
             Vite, c’est l’heure de voter !<br />
             <i>Déplace ton pion Joueur sur le véritable souvenir.</i>
-          </p>,
+          </p>
         );
         break;
       case "RevealPhase":
@@ -83,7 +90,7 @@ export default function GameFlow({ images, gameId }) {
           <p>
             Le véritable souvenir se dévoile !<br />
             <i>Conteur, raconte ton souvenir...</i>
-          </p>,
+          </p>
         );
         break;
       case "ScorePhase":
@@ -98,10 +105,10 @@ export default function GameFlow({ images, gameId }) {
     if (currentPhase == "Conversation") {
       return (
         <>
-          <h1>La conversation est en cours</h1>
-          {currentPhase != "RevealPhase" && (
+         {currentPhase != "RevealPhase" && (
             <Countdown start={chronoStart} onEnd={eventEndClock}></Countdown>
           )}
+          <h1>La conversation est en cours</h1>
         </>
       );
     } else if (
@@ -115,20 +122,6 @@ export default function GameFlow({ images, gameId }) {
           <div className={styles.containerChrono}>
             {currentPhase != "RevealPhase" && (
               <Countdown start={chronoStart} onEnd={eventEndClock}></Countdown>
-            )}
-          </div>
-          <div className={styles.contentSentence}>
-            {contentSentence ? (
-              contentSentence
-            ) : (
-              <p>
-                Nous avons dérobé les souvenirs de{" "}
-                <b style={{ color: colorStyle, textTransform: "capitalize" }}>
-                  {currentBluffer}
-                </b>
-                mais ils sont encore flous...
-                <br /> <i>Chut, n’allez pas lui répéter !</i>
-              </p>
             )}
           </div>
           {currentPhase == "VotePhase" && (
@@ -166,25 +159,64 @@ export default function GameFlow({ images, gameId }) {
       "sendActorAction",
       gameId,
       currentPhase == "RevealImage" ? "EndChrono" : "EndPhase",
-      currentPhase == "VotePhase" ? { ImageTrueVotes: colorListTrue } : {},
+      currentPhase == "VotePhase" ? { ImageTrueVotes: colorListTrue } : {}
     );
   }
 
   return (
-    <section className={styles.containerGame} ref={containerRef}>
-      <button onClick={clickNextPhase}>NextPhase</button>
-      <div className={styles.imgShaders}>
-        {currentPhase != "ScorePhase" && images.length > 0 &&
-          images.map((image, i) => (
-            <ImageShader
-              key={image.id}
-              url={image.url}
-              ref={i == 0 ? imageRef1 : imageRef2}
-              isBlurry={isBlurry}
-            ></ImageShader>
-          ))}
-      </div>
-      {render}
-    </section>
+    <main className={styles.main}>
+      <section className={styles.content} ref={containerRef}>
+        {render}
+        {/* <button onClick={clickNextPhase}>NextPhase</button> */}
+        <div className={styles.imgShaders}>
+          {currentPhase != "ScorePhase" &&
+            images.length > 0 &&
+            images.map((image, i) => (
+              <ImageShader
+                key={image.id}
+                url={image.url}
+                ref={i == 0 ? imageRef1 : imageRef2}
+                isBlurry={isBlurry}
+                width={width}
+                height={width}
+              ></ImageShader>
+            ))}
+        </div>
+      </section>
+      <Footer>
+        <div>
+          {contentSentence ? (
+            contentSentence
+          ) : (
+            <p>
+              Nous avons dérobé les souvenirs de{" "}
+              <b style={{ color: colorStyle, textTransform: "capitalize" }}>
+                {currentBluffer} {" "}
+              </b>
+              mais ils sont encore flous...
+              <br /> <i>Chut, n’allez pas lui répéter !</i>
+            </p>
+          )}
+          {/* <div className={styles.playerColors}>
+            {Object.keys(playersInGameObj).map((player) => (
+              <div
+                key={player}
+                style={{ backgroundColor: players[player].color }}
+                className={styles.playerColor}
+              />
+            ))}
+          </div> */}
+        </div>
+        <div>
+          <Button
+            color={"#373FEF"}
+            type="link"
+            events={{ onClick: clickNextPhase }}
+          >
+            Continuer
+          </Button>
+        </div>
+      </Footer>
+    </main>
   );
 }

@@ -26,7 +26,6 @@ const SocketContext = createContext(value);
 
 // Créez le fournisseur de contexte
 const SocketProvider = ({ children }) => {
-  const [advancementRound,setAdvancementRound] = useState(0);
   const router = useRouter();
   const pathname = usePathname();
   const dispatch = useDispatch();
@@ -83,9 +82,8 @@ const SocketProvider = ({ children }) => {
     }
   }
 
-  function incrementRound(state, gameId){
-      setAdvancementRound((prev => prev + 1));
-
+  function incrementStep(state, gameId){
+      // setAdvancementStep((prev => prev + 1));
   }
 
   function backToRoute(state) {
@@ -183,6 +181,7 @@ const SocketProvider = ({ children }) => {
     // });
 
     value.socket.on("stateChanged", routeManagement);
+    value.socket.on("stateChanged", incrementStep);
     value.socket.on("backToState", backToRoute);
 
     value.socket.on("setCurrentBluffer", setBluffer);
@@ -191,6 +190,7 @@ const SocketProvider = ({ children }) => {
 
     return () => {
       value.socket.off("stateChanged", routeManagement);
+      value.socket.off("stateChanged", incrementStep);
       value.socket.off("backToState", backToRoute);
       value.socket.off("setCurrentBluffer", setBluffer);
       value.socket.off("setScore", setPlayersScore);

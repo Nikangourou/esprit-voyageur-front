@@ -15,7 +15,7 @@ import ImageShader from "../imageShader/ImageShader";
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function Score({ gameId }) {
-  const final = true; // for dev
+  const final = false; // for dev
   const { socket } = useContext(SocketContext);
   const [trueImageUrl, setTrueImageUrl] = useState();
   const [isBlurry, setIsBlurry] = useState(true);
@@ -74,7 +74,7 @@ export default function Score({ gameId }) {
     <div className={styles.main}>
       <div className={styles.content}>
         <div>
-          <ProgressBar value={6} max={7} />
+          {/* <ProgressBar value={6} max={7} /> */}
           {final ? (
             <h1>
               {" "}

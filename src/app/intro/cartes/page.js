@@ -38,12 +38,14 @@ export default function Cartes() {
       {/* <AddPlayer></AddPlayer> */}
       <section className={styles.content}>
         <Countdown start={chronoStart}></Countdown>
-        <Title
-          text={"Chacun pioche \n"}
-          important={"3 "}
-          text2={"cartes "}
-        ></Title>
-        <p>Aidez-vous de celles-ci pour vous remémorer un souvenir...</p>
+        <div className={styles.text}>
+          <Title
+            text={"Chacun pioche \n"}
+            important={"3 "}
+            text2={"cartes "}
+          ></Title>
+          <p>Aidez-vous de celles-ci pour vous remémorer un souvenir...</p>
+        </div>
       </section>
       {/*<div className={styles.cardAnim}>*/}
       {/*  <div className={styles.cards}>*/}
