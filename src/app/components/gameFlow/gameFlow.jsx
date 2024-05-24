@@ -8,7 +8,8 @@ import Score from "../score/score";
 import DraggablePawns from "../draggablePawns/draggablePawns";
 import Footer from "../footer/footer";
 import Button from "../button/button";
-import { setDistanceCircle } from "@/app/store/reducers/gameReducer";
+import { setDistanceCircle } from "../../store/reducers/gameReducer";
+import { setShowFooter } from "../../store/reducers/footerReducer";
 
 export default function GameFlow({ images, gameId }) {
   const { socket } = useContext(SocketContext);
@@ -62,15 +63,17 @@ export default function GameFlow({ images, gameId }) {
     console.log(state);
     switch (state) {
       case "Conversation":
+        dispatch(setShowFooter(false))
         setChronoStart(120);
         setCurrentPhase("Conversation");
         break;
       case "RevealImage":
+        dispatch(setShowFooter(true))
+        dispatch(setDistanceCircle([0.1, 0.1]));
         setChronoStart(20);
         setCurrentPhase("RevealImage");
         break;
       case "QuestionsPhase":
-        dispatch(setDistanceCircle([0.1, 0.1]));
         setCurrentPhase("QuestionsPhase");
         setIsBlurry(false);
         setChronoStart(20);
@@ -112,10 +115,10 @@ export default function GameFlow({ images, gameId }) {
     if (currentPhase == "Conversation") {
       return (
         <>
-          {currentPhase != "RevealPhase" && (
+          {/* {currentPhase != "RevealPhase" && (
             <Countdown start={chronoStart} onEnd={eventEndClock}></Countdown>
           )}
-          <h1>La conversation est en cours</h1>
+          <h1>La conversation est en cours</h1> */}
         </>
       );
     } else if (
