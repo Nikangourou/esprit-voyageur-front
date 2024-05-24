@@ -8,6 +8,7 @@ import Score from "../score/score";
 import DraggablePawns from "../draggablePawns/draggablePawns";
 import Footer from "../footer/footer";
 import Button from "../button/button";
+import { setDistanceCircle } from "@/app/store/reducers/gameReducer";
 
 export default function GameFlow({ images, gameId }) {
   const { socket } = useContext(SocketContext);
@@ -20,6 +21,7 @@ export default function GameFlow({ images, gameId }) {
   const containerRef = useRef();
   const imageRef1 = useRef();
   const imageRef2 = useRef();
+  const dispatch = useDispatch();
 
   if (typeof window === "undefined") {
     return <div></div>;
@@ -68,6 +70,7 @@ export default function GameFlow({ images, gameId }) {
         setCurrentPhase("RevealImage");
         break;
       case "QuestionsPhase":
+        dispatch(setDistanceCircle([0.1, 0.1]));
         setCurrentPhase("QuestionsPhase");
         setIsBlurry(false);
         setChronoStart(20);
@@ -75,7 +78,7 @@ export default function GameFlow({ images, gameId }) {
           <p>
             Attention !<br />
             <i>Ne vous laissez pas berner...</i>
-          </p>
+          </p>,
         );
         break;
       case "VotePhase":
@@ -85,7 +88,7 @@ export default function GameFlow({ images, gameId }) {
           <p>
             Vite, c’est l’heure de voter !<br />
             <i>Déplace ton pion Joueur sur le véritable souvenir.</i>
-          </p>
+          </p>,
         );
         break;
       case "RevealPhase":
@@ -94,7 +97,7 @@ export default function GameFlow({ images, gameId }) {
           <p>
             Le véritable souvenir se dévoile !<br />
             <i>Conteur, raconte ton souvenir...</i>
-          </p>
+          </p>,
         );
         break;
       case "ScorePhase":
@@ -109,7 +112,7 @@ export default function GameFlow({ images, gameId }) {
     if (currentPhase == "Conversation") {
       return (
         <>
-         {currentPhase != "RevealPhase" && (
+          {currentPhase != "RevealPhase" && (
             <Countdown start={chronoStart} onEnd={eventEndClock}></Countdown>
           )}
           <h1>La conversation est en cours</h1>
@@ -163,7 +166,7 @@ export default function GameFlow({ images, gameId }) {
       "sendActorAction",
       gameId,
       currentPhase == "RevealImage" ? "EndChrono" : "EndPhase",
-      currentPhase == "VotePhase" ? { ImageTrueVotes: colorListTrue } : {}
+      currentPhase == "VotePhase" ? { ImageTrueVotes: colorListTrue } : {},
     );
   }
 
@@ -195,7 +198,7 @@ export default function GameFlow({ images, gameId }) {
             <p>
               Nous avons dérobé les souvenirs de{" "}
               <b style={{ color: colorStyle, textTransform: "capitalize" }}>
-                {currentBluffer} {" "}
+                {currentBluffer}{" "}
               </b>
               mais ils sont encore flous...
               <br /> <i>Chut, n’allez pas lui répéter !</i>
