@@ -64,6 +64,7 @@ export default function Images() {
 
   useEffect(() => {
     if (images.length === 2) {
+      const urlParams = new URLSearchParams(window.location.search);
       const tl = gsap
         .timeline()
         .to(".pageContainer", { opacity: 1, duration: 3, ease: "power3.out" })
@@ -78,11 +79,16 @@ export default function Images() {
       setTimeout(() => {
         setIsBlurry(false);
       }, 500);
-      socket.emit("sendActorAction", gameId.current, "ImagesGenerated", {
-        TrueImageId: trueImageId,
-        FalseImageId: falseImageId,
-      });
-      socket.emit("imagesAllGenerated", gameId.current);
+      socket.emit(
+        "sendActorAction",
+        urlParams.get("gameId"),
+        "ImagesGenerated",
+        {
+          TrueImageId: trueImageId,
+          FalseImageId: falseImageId,
+        },
+      );
+      socket.emit("imagesAllGenerated", urlParams.get("gameId"));
       setIsPaused(false);
     }
   }, [images]);
@@ -90,9 +96,11 @@ export default function Images() {
   const onEndCountdown = () => {
     console.log("End countdown");
     if (!disconnect) {
+      const urlParams = new URLSearchParams(window.location.search);
+
       setDisconnect(true);
       setIsPaused(true);
-      socket?.emit("sendActorAction", gameId.current, "EndChrono", {});
+      socket?.emit("sendActorAction", urlParams.get("gameId"), "EndChrono", {});
     }
   };
 
