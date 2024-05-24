@@ -1,0 +1,110 @@
+
+.contentBoard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    .scoreList {
+      font-family: ContrailOne;
+
+      .rank {
+        color: #efebe2;
+        font-size: 32px;
+        -webkit-text-stroke: 1px #000;
+      }
+
+      .score {
+        font-size: 32px;
+
+        .pts {
+          font-family: WorkSans;
+          font-size: 26px;
+        }
+      }
+
+      .podium {
+        display: flex;
+        align-items: end;
+        gap: 40px;
+
+        .column {
+          font-size: 20px;
+          width: 160px;
+          height: 314px;
+          position: relative;
+
+          .name {
+            font-size: 56px;
+            text-transform: uppercase;
+          }
+
+          &.column2 {
+            height: 214px;
+
+            .name {
+              font-size: 40px;
+            }
+          }
+
+          &.column3 {
+            height: 176px;
+
+            .name {
+              font-size: 32px;
+            }
+          }
+
+          .rank {
+            font-size: 56px;
+          }
+
+          .columnMain {
+            position: absolute;
+            background-color: var(--backgroundColor);
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            border: 3px solid #1c1c1e;
+            border-radius: 0.5em;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 15px 0;
+          }
+
+          .sub {
+            background-color: #373fef;
+            width: 100%;
+            height: 100%;
+            position: relative;
+            border-radius: 0.5em;
+            border: 2px solid #1c1c1e;
+          }
+        }
+      }
+
+      .row {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 2px solid #1c1c1e;
+        margin-top: 16px;
+
+        .flex {
+          display: flex;
+          gap: 16px;
+          align-items: flex-end;
+
+          .rank {
+            font-size: 32px;
+          }
+
+          .name {
+            font-size: 24px;
+            text-transform: uppercase;
+          }
+        }
+      }
+    }
+  }

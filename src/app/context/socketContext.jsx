@@ -60,7 +60,7 @@ const SocketProvider = ({ children }) => {
           const tl = gsap
             .timeline()
             .to(".pageContainer", {
-              opacity: 0,
+              opacity: 1,
               duration: 1.5,
               ease: "power2.out",
             })
@@ -80,6 +80,10 @@ const SocketProvider = ({ children }) => {
       default:
         break;
     }
+  }
+
+  function incrementStep(state, gameId){
+      // setAdvancementStep((prev => prev + 1));
   }
 
   function backToRoute(state) {
@@ -177,6 +181,7 @@ const SocketProvider = ({ children }) => {
     // });
 
     value.socket.on("stateChanged", routeManagement);
+    value.socket.on("stateChanged", incrementStep);
     value.socket.on("backToState", backToRoute);
 
     value.socket.on("setCurrentBluffer", setBluffer);
@@ -185,6 +190,7 @@ const SocketProvider = ({ children }) => {
 
     return () => {
       value.socket.off("stateChanged", routeManagement);
+      value.socket.off("stateChanged", incrementStep);
       value.socket.off("backToState", backToRoute);
       value.socket.off("setCurrentBluffer", setBluffer);
       value.socket.off("setScore", setPlayersScore);

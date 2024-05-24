@@ -1,0 +1,20 @@
+.progressBar {
+    width: 350px;
+  .label {
+    font-family: WorkSans;
+    font-size: 20px;
+
+    .manche {
+      font-weight: bold;
+    }
+  }
+
+  .progressBarContainer{
+    border-radius: 0.5em;
+
+  .progressBarValue {
+    height: 8px;
+    border-radius: 0.5em;
+  }
+}
+}

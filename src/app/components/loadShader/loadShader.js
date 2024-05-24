@@ -34,7 +34,7 @@ const LoaderShader = () => {
         ? players[currentBluffer].color
         : "";
     if (colorStyle !== "") {
-      colorRef.current.set(colorStyle);
+      // colorRef.current.set(colorStyle);
     }
   }, [currentBluffer]);
 
