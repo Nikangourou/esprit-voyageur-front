@@ -87,7 +87,7 @@ export default function Score({ gameId }) {
           )}
         </div>
         <div className={styles.scoreBoardContainer}>
-          {final && (
+          {!final && (
             <ImageShader
               url={trueImageUrl}
               isBlurry={isBlurry}
@@ -99,7 +99,7 @@ export default function Score({ gameId }) {
           <ScoreBoard />
         </div>
       </div>
-      <div className={styles.footer}>
+      {/* <div className={styles.footer}>
         <Footer>
           <div className={styles.footerContent}>
             <p>
@@ -123,7 +123,7 @@ export default function Score({ gameId }) {
             Terminer
           </Button>
         </Footer>
-      </div>
+      </div> */}
     </div>
   );
 }
