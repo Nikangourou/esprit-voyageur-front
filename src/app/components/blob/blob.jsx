@@ -19,8 +19,7 @@ export default function Blob({
   seed = 0,
   mask,
   active = false,
-  x = 0,
-  y = 0,
+  offset = 2.5,
 }) {
   const blobPathRef = useRef();
   const tlRef = useRef();
@@ -70,11 +69,23 @@ export default function Blob({
   ]);
 
   useEffect(() => {
-    if ((playersInGame.includes(dataColor) || active) && yoyoAnim.current) {
+    if (playersInGame.includes(dataColor) && yoyoAnim.current) {
       yoyoAnim.current.play();
       yoyoAnim2.current.pause();
     }
   }, [playersInGame]);
+
+  useEffect(() => {
+    if (yoyoAnim2.current && yoyoAnim.current) {
+      if (active) {
+        yoyoAnim.current.play();
+        yoyoAnim2.current.pause();
+      } else {
+        yoyoAnim.current.pause();
+        yoyoAnim2.current.play();
+      }
+    }
+  }, [active]);
 
   function createBlob(options) {
     const points = []; // This array will hold the center points for the blob
@@ -106,9 +117,9 @@ export default function Blob({
       const targetY = options.height / 2 + Math.sin(angle) * options.maxRadius;
 
       const targetX2 =
-        options.width / 2 + Math.cos(angle) * (options.maxRadius - 2.5);
+        options.width / 2 + Math.cos(angle) * (options.maxRadius - offset);
       const targetY2 =
-        options.height / 2 + Math.sin(angle) * (options.maxRadius - 2.5);
+        options.height / 2 + Math.sin(angle) * (options.maxRadius - offset);
 
       // Create a GSAP tween for the point using `to` method chaining it with `yoyo` and `repeat` to make it bounce between minRadius and maxRadius
       yoyoAnim.current.to(
@@ -138,8 +149,8 @@ export default function Blob({
       );
     }
 
-    yoyoAnim.current.play();
-    yoyoAnim2.current.pause();
+    yoyoAnim.current.pause();
+    yoyoAnim2.current.play();
 
     tl.to({}, { duration: 1, repeat: -1 }); // Dummy tween to keep the timeline active
     tl.play(); // Start the animation
@@ -207,8 +218,6 @@ export default function Blob({
       style={{
         transition: "fill 1s ease-out",
       }}
-      x={x}
-      y={y}
       data-color={dataColor != "none" ? dataColor : "none"}
       mask={mask && `url(${mask})`}
       {...events}

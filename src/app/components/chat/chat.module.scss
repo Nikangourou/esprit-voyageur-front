@@ -38,7 +38,7 @@
       transition: all 0.5s cubic-bezier(.33,1.32,.73,.99) 0.25s;
       font-family: var(--font-work-sans);
       font-size: 0.75rem;
-      color: rgba(0, 0, 0, 0.25);
+      color: rgba(0, 0, 0, 1);
       padding: 0.5rem;
         &:focus {
           & ~ button{
@@ -88,9 +88,5 @@
     }
   }
 
-  .containerRecording{
-    padding: 1rem;
-    margin-bottom: 3rem;
-    margin-top:4rem;
-  }
+
 }

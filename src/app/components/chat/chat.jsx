@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef, useContext } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import styles from "./chat.module.scss";
 import Message from "./message/message";
 import RecordingComponent from "../recordingComponent/recordingComponent";
@@ -15,6 +15,7 @@ import { setShaderPosition } from "../../store/reducers/gameReducer";
 import { get } from "http";
 import { useRouter } from "next/navigation";
 import { gsap } from "gsap";
+import ClipBlob from "../clipBlob/clipBlob";
 
 const firstMessage = {
   id: uuidv4(),
@@ -41,6 +42,7 @@ export default function Chat() {
   const isReadyRef = useRef(false);
   const containerMessagesRef = useRef(null);
   const imagesCountRef = useRef(0);
+  const textAreaRef = useRef(null);
 
   const colorStyle =
     currentBluffer && currentBluffer != ""
@@ -336,6 +338,7 @@ export default function Chat() {
           }}
         >
           <textarea
+            ref={textAreaRef}
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -355,13 +358,12 @@ export default function Chat() {
             style={{
               filter: `drop-shadow(1px 2px 0px ${colorStyle})`,
             }}
+            onClick={() => setInput("")}
           >
             <img src="/images/Trash.svg" alt="Send" />
           </button>
         </div>
-        <div className={styles.containerRecording}>
-          <RecordingComponent onEnd={onSpeechEnd} />
-        </div>
+        <RecordingComponent onEnd={onSpeechEnd} textAreaRef={textAreaRef} />
       </div>
 
       {isFinished != "not" && (

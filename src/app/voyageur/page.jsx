@@ -27,8 +27,7 @@ export default function Voyageur() {
 
   const logo = (
     <svg
-      width="440"
-      height="264"
+      style={{ maxWidth: "440px", width: "100%" }}
       viewBox="0 0 440 264"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

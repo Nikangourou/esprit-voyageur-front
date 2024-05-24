@@ -149,7 +149,8 @@ const Button = forwardRef(function Button(
           {...events}
           onClick={(e) => {
             if (events && events.onClick) {
-              gsap
+              buttonTl.current?.kill();
+              buttonTl.current = gsap
                 .timeline()
                 .to(`.${styles.principal}`, {
                   backgroundColor: "#dad6d3",

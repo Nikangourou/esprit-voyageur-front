@@ -15,17 +15,20 @@ export default function ClipBlob({
   maxDuration = 2,
   color = "red",
   active = false,
+  offset = 2.5,
+  seed = 0,
+  x = 0.85,
+  y = 0.95,
 }) {
   const groupRef = useRef();
   const svgRef = useRef();
   const htmlId = useRef(uuidv4());
-  const [isActive, setIsActive] = useState(active);
 
   useEffect(() => {
     const tl = gsap
       .timeline()
       .to(groupRef.current, {
-        scaleX: 0.85,
+        scaleX: x,
         duration: 4,
         ease: "power2.out",
         yoyo: true,
@@ -34,7 +37,7 @@ export default function ClipBlob({
       .to(
         groupRef.current,
         {
-          scaleY: 0.95,
+          scaleY: y,
           duration: 2,
           ease: "sine.inOut",
           yoyo: true,
@@ -70,8 +73,9 @@ export default function ClipBlob({
               minDuration={minDuration}
               maxDuration={maxDuration}
               color={"black"}
-              seed={10}
-              active={isActive}
+              seed={seed}
+              active={active}
+              offset={offset}
             />
           </g>
         </mask>
@@ -85,9 +89,10 @@ export default function ClipBlob({
         minDuration={minDuration}
         maxDuration={maxDuration}
         color={color}
-        seed={10}
+        seed={seed}
         mask={`#${htmlId.current}`}
-        active={isActive}
+        active={active}
+        offset={offset}
       />
     </svg>
   );
