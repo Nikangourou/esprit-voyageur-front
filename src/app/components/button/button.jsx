@@ -174,15 +174,15 @@ const Button = forwardRef(function Button(
                   duration: 1.5,
                   ease: "power3.out",
                   onComplete: () => {
-                    events.onClick(e);
+                    events.onClick(e, buttonTl.current);
+                    buttonTl.current.to(".pageContainer", {
+                      opacity: 1,
+                      delay: 1,
+                      duration: 6,
+                      pointerEvents: "auto",
+                      ease: "power2.out",
+                    });
                   },
-                })
-                .to(".pageContainer", {
-                  opacity: 1,
-                  delay: 1.5,
-                  duration: 3,
-                  pointerEvents: "auto",
-                  ease: "power2.out",
                 });
             }
           }}

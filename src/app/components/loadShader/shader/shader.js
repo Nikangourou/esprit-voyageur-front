@@ -155,7 +155,7 @@ float sdBox( in vec2 p, in vec2 b )
 
 
     vec3 nVec = vec3(n01) * vec3(0.,0.,0.);
-    nVec += vec3(n03) * uColor;
+    nVec += vec3(n03);
 
     float alpha = n01+n03;
     
@@ -164,6 +164,8 @@ float sdBox( in vec2 p, in vec2 b )
     nVec -= ((1.-dist)*12.5 * uProgress);
     alpha -= ((1.-dist)*12.5 * uProgress);
     nVec = step(vec3(0.1),nVec);
+    nVec *= uColor;
+
     alpha = step(0.1,alpha);
 
     

@@ -9,14 +9,15 @@ import { useSelector, useDispatch } from "react-redux";
 import Button from "../../components/button/button";
 import Footer from "../../components/footer/footer";
 import Title from "../../components/title/title";
+import { useRouter } from "next/navigation";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function Joueurs() {
   const { socket } = useContext(SocketContext);
-  const dispatch = useDispatch();
   const players = useSelector((state) => state.players.players);
   const playersInGame = useSelector((state) => state.players.playersInGame);
+  const router = useRouter();
 
   const playersInGameObj = playersInGame.reduce((acc, color) => {
     acc[color] = players[color];
@@ -24,32 +25,7 @@ export default function Joueurs() {
   }, {});
 
   const onRedirectEvent = () => {
-    if (socket) {
-      fetch(`${apiUrl}/game/post/create`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          v2: true,
-        }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Create Game");
-          dispatch(
-            setGameId({
-              gameId: data.game_id,
-            }),
-          );
-          localStorage.setItem("gameId", data.game_id);
-
-          socket.emit("connexionPrimary", data.game_id, {
-            Players: players,
-            PlayersInArray: playersInGame,
-          });
-        });
-    }
+    router.push(`/intro/cartes`);
   };
 
   return (

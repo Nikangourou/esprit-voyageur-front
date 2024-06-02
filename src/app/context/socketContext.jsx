@@ -40,13 +40,7 @@ const SocketProvider = ({ children }) => {
     console.log(gameId);
     switch (state) {
       case "SetBluffer":
-        console.log(path.current);
-        if (path.current == "/intro/joueurs") {
-          router.push(`/intro/cartes?gameId=${gameId}`);
-        } else {
-          router.push(`/game/qrcode?gameId=${gameId}`);
-        }
-        dispatch(setDistanceCircle([0.1, 0.1]));
+        router.push(`/game/qrcode?gameId=${gameId}`);
         break;
       case "Conversation":
         if (path.current == "/voyageur") {
@@ -82,8 +76,8 @@ const SocketProvider = ({ children }) => {
     }
   }
 
-  function incrementStep(state, gameId){
-      // setAdvancementStep((prev => prev + 1));
+  function incrementStep(state, gameId) {
+    // setAdvancementStep((prev => prev + 1));
   }
 
   function backToRoute(state) {

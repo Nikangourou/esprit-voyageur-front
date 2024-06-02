@@ -31,10 +31,16 @@ const LoaderShader = () => {
     console.log(currentBluffer);
     const colorStyle =
       currentBluffer && currentBluffer != ""
-        ? players[currentBluffer].color
+        ? new THREE.Color(players[currentBluffer].color)
         : "";
     if (colorStyle !== "") {
-      colorRef.current.set(colorStyle);
+      gsap.to(colorRef.current, {
+        r: colorStyle.r,
+        g: colorStyle.g,
+        b: colorStyle.b,
+        duration: 1,
+        ease: "power2.out",
+      });
     }
   }, [currentBluffer]);
 
@@ -146,9 +152,10 @@ const LoaderShader = () => {
 
   useEffect(() => {
     if (materialRef.current && materialRef.current.uniforms.uProgress) {
+      console.log(materialRef.current.uniforms.uProgress, shaderPosition);
       gsap.to(materialRef.current.uniforms.uProgress, {
         value: shaderPosition,
-        duration: 6,
+        duration: 3,
         ease: CustomEase.create(
           "custom",
           "M0,0 C0.238,0.185 0.242,0.784 0.445,0.921 0.517,0.986 0.682,0.989 1,1 ",
@@ -164,7 +171,7 @@ const LoaderShader = () => {
       gsap.to(materialRef.current.uniforms.uDistanceCircle.value, {
         x: distanceCircle[0],
         y: distanceCircle[1],
-        duration: 2,
+        duration: 3,
         ease: "power2.inOut",
       });
     }

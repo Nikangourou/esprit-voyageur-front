@@ -2,12 +2,18 @@
 
 import styles from "./page.module.scss";
 import Countdown from "../../components/chrono/countdown";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Button from "../../components/button/button";
 import Footer from "../../components/footer/footer";
 import { useRouter } from "next/navigation";
 import Title from "../../components/title/title";
+import { setGameId } from "../../store/reducers/playersReducer";
+import { SocketContext } from "../../context/socketContext";
+import {
+  setDistanceCircle,
+  setShaderPosition,
+} from "../../store/reducers/gameReducer";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -15,22 +21,66 @@ export default function Cartes() {
   const players = useSelector((state) => state.players.players);
   const playersInGame = useSelector((state) => state.players.playersInGame);
   const gameIdRef = useRef();
-  const router = useRouter();
+  const { socket } = useContext(SocketContext);
+  const dispatch = useDispatch();
 
   const playersInGameObj = playersInGame.reduce((acc, color) => {
     acc[color] = players[color];
     return acc;
   }, {});
 
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    gameIdRef.current = urlParams.get("gameId");
-  }, []);
-
   const [chronoStart, setChronoStart] = useState(120);
 
-  function clickEvt(e) {
-    router.push(`/game/qrcode?gameId=${localStorage.getItem("gameId")}`);
+  function clickEvt(e, tl) {
+    if (socket) {
+      dispatch(setDistanceCircle([0.65, 0.65]));
+      tl.call(
+        () => {
+          dispatch(setShaderPosition(0));
+        },
+        null,
+        ">1",
+      )
+        .call(
+          () => {
+            fetch(`${apiUrl}/game/post/create`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                v2: true,
+              }),
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                console.log("Create Game");
+                dispatch(
+                  setGameId({
+                    gameId: data.game_id,
+                  }),
+                );
+                gameIdRef.current = data.game_id;
+                localStorage.setItem("gameId", data.game_id);
+
+                socket.emit("connexionPrimary", data.game_id, {
+                  Players: players,
+                  PlayersInArray: playersInGame,
+                });
+              });
+          },
+          null,
+          ">1",
+        )
+        .call(
+          () => {
+            dispatch(setShaderPosition(1));
+            dispatch(setDistanceCircle([0.1, 0.1]));
+          },
+          null,
+          ">3",
+        );
+    }
   }
 
   return (
