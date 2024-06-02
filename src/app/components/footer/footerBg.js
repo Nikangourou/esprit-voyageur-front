@@ -15,9 +15,9 @@ export default function FooterSvg() {
   useEffect(() => {
     gsap.to(pathRef.current, {
       attr: {
-        d: "M802 0.5C445.5 0.49818 340 118 4 118V212.928L1370.5 212.927V101.5C1138.5 101.5 994.5 0.500983 802 0.5Z",
+        d: "M798 41.5C441.5 41.4982 336 0 0 0V179.928L1366.5 179.927V8C1134.5 8 990.5 41.501 798 41.5Z",
       },
-      duration: 10,
+      duration: 5,
       ease: "sine.inOut",
       yoyo: true, // Permet de revenir à l'état initial après
       repeat: -1, // Répète l'animation indéfiniment
@@ -29,10 +29,14 @@ export default function FooterSvg() {
   }, [pathname]);
 
   return (
-    <div className={`${styles.bg} ${!showFooter ? styles.hidden : ""}`}>
+    <div
+      className={`${styles.bg} ${!showFooter ? styles.hidden : ""} ${
+        path == "/voyageur/chat" ? styles.voyageur : ""
+      }`}
+    >
       <svg
-        width="100%"
-        height={path == "/voyageur/chat" ? "60svh" : 180}
+        width={"100%"}
+        height={180}
         viewBox="0 0 1366 180"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -40,7 +44,7 @@ export default function FooterSvg() {
       >
         <path
           ref={pathRef}
-          d="M799 41.5C442.5 41.4982 337 0 1 0V179.928L1367.5 179.927V8C1135.5 8 991.5 41.501 799 41.5Z"
+          d="M558.5 0C202 0.00207045 336 40.5 0 40.5V171.931L1366.5 171.931V40.5C1134.5 40.5 777.5 -0.00127182 558.5 0Z"
           fill="#E8E3D8"
         />
       </svg>

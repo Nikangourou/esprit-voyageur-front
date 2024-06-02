@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, useRef, useContext } from "react";
 import styles from "./chat.module.scss";
-import Message from "./message/message";
+import Messages from "./messages/messages";
 import RecordingComponent from "../recordingComponent/recordingComponent";
 import * as utils from "../../utils/micro";
 import { v4 as uuidv4 } from "uuid";
@@ -16,13 +16,16 @@ import { get } from "http";
 import { useRouter } from "next/navigation";
 import { gsap } from "gsap";
 import ClipBlob from "../clipBlob/clipBlob";
+import FooterBg from "../footer/footerBg";
 
-const firstMessage = {
-  id: uuidv4(),
-  content:
-    " Pour commencer, peux-tu partager avec moi un souvenir qui te tient particulièrement à cœur ? Mentionne également à quel moment cela s'est passé et quel âge tu avais à ce moment-là.",
-  send: false,
-};
+const firstMessage = [
+  {
+    id: uuidv4(),
+    content:
+      " Pour commencer, peux-tu partager avec moi un souvenir qui te tient particulièrement à cœur ? Mentionne également à quel moment cela s'est passé et quel âge tu avais à ce moment-là.",
+    send: false,
+  },
+];
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function Chat() {
@@ -32,7 +35,8 @@ export default function Chat() {
   const router = useRouter();
   const [input, setInput] = useState("");
   const [base64, setBase64] = useState(null);
-  const [message, setMessage] = useState(firstMessage);
+  const [messages, setMessages] = useState(firstMessage);
+  const [nbSendMessages, setNbSendMessages] = useState(0);
 
   const [isFinished, setIsFinished] = useState("not");
   const dispatch = useDispatch();
@@ -100,13 +104,6 @@ export default function Chat() {
     }
   }, [base64]);
 
-  useEffect(() => {
-    if (containerMessagesRef.current) {
-      containerMessagesRef.current.scrollTop =
-        containerMessagesRef.current.scrollHeight;
-    }
-  }, [message]);
-
   const base64Reformat = (base64) => {
     const to_remove = "data:audio/webm;codecs=opus;base64,";
     return utils.arrayBufferToBase64(base64).replace(to_remove, "");
@@ -121,17 +118,8 @@ export default function Chat() {
     };
   };
 
-  const addMessage = (messageAdded) => {
-    const tl = gsap
-      .timeline()
-      .to(containerMessagesRef.current, {
-        opacity: 0,
-        duration: 1,
-        onComplete: () => {
-          setMessage(messageAdded);
-        },
-      })
-      .to(containerMessagesRef.current, { opacity: 1, duration: 1, delay: 1 });
+  const addMessages = (messageAdded) => {
+    setMessages((prev) => [...prev, messageAdded]);
   };
 
   const subMessage = async () => {
@@ -171,9 +159,17 @@ export default function Chat() {
         console.log("Send text transcription");
         console.log(data);
 
-        pending(apiUrl, `/run/get/${data.id}`, threadKey.current, (data) => {
-          getAnswer();
-        });
+        pending(
+          apiUrl,
+          `/run/get/${data.id}`,
+          threadKey.current,
+          (data) => {
+            getAnswer();
+          },
+          () => {
+            setNbSendMessages((prev) => prev + 1);
+          },
+        );
       });
   };
 
@@ -247,7 +243,7 @@ export default function Chat() {
 
             // Utilisation d'une expression régulière pour rechercher la partie du texte après "Remember:"
 
-            addMessage(msg);
+            addMessages(msg);
             imagesCountRef.current += 1;
             if (imagesCountRef.current == 1) {
               generatePrompt("alt")
@@ -267,7 +263,7 @@ export default function Chat() {
                 });
             }
           } else {
-            addMessage(msg);
+            addMessages(msg);
           }
         }
       })
@@ -327,8 +323,12 @@ export default function Chat() {
 
   return (
     <div className={styles.chat}>
-      <div className={styles.containerMessages} ref={containerMessagesRef}>
-        <Message key={message.id} message={message} gameId={gameId.current} />
+      <div className={styles.containerMessages}>
+        <Messages
+          nbSendMessages={nbSendMessages}
+          messages={messages}
+        ></Messages>
+        {/*<Message key={message.id} message={message} gameId={gameId.current} />*/}
       </div>
       <div className={styles.inputs}>
         <div
@@ -365,27 +365,7 @@ export default function Chat() {
         </div>
         <RecordingComponent onEnd={onSpeechEnd} textAreaRef={textAreaRef} />
       </div>
-
-      {isFinished != "not" && (
-        <div>
-          <p>
-            {isFinished == "processing"
-              ? "Génération des images"
-              : "Veuillez fermé la page et retournez à la table"}
-          </p>
-          <button
-            onClick={() => {
-              socket?.emit(
-                "sendActorAction",
-                gameId.current,
-                "ImagesGenerated",
-              );
-            }}
-          >
-            END CHRONO SOCKET
-          </button>
-        </div>
-      )}
+      <FooterBg />
     </div>
   );
 }

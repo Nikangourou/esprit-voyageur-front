@@ -3,7 +3,14 @@ import {
   setTrueImageId,
 } from "../store/reducers/playersReducer";
 
-export const pending = (baseUrl, endpoint, threadKey, onCompletion) => {
+export const pending = (
+  baseUrl,
+  endpoint,
+  threadKey,
+  onCompletion,
+  onStart,
+) => {
+  if (onStart) onStart();
   const interval = setInterval(() => {
     fetch(`${baseUrl}${endpoint}/${threadKey}`, {
       method: "GET",
@@ -22,7 +29,7 @@ export const pending = (baseUrl, endpoint, threadKey, onCompletion) => {
           // Gestion des erreurs si nécessaire
           console.error(
             "There was an error processing your request:",
-            data.message
+            data.message,
           );
           clearInterval(interval);
         }

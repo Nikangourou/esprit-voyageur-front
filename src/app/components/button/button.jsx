@@ -165,21 +165,21 @@ const Button = forwardRef(function Button(
                   y: -8,
                   duration: 0.25,
                   ease: "power2.out",
-                })
-                .call(() => {
-                  soundManager.playSingleSound("cta");
+                  onComplete: () => {
+                    soundManager.playSingleSound("cta");
+                  },
                 })
                 .to(".pageContainer", {
                   opacity: 0,
                   duration: 1.5,
                   ease: "power3.out",
-                })
-                .call(() => {
-                  events.onClick(e);
+                  onComplete: () => {
+                    events.onClick(e);
+                  },
                 })
                 .to(".pageContainer", {
                   opacity: 1,
-                  delay: 1,
+                  delay: 1.5,
                   duration: 3,
                   pointerEvents: "auto",
                   ease: "power2.out",

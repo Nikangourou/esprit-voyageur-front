@@ -13,6 +13,7 @@ import {
 } from "./store/reducers/gameReducer";
 import { SocketContext } from "./context/socketContext";
 import { useRouter } from "next/navigation";
+import Message from "./components/chat/message/message";
 
 export default function Home() {
   const tlRef = useRef();
