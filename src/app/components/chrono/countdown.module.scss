@@ -5,29 +5,19 @@
     position: relative;
     font-size:4rem;
     display: inline-block;
-    &:nth-child(1){
-      z-index: 90;
-    }
-    &:nth-child(2){
-      z-index: 80;
-    }
-    &:nth-child(3){
-      z-index: 70;
-    }
-
-    &:nth-child(4){
-      z-index: 60;
-    }
-
-    &:nth-child(5){
-      z-index: 50;
+    &.dot{
+      -webkit-text-stroke: 1px black;
+      text-stroke: 1px black;
+      color: var(--backgroundColor);
     }
     span{
       position: absolute;
+      -webkit-text-stroke: 0px black;
+      text-stroke: 0px black;
       z-index: -1;
       color: var(--backgroundColor);
-      top: 0;
-      left: 0.05em;
+      top: 0.035em;
+      left: 0.035em;
     }
   }
 }

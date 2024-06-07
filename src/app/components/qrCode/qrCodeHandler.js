@@ -71,14 +71,13 @@ export default function Code() {
       </section>
       <Footer>
         <div>
-          <p>
-            {" "}
-            <span
+          <p style={{ marginBottom: ".25rem" }}>
+            <b
               className={styles.currentBluffer}
-              style={{ color: colorStyle }}
+              style={{ color: colorStyle, textTransform: "capitalize" }}
             >
               {currentBluffer}
-            </span>{" "}
+            </b>{" "}
             doit s'isoler
           </p>
           <div className={styles.playerColors}>

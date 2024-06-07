@@ -38,7 +38,7 @@ const LoaderShader = () => {
         r: colorStyle.r,
         g: colorStyle.g,
         b: colorStyle.b,
-        duration: 1,
+        duration: 3,
         ease: "power2.out",
       });
     }
@@ -137,7 +137,7 @@ const LoaderShader = () => {
         const currentTime = Date.now();
         const deltaTime = currentTime - startTimeRef.current;
         startTimeRef.current = currentTime;
-        materialRef.current.uniforms.uTime.value += deltaTime * 0.0005; // Mettre à jour uTime avec le temps écoulé en secondes
+        materialRef.current.uniforms.uTime.value += deltaTime * 0.00015; // Mettre à jour uTime avec le temps écoulé en secondes
         rendererRef.current.render(sceneRef.current, cameraRef.current); // Rendu de la scène
         requestAnimationId = requestAnimationFrame(update); // Appel récursif de la fonction update
       }
@@ -155,11 +155,8 @@ const LoaderShader = () => {
       console.log(materialRef.current.uniforms.uProgress, shaderPosition);
       gsap.to(materialRef.current.uniforms.uProgress, {
         value: shaderPosition,
-        duration: 3,
-        ease: CustomEase.create(
-          "custom",
-          "M0,0 C0.238,0.185 0.242,0.784 0.445,0.921 0.517,0.986 0.682,0.989 1,1 ",
-        ),
+        duration: 4,
+        ease: "power1.inOut",
         // ease: "power1.out",
       });
     }
@@ -171,8 +168,8 @@ const LoaderShader = () => {
       gsap.to(materialRef.current.uniforms.uDistanceCircle.value, {
         x: distanceCircle[0],
         y: distanceCircle[1],
-        duration: 3,
-        ease: "power2.inOut",
+        duration: 4,
+        ease: "power1.inOut",
       });
     }
   }, [distanceCircle]);
@@ -185,7 +182,7 @@ const LoaderShader = () => {
         ease: "power2.inOut",
       });
     }
-  }, [distanceCircle]);
+  }, [offset]);
 
   return (
     <canvas

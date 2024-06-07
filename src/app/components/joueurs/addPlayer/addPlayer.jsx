@@ -162,24 +162,22 @@ export default function AddPlayer() {
       ref={containerRef}
       onTouchMove={onTouchMove}
     >
-      <div className={styles.playerChoice}>
-        {Object.entries(players).map(([colorName, value], index) => {
-          return (
-            <div
-              className={styles.blob}
-              key={colorName}
-              // style={{ top: blob.top, left: blob.left }}
-            >
-              <Button
-                type={"blob"}
-                color={value.color}
-                dataColor={colorName}
-                events={eventsFunctions}
-              ></Button>
-            </div>
-          );
-        })}
-      </div>
+      {Object.entries(players).map(([colorName, value], index) => {
+        return (
+          <div
+            className={styles.blob}
+            key={colorName}
+            // style={{ top: blob.top, left: blob.left }}
+          >
+            <Button
+              type={"blob"}
+              color={value.color}
+              dataColor={colorName}
+              events={eventsFunctions}
+            ></Button>
+          </div>
+        );
+      })}
     </section>
   );
 }

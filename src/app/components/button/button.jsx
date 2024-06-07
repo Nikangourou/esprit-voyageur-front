@@ -159,7 +159,6 @@ const Button = forwardRef(function Button(
                   duration: 0.15,
                   ease: "power2.out",
                 })
-
                 .to(`.${styles.principal}`, {
                   backgroundColor: "#EFEBE2",
                   y: -8,
@@ -169,21 +168,31 @@ const Button = forwardRef(function Button(
                     soundManager.playSingleSound("cta");
                   },
                 })
-                .to(".pageContainer", {
-                  opacity: 0,
-                  duration: 1.5,
-                  ease: "power3.out",
-                  onComplete: () => {
-                    events.onClick(e, buttonTl.current);
-                    buttonTl.current.to(".pageContainer", {
-                      opacity: 1,
-                      delay: 1,
-                      duration: 6,
-                      pointerEvents: "auto",
-                      ease: "power2.out",
-                    });
+                .to(
+                  ".pageContainer",
+                  {
+                    opacity: 0,
+                    duration: 1,
+                    ease: "power3.out",
+                    onComplete: () => {
+                      events.onClick(e, buttonTl.current);
+                      buttonTl.current.fromTo(
+                        ".pageContainer",
+                        {
+                          opacity: 0,
+                        },
+                        {
+                          opacity: 1,
+                          delay: 0.5,
+                          duration: 1,
+                          pointerEvents: "auto",
+                          ease: "power1.out",
+                        },
+                      );
+                    },
                   },
-                });
+                  // "<",
+                );
             }
           }}
         >

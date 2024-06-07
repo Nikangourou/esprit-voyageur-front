@@ -41,6 +41,7 @@ export default function Cartes() {
         null,
         ">1",
       )
+        .to(".footerBg", { opacity: 0, duration: 1, ease: "power2.out" }, "<")
         .call(
           () => {
             fetch(`${apiUrl}/game/post/create`, {
@@ -70,7 +71,7 @@ export default function Cartes() {
               });
           },
           null,
-          ">1",
+          ">2",
         )
         .call(
           () => {
@@ -79,7 +80,8 @@ export default function Cartes() {
           },
           null,
           ">3",
-        );
+        )
+        .to(".footerBg", { opacity: 1, duration: 1, ease: "power2.out" }, "<");
     }
   }
 
@@ -87,7 +89,9 @@ export default function Cartes() {
     <main className={styles.main}>
       {/* <AddPlayer></AddPlayer> */}
       <section className={styles.content}>
-        <Countdown start={chronoStart}></Countdown>
+        <div className={styles.countdown}>
+          <Countdown start={chronoStart}></Countdown>
+        </div>
         <div className={styles.text}>
           <Title
             text={"Chacun pioche \n"}

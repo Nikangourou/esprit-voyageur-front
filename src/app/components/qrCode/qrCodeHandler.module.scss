@@ -26,3 +26,21 @@
     }
   }
 }
+
+.playerColor {
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+  animation: .5s cubic-bezier(.43,1.64,.74,1.01) popIn;
+}
+@keyframes popIn {
+  0%{
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  100%{
+    opacity: 1;
+    transform: scale(1);
+  }
+
+}

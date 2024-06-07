@@ -24,7 +24,7 @@ export default function Home() {
 
   useEffect(() => {
     if (!tlRef.current && buttonRef.current) {
-      console.log(buttonRef.current);
+      console.log("rerender");
       tlRef.current = gsap
         .timeline()
         .call(
@@ -36,15 +36,15 @@ export default function Home() {
         )
         .to(".pageContainer", {
           opacity: 1,
-          duration: 3,
-          delay: 0.25,
-          ease: "power2.out",
+          duration: 2,
+          delay: 2.25,
+          ease: "power1.out",
         })
         .fromTo(
           buttonRef.current,
           { scale: 0.9, opacity: 0 },
           { scale: 1, opacity: 1, duration: 0.35, ease: "back.out(2)" },
-          ">-2.5",
+          ">-1.25",
         )
         .fromTo(
           buttonRef.current.children[0],

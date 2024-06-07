@@ -1,18 +1,21 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { forwardRef, useEffect, useRef } from "react";
 import styles from "./footer.module.scss";
 import { gsap } from "gsap";
 import { useDispatch } from "react-redux";
 import { setShowFooter } from "../../store/reducers/footerReducer";
 
-export default function Footer({ children }) {
+const Footer = forwardRef(function ({ children }, ref) {
   const dispatch = useDispatch();
-  const footerRef = useRef();
 
   useEffect(() => {
     dispatch(setShowFooter(true));
-    gsap.to(footerRef.current, { opacity: 1, duration: 2, ease: "power3.out" });
+    gsap.to(`.${styles.footer}`, {
+      opacity: 1,
+      duration: 2,
+      ease: "power3.out",
+    });
 
     return () => {
       dispatch(setShowFooter(false));
@@ -20,8 +23,10 @@ export default function Footer({ children }) {
   }, []);
 
   return (
-    <div className={styles.footer} ref={footerRef}>
+    <div className={styles.footer} ref={ref}>
       <div className={styles.content}>{children}</div>
     </div>
   );
-}
+});
+
+export default Footer;

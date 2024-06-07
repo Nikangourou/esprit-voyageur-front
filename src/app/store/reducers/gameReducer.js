@@ -3,12 +3,12 @@ import { createSlice } from "@reduxjs/toolkit";
 export const gameSlice = createSlice({
   name: "game",
   initialState: {
-    shaderPosition: 1,
+    shaderPosition: 0,
     distanceCircle: [0.65, 0.65],
     offset: 0,
-    footerLink : "",
-    setAdvancementStep : 0,
-    setAdvancementRouand : 0,
+    footerLink: "",
+    setAdvancementStep: 0,
+    setAdvancementRouand: 0,
   },
   reducers: {
     setShaderPosition: (state, action) => {

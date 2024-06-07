@@ -47,26 +47,14 @@ const Chrono = React.memo(({ start, onEnd, paused = false }) => {
 
   return (
     <div className={styles.countdown}>
-      <p>
-        {formatTimeLeft()[0]}
-        <span>{formatTimeLeft()[0]}</span>
-      </p>
-      <p>
-        {formatTimeLeft()[1]}
-        <span>{formatTimeLeft()[1]}</span>
-      </p>
-      <p style={{ color: colorStyle }}>
+      <p>{formatTimeLeft()[0]}</p>
+      <p>{formatTimeLeft()[1]}</p>
+      <p className={styles.dot}>
         {formatTimeLeft()[2]}
-        <span>{formatTimeLeft()[2]}</span>
+        <span style={{ color: colorStyle }}>{formatTimeLeft()[2]}</span>
       </p>
-      <p>
-        {formatTimeLeft()[3]}
-        <span>{formatTimeLeft()[3]}</span>
-      </p>
-      <p>
-        {formatTimeLeft()[4]}
-        <span>{formatTimeLeft()[4]}</span>
-      </p>
+      <p>{formatTimeLeft()[3]}</p>
+      <p>{formatTimeLeft()[4]}</p>
     </div>
   );
 });
