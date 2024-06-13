@@ -6,6 +6,7 @@ import { gsap, Sine } from "gsap";
 import Button from "./components/button/button";
 import Link from "next/link";
 import FullScreen from "./components/fullScreen/fullScreen";
+import Card from "./components/card/card";
 import { useDispatch } from "react-redux";
 import {
   setDistanceCircle,
@@ -13,7 +14,6 @@ import {
 } from "./store/reducers/gameReducer";
 import { SocketContext } from "./context/socketContext";
 import { useRouter } from "next/navigation";
-import Message from "./components/chat/message/message";
 
 export default function Home() {
   const tlRef = useRef();
@@ -44,7 +44,7 @@ export default function Home() {
           buttonRef.current,
           { scale: 0.9, opacity: 0 },
           { scale: 1, opacity: 1, duration: 0.35, ease: "back.out(2)" },
-          ">-1.25",
+          ">-1.5",
         )
         .fromTo(
           buttonRef.current.children[0],
@@ -81,6 +81,7 @@ export default function Home() {
               Jouer
             </Button>
           </div>
+          <Card></Card>
         </div>
       </main>
     </>

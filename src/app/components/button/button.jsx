@@ -41,11 +41,11 @@ const Button = forwardRef(function Button(
 
       let delay = 1;
       if (Math.random() < 0.33) {
-        delay = 1;
+        delay = 1.5;
       } else if (Math.random() < 0.66) {
-        delay = 1.75;
-      } else {
         delay = 2.25;
+      } else {
+        delay = 3;
       }
       buttonTl.current = gsap.timeline().fromTo(
         buttonRef.current,
@@ -53,7 +53,7 @@ const Button = forwardRef(function Button(
         {
           scale: 1,
           opacity: 1,
-          duration: 0.5,
+          duration: 0.75,
           ease: "back.out(1.4)",
           delay: delay,
         },
@@ -183,7 +183,7 @@ const Button = forwardRef(function Button(
                         },
                         {
                           opacity: 1,
-                          delay: 0.5,
+                          delay: 1,
                           duration: 1,
                           pointerEvents: "auto",
                           ease: "power1.out",
