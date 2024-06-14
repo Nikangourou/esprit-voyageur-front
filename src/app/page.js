@@ -81,7 +81,6 @@ export default function Home() {
               Jouer
             </Button>
           </div>
-          <Card></Card>
         </div>
       </main>
     </>

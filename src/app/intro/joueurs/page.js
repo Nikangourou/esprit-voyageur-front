@@ -4,12 +4,13 @@ import styles from "./page.module.scss";
 import AddPlayer from "../../components/joueurs/addPlayer/addPlayer";
 import { SocketContext } from "../../context/socketContext";
 import { setGameId } from "../../store/reducers/playersReducer";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Button from "../../components/button/button";
 import Footer from "../../components/footer/footer";
 import Title from "../../components/title/title";
 import { useRouter } from "next/navigation";
+import { gsap } from "gsap";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -27,6 +28,15 @@ export default function Joueurs() {
   const onRedirectEvent = () => {
     router.push(`/intro/cartes`);
   };
+
+  useEffect(() => {
+    console.log("a");
+    gsap.fromTo(
+      `.${styles.nbPlayers}`,
+      { scale: 0.5 },
+      { scale: 1, duration: 0.5, ease: "back.out(1.2)" },
+    );
+  }, [playersInGame]);
 
   return (
     <main className={styles.main}>

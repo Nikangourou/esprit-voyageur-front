@@ -6,7 +6,6 @@ import { useState, useRef, useEffect, useContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Button from "../../components/button/button";
 import Footer from "../../components/footer/footer";
-import { useRouter } from "next/navigation";
 import Title from "../../components/title/title";
 import { setGameId } from "../../store/reducers/playersReducer";
 import { SocketContext } from "../../context/socketContext";
@@ -14,6 +13,8 @@ import {
   setDistanceCircle,
   setShaderPosition,
 } from "../../store/reducers/gameReducer";
+import Card from "../../components/card/card";
+import { gsap } from "gsap";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -21,8 +22,18 @@ export default function Cartes() {
   const players = useSelector((state) => state.players.players);
   const playersInGame = useSelector((state) => state.players.playersInGame);
   const gameIdRef = useRef();
+  const card1Ref = useRef();
+  const card2Ref = useRef();
+  const card3Ref = useRef();
   const { socket } = useContext(SocketContext);
   const dispatch = useDispatch();
+  const [isMobile, setIsMobile] = useState(window.innerHeight <= 768);
+
+  const cards = [
+    "/images/card_1.svg",
+    "/images/card_2.svg",
+    "/images/card_3.svg",
+  ];
 
   const playersInGameObj = playersInGame.reduce((acc, color) => {
     acc[color] = players[color];
@@ -85,10 +96,132 @@ export default function Cartes() {
     }
   }
 
+  useEffect(() => {
+    anim1();
+    anim2();
+    anim3();
+  }, []);
+
+  function anim1() {
+    const tl = gsap
+      .timeline()
+      .fromTo(
+        card1Ref.current,
+        { scale: 2, boxShadow: "2px 6px 10px rgba(44,44,44,0.15)" },
+        {
+          scale: isMobile ? 0.85 : 1,
+          duration: 0.5,
+          delay: 1.5,
+          boxShadow: "2px 6px 10px rgba(44,44,44,.25)",
+          ease: "power2.out",
+        },
+      )
+      .fromTo(
+        card1Ref.current,
+        { top: "150%", left: "50%" },
+        {
+          top: "10%",
+          left: "15%",
+          duration: 1.5,
+          ease: "power2.out",
+        },
+        "<",
+      )
+      .fromTo(
+        card1Ref.current,
+        { rotationZ: -20 },
+        {
+          rotationZ: 70,
+          duration: 2,
+          ease: "power4.out",
+        },
+        "<",
+      );
+  }
+
+  function anim2() {
+    const tl = gsap
+      .timeline()
+      .fromTo(
+        card2Ref.current,
+        { scale: 2, boxShadow: "2px 6px 10px rgba(44,44,44,0.15)" },
+        {
+          scale: isMobile ? 0.85 : 1,
+          duration: 0.5,
+          delay: 2.25,
+          boxShadow: "2px 6px 10px rgba(44,44,44,.25)",
+          ease: "power2.out",
+        },
+      )
+      .fromTo(
+        card2Ref.current,
+        { top: "170%", left: "70%" },
+        {
+          top: "40%",
+          left: isMobile ? "95%" : "90%",
+          duration: 1.5,
+          ease: "power2.out",
+        },
+        "<",
+      )
+      .fromTo(
+        card2Ref.current,
+        { rotationZ: 70 },
+        {
+          rotationZ: -15,
+          duration: 2,
+          ease: "power4.out",
+        },
+        "<",
+      );
+  }
+
+  function anim3() {
+    const tl = gsap
+      .timeline()
+      .fromTo(
+        card3Ref.current,
+        { scale: 2, boxShadow: "2px 6px 10px rgba(44,44,44,0.15)" },
+        {
+          scale: isMobile ? 0.85 : 1,
+          duration: 0.5,
+          delay: 2.75,
+          boxShadow: "2px 6px 10px rgba(44,44,44,.25)",
+          ease: "power2.out",
+        },
+      )
+      .fromTo(
+        card3Ref.current,
+        { top: "170%", left: "50%" },
+        {
+          top: "55%",
+          left: isMobile ? "0%" : "5%",
+          duration: 1.5,
+          ease: "power2.out",
+        },
+        "<",
+      )
+      .fromTo(
+        card3Ref.current,
+        { rotationZ: 40 },
+        {
+          rotationZ: -15,
+          duration: 2,
+          ease: "power4.out",
+        },
+        "<",
+      );
+  }
+
   return (
     <main className={styles.main}>
       {/* <AddPlayer></AddPlayer> */}
       <section className={styles.content}>
+        <div className={styles.cardAnim}>
+          <Card ref={card1Ref} srcFront={"/images/card_1.svg"}></Card>
+          <Card ref={card2Ref} srcFront={"/images/card_2.svg"}></Card>
+          <Card ref={card3Ref} srcFront={"/images/card_3.svg"}></Card>
+        </div>
         <div className={styles.countdown}>
           <Countdown start={chronoStart}></Countdown>
         </div>
@@ -101,14 +234,7 @@ export default function Cartes() {
           <p>Aidez-vous de celles-ci pour vous remémorer un souvenir...</p>
         </div>
       </section>
-      {/*<div className={styles.cardAnim}>*/}
-      {/*  <div className={styles.cards}>*/}
-      {/*    <img src="/images/card.svg"></img>*/}
-      {/*    <img src="/images/card.svg"></img>*/}
-      {/*    <img src="/images/card.svg"></img>*/}
-      {/*  </div>*/}
-      {/*  <img src="/images/hand.svg" className={styles.hand}></img>*/}
-      {/*</div>*/}
+
       <Footer>
         <div>
           <p>

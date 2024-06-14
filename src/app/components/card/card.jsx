@@ -1,10 +1,12 @@
 import styles from "./card.module.scss";
-export default function Card() {
+import React, { forwardRef } from "react";
+
+const Card = forwardRef(function Card({ srcFront }, ref) {
   return (
-    <div className={styles.card}>
+    <div className={styles.card} ref={ref}>
       <div
         className={styles.cardFront}
-        style={{ backgroundImage: 'url("/images/card_1.svg")' }}
+        style={{ backgroundImage: srcFront ? `url("${srcFront}")` : "" }}
       ></div>
       <div
         className={styles.cardBack}
@@ -12,4 +14,6 @@ export default function Card() {
       ></div>
     </div>
   );
-}
+});
+
+export default Card;
