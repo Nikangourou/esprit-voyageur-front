@@ -4,7 +4,7 @@ import styles from "./page.module.scss";
 import AddPlayer from "../../components/joueurs/addPlayer/addPlayer";
 import { SocketContext } from "../../context/socketContext";
 import { setGameId } from "../../store/reducers/playersReducer";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Button from "../../components/button/button";
 import Footer from "../../components/footer/footer";
@@ -19,6 +19,7 @@ export default function Joueurs() {
   const players = useSelector((state) => state.players.players);
   const playersInGame = useSelector((state) => state.players.playersInGame);
   const router = useRouter();
+  const buttonRef = useRef();
 
   const playersInGameObj = playersInGame.reduce((acc, color) => {
     acc[color] = players[color];
@@ -28,6 +29,14 @@ export default function Joueurs() {
   const onRedirectEvent = () => {
     router.push(`/intro/cartes`);
   };
+
+  useEffect(() => {
+    gsap.fromTo(
+      buttonRef.current,
+      { scale: 0.9, opacity: 0 },
+      { scale: 1, opacity: 1, duration: 0.35, delay: 1.5, ease: "back.out(2)" },
+    );
+  }, []);
 
   useEffect(() => {
     console.log("a");
@@ -72,8 +81,9 @@ export default function Joueurs() {
           <Button
             type={"link"}
             color={"#373FEF"}
-            // disabled={playersInGame.length < 3}
+            disabled={playersInGame.length < 3}
             events={{ onClick: onRedirectEvent }}
+            ref={buttonRef}
           >
             Continuer
           </Button>

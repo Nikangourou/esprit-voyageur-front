@@ -25,17 +25,14 @@
   border-radius: 8px;
   width: 100%;
 
-  &.disabled {
-    color: rgba(128, 128, 128, 0.3);
-    border-color: rgba(128, 128, 128, 0.3);
-    cursor: not-allowed;
-  }
+
 }
 
 .buttonBis {
   position: relative;
   width: 12em;
   height: 2.33em;
+  //transition: all 0.25s cubic-bezier(0.65, 0, 0.35, 1);
 
   & > div {
     position: relative;
@@ -58,7 +55,17 @@
     transform: translateY(-8px);
     z-index: 1;
     border: black 3px solid;
+    //transition: all 0.25s cubic-bezier(0.65, 0, 0.35, 1);
+  }
 
+  &.disabled {
+    color: rgba(128, 128, 128, 0.3);
+    border-color: rgba(128, 128, 128, 0.3);
+    cursor: not-allowed;
+    .principal{
+      border: rgba(128, 128, 128, 0.3) 3px solid;
+      transform: translateY(0px);
+    }
   }
 
   .sub {

@@ -148,7 +148,7 @@ const Button = forwardRef(function Button(
           className={`${styles.buttonBis} ${disabled && styles.disabled}`}
           {...events}
           onClick={(e) => {
-            if (events && events.onClick) {
+            if (!disabled && events && events.onClick) {
               buttonTl.current?.kill();
               buttonTl.current = gsap
                 .timeline()
