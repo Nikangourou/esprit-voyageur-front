@@ -4,7 +4,10 @@ import styles from "./page.module.scss";
 import Countdown from "../../../components/chrono/countdown";
 import { Swiper, SwiperSlide } from "swiper/react";
 import ImageShader from "../../../components/imageShader/ImageShader";
-import { setShaderPosition } from "../../../store/reducers/gameReducer";
+import {
+  setDistanceCircle,
+  setShaderPosition,
+} from "../../../store/reducers/gameReducer";
 import { useDispatch, useSelector } from "react-redux";
 import { SocketContext } from "../../../context/socketContext";
 import { useState, useRef, useEffect, useContext } from "react";
@@ -56,7 +59,6 @@ export default function Images() {
                 isTrue: data.isTrue,
               },
             ]);
-            dispatch(setShaderPosition(1));
           });
       });
     }
@@ -70,6 +72,7 @@ export default function Images() {
         .call(
           () => {
             dispatch(setShaderPosition(1));
+            dispatch(setDistanceCircle([0.4, 0.8]));
           },
           null,
           "<0.5",

@@ -37,7 +37,7 @@
       display: block;
       background-color: white;
       border-radius: 5px;
-      border: 2px solid black;
+      border: 2px solid #1c1c1e;
       resize: none;
       transition: all 0.5s cubic-bezier(.33,1.32,.73,.99) 0.25s;
       font-family: var(--font-work-sans);
@@ -71,7 +71,7 @@
       right: 1em;
       background-color: var(--backgroundColor);
       border-radius: 50%;
-      border: 2px solid black;
+      border: 2px solid #1c1c1e;
       width: 30px;
       height: 30px;
       cursor: pointer;

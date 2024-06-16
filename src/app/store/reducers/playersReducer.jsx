@@ -40,7 +40,7 @@ export const playersSlice = createSlice({
         jaune: { color: "yellow", score: 0, alreadyPlay: false },
         vert: { color: "green", score: 0, alreadyPlay: false },
         cyan: { color: "#1ecbe1", score: 0, alreadyPlay: false },
-        noir: { color: "black", score: 0, alreadyPlay: false },
+        noir: { color: "#1c1c1e", score: 0, alreadyPlay: false },
       };
       state.currentBluffer = "";
       state.gameId = null;

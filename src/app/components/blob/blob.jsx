@@ -214,7 +214,7 @@ export default function Blob({
     <path
       id="blob"
       ref={blobPathRef}
-      fill={seed ? color : colorActive ? color : "black"}
+      fill={seed ? color : colorActive ? color : "#1c1c1e"}
       style={{
         transition: "fill 1s ease-out",
       }}

@@ -7,7 +7,6 @@
     transform-style: preserve-3d;
     transform: translate(-50%,-50%);
     perspective: 1000px;
-    background: var(--backgroundColor);
     z-index: 10;
 
     .cardFront,.cardBack{
@@ -18,11 +17,15 @@
         width: calc(100% - 15px);
         height: calc(100% - 15px);
         border-radius: 5px;
+        background: #1c1c1e;
+
         background-repeat: no-repeat;
         background-position: center;
         background-size: cover;
         transform: translate3d(-50%,-50%,0.1px);
     }
+
+
     .cardBack{
         transform: translate3d(-50%,-50%,-0.1px);
     }

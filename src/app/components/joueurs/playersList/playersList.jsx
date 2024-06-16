@@ -24,7 +24,7 @@ export default function PlayersList({ setIsAddingPlayers }) {
       </div>
       {players.length < 7 && (
         <Button
-          color={"black"}
+          color={"#1c1c1e"}
           event={() => {
             setIsAddingPlayers(true);
           }}

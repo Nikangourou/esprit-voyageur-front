@@ -118,7 +118,7 @@ export default function Cartes() {
       )
       .fromTo(
         card1Ref.current,
-        { top: "150%", left: "50%" },
+        { top: "170%", left: "50%" },
         {
           top: "10%",
           left: "15%",

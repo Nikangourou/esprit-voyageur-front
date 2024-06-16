@@ -11,7 +11,10 @@ import Countdown from "../chrono/countdown";
 import { SocketContext } from "../../context/socketContext";
 import { div } from "three/nodes";
 import { useDispatch, useSelector } from "react-redux";
-import { setShaderPosition } from "../../store/reducers/gameReducer";
+import {
+  setDistanceCircle,
+  setShaderPosition,
+} from "../../store/reducers/gameReducer";
 import { get } from "http";
 import { useRouter } from "next/navigation";
 import { gsap } from "gsap";
@@ -237,9 +240,25 @@ export default function Chat() {
                 duration: 3,
                 ease: "power2.out",
               })
+              .to(
+                ".footerBg",
+                {
+                  opacity: 0,
+                  duration: 3,
+                  ease: "power2.out",
+                },
+                "<",
+              )
               .call(() => {
-                dispatch(setShaderPosition(0));
-              });
+                dispatch(setDistanceCircle([0.65, 0.65]));
+              })
+              .call(
+                () => {
+                  dispatch(setShaderPosition(0));
+                },
+                null,
+                ">1",
+              );
 
             // Utilisation d'une expression régulière pour rechercher la partie du texte après "Remember:"
 
