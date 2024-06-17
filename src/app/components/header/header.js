@@ -43,8 +43,8 @@ export default function Header({ isProgressBar = false }) {
           <div onClick={() => setOpenMenu(true)}>
             <img src="/images/Pause.svg" alt="logo" />
           </div>
-          <div onClick={toggleMute}>
-            <img src="/images/Sound.svg" alt="logo" />
+          <div onClick={toggleMute} className={styles.imgSoundContainer} >
+            <img  src={isMuted ? "/images/soundMute.svg" : "/images/sound.svg"} alt="logo" />
           </div>
           <FullScreen />
         </div>

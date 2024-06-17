@@ -10,6 +10,8 @@ import { SocketContext } from "../../../context/socketContext";
 import { useState, useRef, useEffect, useContext, use } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { gsap } from "gsap";
+import Title from "../../../components/title/title";
+import Button from "../../../components/button/button";
 
 import "swiper/css";
 
@@ -26,6 +28,12 @@ export default function Images() {
   const falseImageId = useSelector((state) => state.players.falseImageId);
   const { socket } = useContext(SocketContext);
   const gameId = useRef(null);
+  const players = useSelector((state) => state.players.players);
+  const currentBluffer = useSelector((state) => state.players.currentBluffer);
+  const colorStyle =
+    currentBluffer && currentBluffer != ""
+      ? players[currentBluffer].color
+      : "#373FEF";
 
   const urlParams = new URLSearchParams(window.location.search);
   gameId.current = urlParams.get("gameId");
@@ -105,14 +113,9 @@ export default function Images() {
   return (
     <div className={styles.images}>
       <div className={styles.containerCountdown}>
-        <Countdown start={startChrono} onEnd={onEndCountdown} />
+        <Countdown start={startChrono}/>
       </div>
-      <h2>Prépare ton bluff</h2>
-      {isTrue ? (
-        <p>Voici ton véritable souvenir.</p>
-      ) : (
-        <p>La couleuvre que tu dois leur faire avaler...</p>
-      )}
+      <Title text={"Prépare ton"} important={"bluff"}></Title>
       <Swiper
         className={styles.swiper}
         spaceBetween={50}
@@ -134,14 +137,12 @@ export default function Images() {
         ))}
       </Swiper>
       {isTrue ? <p>Vérité</p> : <p>Mensonge</p>}
-      {
-        isTrue ? (
-          <p>{images[0]?.prompt}</p>
-        ) : (
-          <p>{images[1]?.prompt}</p>
-        )
-      }
-
+      <div className={styles.containerPrompt}>
+        {isTrue ? <p>{images[0]?.prompt}</p> : <p>{images[1]?.prompt}</p>}
+      </div>
+      <Button color={colorStyle} type="link" onClick={() => onEndCountdown()}>
+        Je suis prêt
+      </Button>
     </div>
   );
 }
