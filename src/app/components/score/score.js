@@ -1,5 +1,4 @@
 import styles from "./score.module.scss";
-import Countdown from "../chrono/countdown";
 import Button from "../button/button";
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
@@ -14,14 +13,17 @@ import ImageShader from "../imageShader/ImageShader";
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function Score({ gameId }) {
-  const final = false; // for dev
+
+  const dispatch = useDispatch();
   const { socket } = useContext(SocketContext);
   const [trueImageUrl, setTrueImageUrl] = useState();
   const [isBlurry, setIsBlurry] = useState(true);
   const trueImageId = useSelector((state) => state.players.trueImageId);
   const playersInGame = useSelector((state) => state.players.playersInGame);
   const players = useSelector((state) => state.players.players);
-  const dispatch = useDispatch();
+  const manche = useSelector((state) => state.game.manche);
+  const mancheMax = playersInGame.length;
+  const final = manche === mancheMax;
 
   if (typeof window === "undefined") {
     return <div></div>;

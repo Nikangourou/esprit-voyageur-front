@@ -20,7 +20,6 @@ export default function AddPlayer() {
   const handleTouchStart = (e) => {
     timerRef.current = setTimeout(() => {
       const colorName = e.target.getAttribute("data-color");
-      console.log(e.target);
       dispatch(addPlayer({ color: colorName }));
       gsap.to(e.target, {
         fill: players[colorName].color,

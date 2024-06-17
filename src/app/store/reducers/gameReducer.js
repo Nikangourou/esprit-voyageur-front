@@ -6,8 +6,7 @@ export const gameSlice = createSlice({
     shaderPosition: 0,
     distanceCircle: [0.65, 0.65],
     offset: 0,
-    footerLink: "",
-    setAdvancementStep: 0,
+    manche: 0,
     setAdvancementRouand: 0,
     countDownPause: false
   },
@@ -22,11 +21,8 @@ export const gameSlice = createSlice({
       console.log(action.payload);
       state.offset = action.payload;
     },
-    setFooterLink: (state, action) => {
-      state.footerLink = action.payload;
-    },
-    setAdvancementStep: (state, action) => {
-      state.setAdvancementStep = action.payload;
+    incrementManche: (state) => {
+      state.manche += 1;
     },
     setAdvancementRouand: (state, action) => {
       state.setAdvancementRouand = action.payload;
@@ -37,7 +33,7 @@ export const gameSlice = createSlice({
   },
 });
 
-export const { setShaderPosition, setDistanceCircle, setOffset, setCountDownPause} =
+export const { setShaderPosition, setDistanceCircle, setOffset, setCountDownPause, incrementManche, setAdvancementRouand} =
   gameSlice.actions;
 
 export default gameSlice.reducer;

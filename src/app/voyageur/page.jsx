@@ -13,7 +13,7 @@ import {
   setShaderPosition,
 } from "../store/reducers/gameReducer";
 import { gsap } from "gsap";
-import FullScreen from "../components/fullScreen/fullScreen";
+import FullScreen from "../components/header/fullScreen/fullScreen";
 
 export default function Voyageur() {
   const { socket } = useContext(SocketContext);
