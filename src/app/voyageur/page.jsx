@@ -13,6 +13,7 @@ import {
   setShaderPosition,
 } from "../store/reducers/gameReducer";
 import { gsap } from "gsap";
+import FullScreen from "../components/fullScreen/fullScreen";
 
 export default function Voyageur() {
   const { socket } = useContext(SocketContext);
@@ -88,7 +89,7 @@ export default function Voyageur() {
       .to(".pageContainer", {
         opacity: 1,
         duration: 3,
-        delay: 0.25,
+        delay: 2,
         ease: "power2.out",
       })
       .fromTo(
@@ -103,7 +104,7 @@ export default function Voyageur() {
         { y: -8, duration: 0.5, ease: "back.out(3)" },
         "<.15",
       );
-    dispatch(setDistanceCircle([0.4, 0.8]));
+    dispatch(setDistanceCircle([0.4, 0.7]));
     const urlParams = new URLSearchParams(window.location.search);
     gameIdRef.current = urlParams.get("gameId");
     dispatch(setGameId(urlParams.get("gameId")));
@@ -123,20 +124,23 @@ export default function Voyageur() {
   }
 
   return (
-    <main className={styles.main}>
-      <div className={styles.container}>
-        {logo}
-        <div className={styles.buttonContainer}>
-          <Button
-            type="link"
-            color={colorStyle}
-            ref={buttonRef}
-            events={{ onClick: clickEvt }}
-          >
-            Jouer
-          </Button>
+    <>
+      <FullScreen />
+      <main className={styles.main}>
+        <div className={styles.container}>
+          {logo}
+          <div className={styles.buttonContainer}>
+            <Button
+              type="link"
+              color={colorStyle}
+              ref={buttonRef}
+              events={{ onClick: clickEvt }}
+            >
+              Jouer
+            </Button>
+          </div>
         </div>
-      </div>
-    </main>
+      </main>
+    </>
   );
 }

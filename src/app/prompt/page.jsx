@@ -11,7 +11,7 @@ export default function Prompt() {
   const [url, setUrl] = useState(null);
 
   function createImg() {
-    fetch(`http://localhost:5001/image/post/create`, {
+    fetch(`${apiUrl}/image/post/create`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -37,8 +37,8 @@ export default function Prompt() {
         placeholder="Ecrivez votre message"
       />
       <button onClick={createImg}>Envoyer</button>
-      <ImageShader url={`http://localhost:5001${url}`}></ImageShader>
-      <img src={`http://localhost:5001${url}`} alt="" />
+      <ImageShader url={`${apiUrl}${url}`}></ImageShader>
+      <img src={`${apiUrl}${url}`} alt="" />
     </>
   );
 }

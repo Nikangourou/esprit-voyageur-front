@@ -29,42 +29,6 @@
     height: 120px;
     margin: auto;
 
-    textarea {
-      position: absolute;
-      bottom:0;
-      width: 100%;
-      height: 2rem;
-      display: block;
-      background-color: white;
-      border-radius: 5px;
-      border: 2px solid #1c1c1e;
-      resize: none;
-      transition: all 0.5s cubic-bezier(.33,1.32,.73,.99) 0.25s;
-      font-family: var(--font-work-sans);
-      font-size: 0.75rem;
-      color: rgba(0, 0, 0, 1);
-      padding: 0.5rem;
-        &:focus {
-          & ~ button{
-            opacity: 1;
-            transform: scale(1) ;
-            transition: transform 0.33s cubic-bezier(.34,1.56,.74,1.17) 0.33s, opacity 0.75s ease-out 0.33s;
-          }
-          & ~ .clearBtn{
-            transform: scale(1);
-            transition: transform 0.15s cubic-bezier(.34,1.56,.74,1.17) 0.5s, opacity 0.15s ease-out 0.5s;
-          }
-          outline: none;
-          height: 100%;
-          color: rgba(0, 0, 0, 1);
-          transition: all 0.66s cubic-bezier(.55,-0.31,.12,1.48);
-        }
-
-        &:focus-visible {
-            outline: none;
-        }
-    }
-
     button {
       position: absolute;
       bottom: 1em;
@@ -84,8 +48,48 @@
       }
     }
 
+    textarea {
+      position: absolute;
+      bottom:0;
+      width: 100%;
+      height: 2.25rem;
+      display: block;
+      background-color: white;
+      border-radius: 5px;
+      border: 2px solid #1c1c1e;
+      resize: none;
+      transition: all 0.5s cubic-bezier(.33,1.32,.73,.99) 0.25s;
+      font-family: var(--font-work-sans);
+      font-size: 1rem;
+      color: rgba(0, 0, 0, 1);
+      padding: 0.5rem;
+        &:focus {
+          & ~ button{
+            opacity: 1;
+            transform: scale(1) ;
+            transition: transform 0.33s cubic-bezier(.34,1.56,.74,1.17) 0.33s, opacity 0.75s ease-out 0.33s;
+            pointer-events: auto;
+
+          }
+          & ~ .clearBtn{
+            transform: scale(1);
+            transition: transform 0.15s cubic-bezier(.34,1.56,.74,1.17) 0.5s, opacity 0.15s ease-out 0.5s;
+          }
+          outline: none;
+          height: 100%;
+          color: rgba(0, 0, 0, 1);
+          transition: all 0.66s cubic-bezier(.55,-0.31,.12,1.48);
+        }
+
+        &:focus-visible {
+            outline: none;
+        }
+    }
+
+
+
     .clearBtn{
-      right: 4em;
+      right: 4.5em;
       transition: all 0.25s ease-out 0s ;
 
 

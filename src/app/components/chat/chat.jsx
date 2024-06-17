@@ -57,6 +57,12 @@ export default function Chat() {
       : "#373FEF";
 
   useEffect(() => {
+    gsap.fromTo(
+      `.${styles.containerMessages}`,
+      { yPercent: 150, opacity: 0 },
+      { yPercent: 0, opacity: 1, duration: 1, delay: 1.5, ease: "power2.out" },
+    );
+
     if (isReadyRef.current) {
       return;
     }

@@ -115,8 +115,8 @@ const RecordingComponent = ({ onEnd, textAreaRef }) => {
           maxDuration={1}
           width={150}
           height={150}
-          maxRadius={60}
-          minRadius={60}
+          maxRadius={50}
+          minRadius={50}
           active={!isRecording}
           offset={10}
           // y={0.9}
@@ -132,8 +132,8 @@ const RecordingComponent = ({ onEnd, textAreaRef }) => {
           maxDuration={1}
           width={150}
           height={150}
-          maxRadius={60}
-          minRadius={60}
+          maxRadius={50}
+          minRadius={50}
           active={!isRecording}
           offset={10}
           // y={0.9}

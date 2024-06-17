@@ -19,7 +19,7 @@ import SoundManager from "../soundManager";
 
 // Créez le contexte
 const value = {
-  socket: io("localhost:5001"),
+  socket: io("10.137.97.208:5001"),
   soundManager: new SoundManager(),
 };
 const SocketContext = createContext(value);

@@ -107,7 +107,7 @@ export default function Cartes() {
       .timeline()
       .fromTo(
         card1Ref.current,
-        { scale: 2, boxShadow: "2px 6px 10px rgba(44,44,44,0.15)" },
+        { scale: 1.25, boxShadow: "2px 6px 10px rgba(44,44,44,0.15)" },
         {
           scale: isMobile ? 0.85 : 1,
           duration: 0.5,
@@ -132,8 +132,8 @@ export default function Cartes() {
         { rotationZ: -20 },
         {
           rotationZ: 70,
-          duration: 2,
-          ease: "power4.out",
+          duration: 0.25,
+          ease: "power2.out",
         },
         "<",
       );
@@ -144,11 +144,11 @@ export default function Cartes() {
       .timeline()
       .fromTo(
         card2Ref.current,
-        { scale: 2, boxShadow: "2px 6px 10px rgba(44,44,44,0.15)" },
+        { scale: 1.25, boxShadow: "2px 6px 10px rgba(44,44,44,0.15)" },
         {
           scale: isMobile ? 0.85 : 1,
           duration: 0.5,
-          delay: 2.25,
+          delay: 1,
           boxShadow: "2px 6px 10px rgba(44,44,44,.25)",
           ease: "power2.out",
         },
@@ -169,8 +169,8 @@ export default function Cartes() {
         { rotationZ: 70 },
         {
           rotationZ: -15,
-          duration: 2,
-          ease: "power4.out",
+          duration: 0.25,
+          ease: "power2.out",
         },
         "<",
       );
@@ -181,11 +181,11 @@ export default function Cartes() {
       .timeline()
       .fromTo(
         card3Ref.current,
-        { scale: 2, boxShadow: "2px 6px 10px rgba(44,44,44,0.15)" },
+        { scale: 1.25, boxShadow: "2px 6px 10px rgba(44,44,44,0.15)" },
         {
           scale: isMobile ? 0.85 : 1,
           duration: 0.5,
-          delay: 2.75,
+          delay: 2,
           boxShadow: "2px 6px 10px rgba(44,44,44,.25)",
           ease: "power2.out",
         },
@@ -206,8 +206,8 @@ export default function Cartes() {
         { rotationZ: 40 },
         {
           rotationZ: -15,
-          duration: 2,
-          ease: "power4.out",
+          duration: 0.25,
+          ease: "power2.out",
         },
         "<",
       );

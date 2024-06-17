@@ -54,7 +54,7 @@ export default function FooterSvg() {
     >
       <svg
         width={"100%"}
-        height={180}
+        height={160}
         viewBox="0 0 1366 180"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"

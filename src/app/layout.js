@@ -35,18 +35,6 @@ export default function RootLayout({ children }) {
         <StoreProvider>
           <LoadShader />
           <SocketProvider>
-            {/*<ClipBlob*/}
-            {/*  numPoints={20}*/}
-            {/*  color={"red"}*/}
-            {/*  minDuration={3}*/}
-            {/*  maxDuration={4}*/}
-            {/*  width={600}*/}
-            {/*  height={600}*/}
-            {/*  maxRadius={300}*/}
-            {/*  minRadius={300}*/}
-            {/*  active={true}*/}
-            {/*  offset={200}*/}
-            {/*></ClipBlob>{" "}*/}
             <div className="pageContainer">{children}</div>
             <FooterBg />
           </SocketProvider>
