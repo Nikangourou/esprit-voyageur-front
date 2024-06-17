@@ -7,7 +7,7 @@ import ImageShader from "../../../components/imageShader/ImageShader";
 import { setShaderPosition } from "../../../store/reducers/gameReducer";
 import { useDispatch, useSelector } from "react-redux";
 import { SocketContext } from "../../../context/socketContext";
-import { useState, useRef, useEffect, useContext } from "react";
+import { useState, useRef, useEffect, useContext, use } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { gsap } from "gsap";
 
@@ -16,10 +16,10 @@ import "swiper/css";
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function Images() {
-  const [isPaused, setIsPaused] = useState(true);
   const [isBlurry, setIsBlurry] = useState(true);
   const [isTrue, setIsTrue] = useState(true);
   const [images, setImages] = useState([]);
+  const [startChrono, setStartChrono] = useState(1000);
   const [disconnect, setDisconnect] = useState(false);
   const dispatch = useDispatch();
   const trueImageId = useSelector((state) => state.players.trueImageId);
@@ -54,6 +54,7 @@ export default function Images() {
                 id: uuidv4(),
                 url: `${apiUrl}${data.url}`,
                 isTrue: data.isTrue,
+                prompt: data.prompt,
               },
             ]);
             dispatch(setShaderPosition(1));
@@ -72,7 +73,7 @@ export default function Images() {
             dispatch(setShaderPosition(1));
           },
           null,
-          "<0.5",
+          "<0.5"
         );
 
       setTimeout(() => {
@@ -83,7 +84,7 @@ export default function Images() {
         FalseImageId: falseImageId,
       });
       socket.emit("imagesAllGenerated", gameId.current);
-      setIsPaused(false);
+      setStartChrono(30);
     }
   }, [images]);
 
@@ -91,7 +92,6 @@ export default function Images() {
     console.log("End countdown");
     if (!disconnect) {
       setDisconnect(true);
-      setIsPaused(true);
       socket?.emit("sendActorAction", gameId.current, "EndChrono", {});
     }
   };
@@ -105,7 +105,7 @@ export default function Images() {
   return (
     <div className={styles.images}>
       <div className={styles.containerCountdown}>
-        <Countdown start={20} onEnd={onEndCountdown} paused={isPaused} />
+        <Countdown start={startChrono} onEnd={onEndCountdown} />
       </div>
       <h2>Prépare ton bluff</h2>
       {isTrue ? (
@@ -134,6 +134,14 @@ export default function Images() {
         ))}
       </Swiper>
       {isTrue ? <p>Vérité</p> : <p>Mensonge</p>}
+      {
+        isTrue ? (
+          <p>{images[0]?.prompt}</p>
+        ) : (
+          <p>{images[1]?.prompt}</p>
+        )
+      }
+
     </div>
   );
 }

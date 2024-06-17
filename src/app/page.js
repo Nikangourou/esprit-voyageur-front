@@ -5,7 +5,6 @@ import styles from "./page.module.scss";
 import { gsap, Sine } from "gsap";
 import Button from "./components/button/button";
 import Link from "next/link";
-import FullScreen from "./components/fullScreen/fullScreen";
 import Card from "./components/card/card";
 import { useDispatch } from "react-redux";
 import {
@@ -66,8 +65,6 @@ export default function Home() {
   }
 
   return (
-    <>
-      <FullScreen />
       <main className={styles.main}>
         <div className={styles.container}>
           <img src="/Logo.svg" alt="Logo" />
@@ -83,6 +80,5 @@ export default function Home() {
           </div>
         </div>
       </main>
-    </>
   );
 }

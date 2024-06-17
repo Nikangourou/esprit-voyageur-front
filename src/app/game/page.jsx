@@ -3,7 +3,6 @@
 import styles from "./page.module.scss";
 import { useEffect, useState, useRef, useContext } from "react";
 import { v4 as uuidv4 } from "uuid";
-import Countdown from "../components/chrono/countdown";
 import GameFlow from "../components/gameFlow/gameFlow";
 import { useDispatch } from "react-redux";
 import { SocketContext } from "../context/socketContext";

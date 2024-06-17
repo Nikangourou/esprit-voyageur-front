@@ -39,7 +39,6 @@ export default function Joueurs() {
   }, []);
 
   useEffect(() => {
-    console.log("a");
     gsap.fromTo(
       `.${styles.nbPlayers}`,
       { scale: 0.5 },

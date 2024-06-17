@@ -11,24 +11,8 @@ import Title from "../../components/title/title";
 
 export default function Voyageur() {
   const { socket } = useContext(SocketContext);
-  const [currentPhase, setCurrentPhase] = useState("Conversation");
-  const [chronoStart, setChronoStart] = useState(120);
   const [disconnect, setDisconnect] = useState(false);
   const gameId = useRef(null);
-
-  function phaseManagement(state, gameId) {
-    console.log(state);
-    switch (state) {
-      case "Conversation":
-        setChronoStart(120);
-        setCurrentPhase("Conversation");
-        break;
-      case "RevealImage":
-        setChronoStart(20);
-        setCurrentPhase("RevealImage");
-        break;
-    }
-  }
 
   useEffect(() => {
     if (!gameId.current) {
@@ -47,7 +31,7 @@ export default function Voyageur() {
   return (
     <main className={styles.container}>
       <div className={styles.containerCountdown}>
-        <Countdown start={chronoStart} onEnd={onEndCountdown} />
+        <Countdown start={120} onEnd={onEndCountdown} />
         <div className={styles.title}>
           <Title text={"Raconte ton"} important={"souvenir"}></Title>
         </div>

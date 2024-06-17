@@ -1,7 +1,19 @@
 import React, { useState, useEffect } from "react";
 import styles from "./progressBar.module.scss";
+import { useSelector } from "react-redux";
 
-const ProgressBar = ({ value, max, color= "#373fef" }) => {
+const ProgressBar = () => {
+  const value = useSelector((state) => state.game.setAdvancementRouand);
+  const players = useSelector((state) => state.players.players);
+  const playersInGame = useSelector((state) => state.players.playersInGame);
+  const max = playersInGame.length;
+
+  const currentBluffer = useSelector((state) => state.players.currentBluffer);
+  const color =
+    currentBluffer && currentBluffer != ""
+      ? players[currentBluffer].color
+      : "#373FEF";
+
   return (
     <div className={styles.progressBar}>
       <span className={styles.label}>
