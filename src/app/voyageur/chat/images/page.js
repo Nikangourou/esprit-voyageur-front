@@ -4,16 +4,20 @@ import styles from "./page.module.scss";
 import Countdown from "../../../components/chrono/countdown";
 import { Swiper, SwiperSlide } from "swiper/react";
 import ImageShader from "../../../components/imageShader/ImageShader";
-import { setShaderPosition } from "../../../store/reducers/gameReducer";
+import {
+  setDistanceCircle,
+  setShaderPosition,
+} from "../../../store/reducers/gameReducer";
 import { useDispatch, useSelector } from "react-redux";
 import { SocketContext } from "../../../context/socketContext";
 import { useState, useRef, useEffect, useContext, use } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { gsap } from "gsap";
-import Title from "../../../components/title/title";
-import Button from "../../../components/button/button";
-
+import { Pagination } from "swiper/modules";
 import "swiper/css";
+import Card from "../../../components/card/card";
+import Button from "../../../components/button/button";
+import Title from "../../../components/title/title";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -24,6 +28,8 @@ export default function Images() {
   const [startChrono, setStartChrono] = useState(1000);
   const [disconnect, setDisconnect] = useState(false);
   const dispatch = useDispatch();
+  const currentBluffer = useSelector((state) => state.players.currentBluffer);
+  const players = useSelector((state) => state.players.players);
   const trueImageId = useSelector((state) => state.players.trueImageId);
   const falseImageId = useSelector((state) => state.players.falseImageId);
   const { socket } = useContext(SocketContext);
@@ -43,8 +49,16 @@ export default function Images() {
   }
   const width = window.innerWidth - window.innerWidth * 0.2;
 
+  const colorStyle =
+    currentBluffer && currentBluffer != ""
+      ? players[currentBluffer].color
+      : "#373FEF";
+
   useEffect(() => {
     if (trueImageId && falseImageId) {
+      document
+        .querySelector(".swiper-pagination-bullet-active")
+        .style.setProperty("--colorActive", colorStyle);
       const arrayTmp = [trueImageId, falseImageId];
       arrayTmp.forEach((imageId) => {
         fetch(`${apiUrl}/image/get/${imageId}`, {
@@ -65,7 +79,6 @@ export default function Images() {
                 prompt: data.prompt,
               },
             ]);
-            dispatch(setShaderPosition(1));
           });
       });
     }
@@ -79,6 +92,7 @@ export default function Images() {
         .call(
           () => {
             dispatch(setShaderPosition(1));
+            dispatch(setDistanceCircle([0.1, 0.1]));
           },
           null,
           "<0.5"
@@ -110,6 +124,14 @@ export default function Images() {
     setIsTrue(currentSlide.isTrue);
   };
 
+  const pagination = {
+    clickable: true,
+    renderBullet: function (index, className) {
+      console.log(className);
+      return `<span class="${className} ${styles.pageDot}">` + "</span>";
+    },
+  };
+
   return (
     <div className={styles.images}>
       <div className={styles.containerCountdown}>
@@ -117,32 +139,47 @@ export default function Images() {
       </div>
       <Title text={"Prépare ton"} important={"bluff"}></Title>
       <Swiper
+        pagination={pagination}
+        modules={[Pagination]}
         className={styles.swiper}
         spaceBetween={50}
         slidesPerView={1}
         onSlideChange={onSlideChange}
         onSwiper={(swiper) => console.log(swiper)}
       >
-        {images.map((image) => (
+        {images.map((image, index) => (
           <SwiperSlide key={image.id}>
-            <div className={styles.imageContainer}>
-              <ImageShader
-                url={image.url}
-                isBlurry={isBlurry}
-                width={width}
-                height={width}
-              ></ImageShader>
-            </div>
+            <Card
+              stylesCard={{
+                position: "relative",
+                margin: "2rem auto",
+                marginBottom: "1.75rem",
+                width: "280px",
+                height: "400px",
+                transform: `rotateZ(${index % 2 == 0 ? "2.5deg" : "-1.25deg"})`,
+              }}
+              srcFront={image.url}
+              backChild={
+                <div className={styles.indice}>
+                  <p>{image.prompt}</p>
+                </div>
+              }
+            ></Card>
+            <h3 className={styles.infos}>
+              {image.isTrue ? "Vérité" : "Mensonge"}
+            </h3>
           </SwiperSlide>
         ))}
       </Swiper>
-      {isTrue ? <p>Vérité</p> : <p>Mensonge</p>}
-      <div className={styles.containerPrompt}>
-        {isTrue ? <p>{images[0]?.prompt}</p> : <p>{images[1]?.prompt}</p>}
+      <div className={styles.buttonContainer}>
+        <Button
+          color={"#373FEF"}
+          type="link"
+          // events={events}
+        >
+          Je suis prêt
+        </Button>
       </div>
-      <Button color={colorStyle} type="link" onClick={() => onEndCountdown()}>
-        Je suis prêt
-      </Button>
     </div>
   );
 }

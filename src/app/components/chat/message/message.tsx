@@ -18,7 +18,7 @@ export default function Message({ idx, nbSendMessages, message = null }) {
         .fromTo(
           cardRef.current,
           {
-            top: "50%",
+            top: "80%",
             rotationZ: cards[idx][0],
           },
           { top: "40%", duration: 1 },

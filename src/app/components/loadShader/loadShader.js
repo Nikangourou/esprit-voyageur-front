@@ -142,11 +142,19 @@ const LoaderShader = () => {
         requestAnimationId = requestAnimationFrame(update); // Appel récursif de la fonction update
       }
       window.addEventListener("resize", handleResize);
+      window.addEventListener("fullscreenchange", handleResize);
+      window.addEventListener("webkitfullscreenchange", handleResize); // Safari and older versions of Chrome
+      window.addEventListener("mozfullscreenchange", handleResize); // Firefox
+      window.addEventListener("MSFullscreenChange", handleResize);
       update();
     }
     return () => {
       cancelAnimationFrame(requestAnimationId);
       window.removeEventListener("resize", handleResize);
+      window.removeEventListener("fullscreenchange", handleResize);
+      window.removeEventListener("webkitfullscreenchange", handleResize); // Safari and older versions of Chrome
+      window.removeEventListener("mozfullscreenchange", handleResize); // Firefox
+      window.removeEventListener("MSFullscreenChange", handleResize);
     };
   }, []);
 

@@ -11,15 +11,16 @@
     position: relative;
     font-size: 4rem;
     display: inline-block;
-    &.dot {
-      -webkit-text-stroke: 1px black;
-      text-stroke: 1px black;
+
+    &.dot{
+      -webkit-text-stroke: 1px #1c1c1e;
+      text-stroke: 1px #1c1c1e;
       color: var(--backgroundColor);
     }
     span {
       position: absolute;
-      -webkit-text-stroke: 0px black;
-      text-stroke: 0px black;
+      -webkit-text-stroke: 0px #1c1c1e;
+      text-stroke: 0px #1c1c1e;
       z-index: -1;
       color: var(--backgroundColor);
       top: 0.035em;

@@ -78,6 +78,10 @@ export default function Home() {
               Jouer
             </Button>
           </div>
+          {/*<Card*/}
+          {/*  frontChild={<p className={styles.front}>Test</p>}*/}
+          {/*  backChild={<p className={styles.back}>Test</p>}*/}
+          {/*></Card>*/}
         </div>
       </main>
   );

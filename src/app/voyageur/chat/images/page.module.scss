@@ -1,16 +1,49 @@
 .images {
+  position: relative;
   max-width: 600px;
+  height: 100%;
   margin: auto;
   text-align: center;
 
   .swiper {
+    //position: absolute;
+    //top: 50%;
+    //left: 50%;
+    //transform: translate(-50%,-50%);
+    width: 100dvw;
     z-index: 0;
 
-    .imageContainer {
+    .imageContainer{
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
       width: 100%;
       aspect-ratio: 1/1;
+
       // background-color: red;
+      & > p{
+        font-family: var(--font-contrail-one);
+        color: var(--backgroundColor);
+        font-size: 1.5rem;
+        margin-top: 1rem;
+      }
     }
+
+    .indice{
+      transform: rotateY(180deg) ;
+      padding: 2rem 1rem;
+      color: white;
+
+      & > p {
+        height: 320px;
+        overflow: scroll;
+        font-size: 14px;
+        text-align: left;
+      }
+    }
+
+
 
     img {
       width: 100%;
@@ -20,12 +53,17 @@
       // );
     }
   }
-  
-  .containerPrompt {
-    height: 90px;
-    overflow-y: auto;
-    width: 80%;
-    max-width: 400px;
-    margin: auto;
+
+  .infos{
+    text-transform: uppercase;
+    font-size: 1.75rem;
+    font-weight: normal;
+  }
+}
+
+.buttonContainer{
+  margin-top: 2rem;
+  & > div{
+    margin: 0 auto;
   }
 }

@@ -63,14 +63,14 @@ export default function GameFlow({ images, gameId }) {
     console.log(state);
     switch (state) {
       case "Conversation":
-        dispatch(setShowFooter(false))
+        dispatch(setShowFooter(false));
         setChronoStart(120);
         setCurrentPhase("Conversation");
         break;
       case "RevealImage":
-        dispatch(setShowFooter(true))
+        dispatch(setShowFooter(true));
         dispatch(setDistanceCircle([0.1, 0.1]));
-        setChronoStart(20);
+        setChronoStart(120);
         setCurrentPhase("RevealImage");
         break;
       case "QuestionsPhase":
