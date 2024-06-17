@@ -14,13 +14,14 @@ import {
   setDistanceCircle,
   setOffset,
   setShaderPosition,
+  incrementManche,
 } from "../store/reducers/gameReducer";
 import SoundManager from "../soundManager";
 
 // Créez le contexte
 const value = {
-  // socket: io("localhost:5001"),
-  socket: io("10.137.97.181:5001"),
+  socket: io("localhost:5001"),
+  // socket: io("10.137.97.181:5001"),
   soundManager: new SoundManager(),
 };
 const SocketContext = createContext(value);
@@ -41,6 +42,7 @@ const SocketProvider = ({ children }) => {
     console.log(gameId);
     switch (state) {
       case "SetBluffer":
+        incrementStep();
         router.push(`/game/qrcode?gameId=${gameId}`);
         break;
       case "Conversation":
@@ -75,10 +77,6 @@ const SocketProvider = ({ children }) => {
       default:
         break;
     }
-  }
-
-  function incrementStep(state, gameId) {
-    // setAdvancementStep((prev => prev + 1));
   }
 
   function backToRoute(state) {
@@ -141,6 +139,10 @@ const SocketProvider = ({ children }) => {
     }
   }
 
+  function incrementStep() {
+    dispatch(incrementManche());
+  }
+
   function setBluffer(bluffer) {
     console.log("bluffer initialized: " + bluffer);
     dispatch(setCurrentBluffer({ CurrentBluffer: bluffer }));
@@ -176,16 +178,13 @@ const SocketProvider = ({ children }) => {
     // });
 
     value.socket.on("stateChanged", routeManagement);
-    value.socket.on("stateChanged", incrementStep);
     value.socket.on("backToState", backToRoute);
-
     value.socket.on("setCurrentBluffer", setBluffer);
     value.socket.on("setScore", setPlayersScore);
     value.socket.on("resetAll", resetGame);
 
     return () => {
       value.socket.off("stateChanged", routeManagement);
-      value.socket.off("stateChanged", incrementStep);
       value.socket.off("backToState", backToRoute);
       value.socket.off("setCurrentBluffer", setBluffer);
       value.socket.off("setScore", setPlayersScore);

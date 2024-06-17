@@ -3,7 +3,7 @@ import styles from "./progressBar.module.scss";
 import { useSelector } from "react-redux";
 
 const ProgressBar = () => {
-  const value = useSelector((state) => state.game.setAdvancementRouand);
+  const value = useSelector((state) => state.game.manche);
   const players = useSelector((state) => state.players.players);
   const playersInGame = useSelector((state) => state.players.playersInGame);
   const max = playersInGame.length;

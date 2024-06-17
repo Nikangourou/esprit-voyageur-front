@@ -25,7 +25,7 @@ export default function Images() {
   const [isBlurry, setIsBlurry] = useState(true);
   const [isTrue, setIsTrue] = useState(true);
   const [images, setImages] = useState([]);
-  const [startChrono, setStartChrono] = useState(1000);
+  const [startChrono, setStartChrono] = useState(80);
   const [disconnect, setDisconnect] = useState(false);
   const dispatch = useDispatch();
   const currentBluffer = useSelector((state) => state.players.currentBluffer);
@@ -170,7 +170,7 @@ export default function Images() {
         <Button
           color={"#373FEF"}
           type="link"
-          // events={events}
+          events={{onClick: onEndCountdown}}
         >
           Je suis prêt
         </Button>

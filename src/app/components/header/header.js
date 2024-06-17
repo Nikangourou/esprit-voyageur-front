@@ -7,7 +7,7 @@ import Menu from "./menu/menu";
 import { SocketContext } from "../../context/socketContext";
 import { setCountDownPause } from "../../store/reducers/gameReducer";
 import { useDispatch } from "react-redux";
-import ProgressBar from "../progressBar/progressBar";
+import ProgressBar from "./progressBar/progressBar";
 
 export default function Header({ isProgressBar = false }) {
   const { soundManager } = useContext(SocketContext);
