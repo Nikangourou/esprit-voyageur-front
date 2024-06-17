@@ -34,12 +34,7 @@ export default function Images() {
   const falseImageId = useSelector((state) => state.players.falseImageId);
   const { socket } = useContext(SocketContext);
   const gameId = useRef(null);
-  const players = useSelector((state) => state.players.players);
-  const currentBluffer = useSelector((state) => state.players.currentBluffer);
-  const colorStyle =
-    currentBluffer && currentBluffer != ""
-      ? players[currentBluffer].color
-      : "#373FEF";
+ 
 
   const urlParams = new URLSearchParams(window.location.search);
   gameId.current = urlParams.get("gameId");
