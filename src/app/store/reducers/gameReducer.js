@@ -9,6 +9,7 @@ export const gameSlice = createSlice({
     footerLink: "",
     setAdvancementStep: 0,
     setAdvancementRouand: 0,
+    countDownPause: false
   },
   reducers: {
     setShaderPosition: (state, action) => {
@@ -30,10 +31,13 @@ export const gameSlice = createSlice({
     setAdvancementRouand: (state, action) => {
       state.setAdvancementRouand = action.payload;
     },
+    setCountDownPause: (state, action) => {
+      state.countDownPause = action.payload;
+    },
   },
 });
 
-export const { setShaderPosition, setDistanceCircle, setOffset } =
+export const { setShaderPosition, setDistanceCircle, setOffset, setCountDownPause} =
   gameSlice.actions;
 
 export default gameSlice.reducer;

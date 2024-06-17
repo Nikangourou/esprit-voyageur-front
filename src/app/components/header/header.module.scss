@@ -1,0 +1,24 @@
+.header{
+    display: flex;
+    justify-content: space-between;
+    height: 80px;
+    padding: 20px 20px 10px 20px;
+
+    .containerLeft{
+     
+    }
+
+    .containerRight{
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        .imgSoundContainer{
+            width: 60px;
+            
+            img{
+                height: 100%;
+            }
+        }
+    }
+}

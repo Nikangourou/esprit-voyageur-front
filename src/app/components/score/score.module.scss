@@ -1,11 +1,11 @@
 .main {
   position: relative;
-  height: 100vh;
+  height: 100%;
   width: 100vw;
   z-index: 10;
 
   .content {
-    height: calc(100% - 190px);
+    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;

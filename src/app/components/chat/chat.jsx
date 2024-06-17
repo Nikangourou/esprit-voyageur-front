@@ -177,7 +177,7 @@ export default function Chat() {
           },
           () => {
             setNbSendMessages((prev) => prev + 1);
-          },
+          }
         );
       });
   };
