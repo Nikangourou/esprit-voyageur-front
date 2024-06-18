@@ -3,10 +3,15 @@ import styles from "./progressBar.module.scss";
 import { useSelector } from "react-redux";
 
 const ProgressBar = () => {
-  const value = useSelector((state) => state.game.manche);
+  const valueManche = useSelector((state) => state.game.manche);
+  const valueAdvancedManche = useSelector((state) => state.game.advancementManche);
+  
   const players = useSelector((state) => state.players.players);
   const playersInGame = useSelector((state) => state.players.playersInGame);
-  const max = playersInGame.length;
+
+  const maxManche = playersInGame.length;
+  const maxAdvancedManche = 7
+  
 
   const currentBluffer = useSelector((state) => state.players.currentBluffer);
   const color =
@@ -17,7 +22,7 @@ const ProgressBar = () => {
   return (
     <div className={styles.progressBar}>
       <span className={styles.label}>
-        Manche <span className={styles.manche}><span style={{color: color}}>{value}</span>/{max}</span> 
+        Manche <span className={styles.manche}><span style={{color: color}}>{valueManche}</span>/{maxManche}</span> 
       </span>
       <div
         className={styles.progressBarContainer}
@@ -26,7 +31,7 @@ const ProgressBar = () => {
         <div
           className={styles.progressBarValue}
           style={{
-            width: `${(value / max) * 100}%`,
+            width: `${(valueAdvancedManche / maxAdvancedManche) * 100}%`,
             backgroundColor: color,
           }}
         ></div>
@@ -35,10 +40,4 @@ const ProgressBar = () => {
   );
 };
 
-const ProgressComponent = ({ value }) => {
-  const maxProgress = 7;
-
-  return <ProgressBar value={value} max={maxProgress} />;
-};
-
-export default ProgressComponent;
+export default ProgressBar;

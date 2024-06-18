@@ -12,11 +12,14 @@ import Button from "../button/button";
 import Footer from "../footer/footer";
 import Title from "../../components/title/title";
 import ClipBlob from "../../components/clipBlob/clipBlob";
+import { setAdvancementManche} from "../../store/reducers/gameReducer";
+
 
 export default function Code() {
   const players = useSelector((state) => state.players.players);
   const searchParams = useSearchParams();
   const gameId = searchParams.get("gameId");
+  const dispatch = useDispatch();
 
   const currentBluffer = useSelector((state) => state.players.currentBluffer);
   const colorStyle =
@@ -24,6 +27,11 @@ export default function Code() {
       ? players[currentBluffer].color
       : "#373FEF";
   console.log(colorStyle);
+
+
+  useEffect(() => {
+    dispatch(setAdvancementManche(1));
+  }, []);
   // useEffect(() => {
   //   if (socket && !isReady.current) {
   //     isReady.current = true;

@@ -66,7 +66,7 @@ const SocketProvider = ({ children }) => {
                 dispatch(setShaderPosition(1));
               },
               null,
-              2,
+              2
             );
         }
         break;
