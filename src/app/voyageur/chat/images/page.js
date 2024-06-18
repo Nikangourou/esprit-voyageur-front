@@ -34,7 +34,7 @@ export default function Images() {
   const falseImageId = useSelector((state) => state.players.falseImageId);
   const { socket } = useContext(SocketContext);
   const gameId = useRef(null);
- 
+  const [isMobile, setIsMobile] = useState(window.innerHeight <= 668);
 
   const urlParams = new URLSearchParams(window.location.search);
   gameId.current = urlParams.get("gameId");
@@ -53,6 +53,10 @@ export default function Images() {
     if (trueImageId && falseImageId) {
       document
         .querySelector(".swiper-pagination-bullet-active")
+        .style.setProperty("--colorActive", colorStyle);
+
+      document
+        .querySelector(`.${styles.images}`)
         .style.setProperty("--colorActive", colorStyle);
       const arrayTmp = [trueImageId, falseImageId];
       arrayTmp.forEach((imageId) => {
@@ -83,15 +87,16 @@ export default function Images() {
     if (images.length === 2) {
       const tl = gsap
         .timeline()
-        .to(".pageContainer", { opacity: 1, duration: 3, ease: "power3.out" })
-        .call(
-          () => {
-            dispatch(setShaderPosition(1));
-            dispatch(setDistanceCircle([0.1, 0.1]));
-          },
-          null,
-          "<0.5"
-        );
+        .call(() => {
+          dispatch(setShaderPosition(1));
+          dispatch(setDistanceCircle([0.1, 0.1]));
+        })
+        .to(".pageContainer", {
+          opacity: 1,
+          duration: 3,
+          delay: 1.5,
+          ease: "power3.out",
+        });
 
       setTimeout(() => {
         setIsBlurry(false);
@@ -130,7 +135,7 @@ export default function Images() {
   return (
     <div className={styles.images}>
       <div className={styles.containerCountdown}>
-        <Countdown start={startChrono}/>
+        <Countdown start={startChrono} />
       </div>
       <Title text={"Prépare ton"} important={"bluff"}></Title>
       <Swiper
@@ -150,7 +155,7 @@ export default function Images() {
                 margin: "2rem auto",
                 marginBottom: "1.75rem",
                 width: "280px",
-                height: "400px",
+                height: isMobile ? "280px" : "400px",
                 transform: `rotateZ(${index % 2 == 0 ? "2.5deg" : "-1.25deg"})`,
               }}
               srcFront={image.url}
@@ -170,7 +175,7 @@ export default function Images() {
         <Button
           color={"#373FEF"}
           type="link"
-          events={{onClick: onEndCountdown}}
+          events={{ onClick: onEndCountdown }}
         >
           Je suis prêt
         </Button>

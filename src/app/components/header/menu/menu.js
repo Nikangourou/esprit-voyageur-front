@@ -3,11 +3,8 @@
 import { useEffect, useState } from "react";
 import styles from "./menu.module.scss";
 import { useRouter } from "next/navigation";
-import {
-  newGame,
-} from "../store/reducers/playersReducer";
+import { newGame } from "../../../store/reducers/playersReducer";
 import { useDispatch } from "react-redux";
-
 
 export default function Menu({ openMenu, setOpenMenu }) {
   const router = useRouter();
@@ -17,7 +14,6 @@ export default function Menu({ openMenu, setOpenMenu }) {
     dispatch(newGame());
     router.push("/");
   };
- 
 
   return (
     <div className={styles.menu}>
@@ -30,7 +26,10 @@ export default function Menu({ openMenu, setOpenMenu }) {
         </div>
         <p>Continuer</p>
       </div>
-      <div className={`${styles.card} ${styles.recommencer}`} onClick={restartGame}>
+      <div
+        className={`${styles.card} ${styles.recommencer}`}
+        onClick={restartGame}
+      >
         <div className={styles.containerImg}>
           <img src="/images/stair.svg" alt="logo" />
         </div>

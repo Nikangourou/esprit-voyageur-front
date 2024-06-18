@@ -2,6 +2,10 @@
 
   .containerMessages{
     position: relative;
+    display: inline-block;
+    height: 60svh;
+    width: 100svw;
+    animation: appear 1s both 1s cubic-bezier(.26,1.24,.74,1.01);
   }
 
   .containerCountdown {
@@ -28,6 +32,9 @@
     width: 80%;
     height: 120px;
     margin: auto;
+    @media screen and (max-height: 668px) {
+      height: 80px;
+    }
 
     button {
       position: absolute;
@@ -63,6 +70,9 @@
       font-size: 1rem;
       color: rgba(0, 0, 0, 1);
       padding: 0.5rem;
+      @media screen and (max-height: 668px) {
+        font-size: .75rem;
+      }
         &:focus {
           & ~ button{
             opacity: 1;
@@ -96,5 +106,15 @@
     }
   }
 
+
+}
+
+@keyframes appear {
+  0%{
+    transform: translateY(200%);
+  }
+  100%{
+    transform: translateY(0%);
+  }
 
 }

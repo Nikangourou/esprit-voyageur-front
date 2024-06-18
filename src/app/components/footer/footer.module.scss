@@ -43,10 +43,14 @@
       width: 100%;
       height: 30%;
       background: #E8E3D8;
+
     }
     & > svg{
       position: absolute;
       top:60.5%;
+      @media screen and (max-height: 668px) {
+        top: 67.5%;
+      }
       transform:translateY(-50%);
     }
   }

@@ -6,6 +6,10 @@
   background: transparent;
   border:none;
 
+  @media screen and (max-height: 668px) {
+    margin-top:2rem;
+  }
+
 
   .recording {
     height: 60px;
