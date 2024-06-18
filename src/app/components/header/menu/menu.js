@@ -5,7 +5,7 @@ import styles from "./menu.module.scss";
 import { useRouter } from "next/navigation";
 import {
   newGame,
-} from "../store/reducers/playersReducer";
+} from "../../../store/reducers/playersReducer";
 import { useDispatch } from "react-redux";
 
 

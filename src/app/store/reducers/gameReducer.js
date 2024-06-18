@@ -7,7 +7,7 @@ export const gameSlice = createSlice({
     distanceCircle: [0.65, 0.65],
     offset: 0,
     manche: 0,
-    setAdvancementRouand: 0,
+    advancementManche: 0,
     countDownPause: false
   },
   reducers: {
@@ -24,8 +24,8 @@ export const gameSlice = createSlice({
     incrementManche: (state) => {
       state.manche += 1;
     },
-    setAdvancementRouand: (state, action) => {
-      state.setAdvancementRouand = action.payload;
+    setAdvancementManche: (state, action) => {
+      state.advancementManche = action.payload;
     },
     setCountDownPause: (state, action) => {
       state.countDownPause = action.payload;
@@ -33,7 +33,7 @@ export const gameSlice = createSlice({
   },
 });
 
-export const { setShaderPosition, setDistanceCircle, setOffset, setCountDownPause, incrementManche, setAdvancementRouand} =
+export const { setShaderPosition, setDistanceCircle, setOffset, setCountDownPause, incrementManche, setAdvancementManche} =
   gameSlice.actions;
 
 export default gameSlice.reducer;

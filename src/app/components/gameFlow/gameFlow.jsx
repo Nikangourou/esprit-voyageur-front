@@ -8,7 +8,7 @@ import Score from "../score/score";
 import DraggablePawns from "../draggablePawns/draggablePawns";
 import Footer from "../footer/footer";
 import Button from "../button/button";
-import { setDistanceCircle } from "../../store/reducers/gameReducer";
+import { setAdvancementManche, setDistanceCircle } from "../../store/reducers/gameReducer";
 import { setShowFooter } from "../../store/reducers/footerReducer";
 
 export default function GameFlow({ images, gameId }) {
@@ -64,17 +64,20 @@ export default function GameFlow({ images, gameId }) {
     switch (state) {
       case "Conversation":
         dispatch(setShowFooter(false));
+        dispatch(setAdvancementManche(2));
         setChronoStart(120);
         setCurrentPhase("Conversation");
         break;
       case "RevealImage":
         dispatch(setShowFooter(true));
         dispatch(setDistanceCircle([0.1, 0.1]));
+        dispatch(setAdvancementManche(3));
         setChronoStart(120);
         setCurrentPhase("RevealImage");
         break;
       case "QuestionsPhase":
         setCurrentPhase("QuestionsPhase");
+        dispatch(setAdvancementManche(4));
         setIsBlurry(false);
         setChronoStart(20);
         setContentSentence(
@@ -86,6 +89,7 @@ export default function GameFlow({ images, gameId }) {
         break;
       case "VotePhase":
         setCurrentPhase("VotePhase");
+        dispatch(setAdvancementManche(5));
         setChronoStart(20);
         setContentSentence(
           <p>
@@ -96,6 +100,7 @@ export default function GameFlow({ images, gameId }) {
         break;
       case "RevealPhase":
         setCurrentPhase("RevealPhase");
+        dispatch(setAdvancementManche(6));
         setContentSentence(
           <p>
             Le véritable souvenir se dévoile !<br />
@@ -104,6 +109,7 @@ export default function GameFlow({ images, gameId }) {
         );
         break;
       case "ScorePhase":
+        dispatch(setAdvancementManche(7));
         setCurrentPhase("ScorePhase");
         setContentSentence(<p>Voici un récapitulatif des scores</p>);
         break;
