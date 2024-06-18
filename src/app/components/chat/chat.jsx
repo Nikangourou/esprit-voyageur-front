@@ -50,6 +50,7 @@ export default function Chat() {
   const containerMessagesRef = useRef(null);
   const imagesCountRef = useRef(0);
   const textAreaRef = useRef(null);
+  const tlStart = useRef(null);
 
   const colorStyle =
     currentBluffer && currentBluffer != ""
@@ -57,12 +58,6 @@ export default function Chat() {
       : "#373FEF";
 
   useEffect(() => {
-    gsap.fromTo(
-      `.${styles.containerMessages}`,
-      { yPercent: 150, opacity: 0 },
-      { yPercent: 0, opacity: 1, duration: 1, delay: 1.5, ease: "power2.out" },
-    );
-
     if (isReadyRef.current) {
       return;
     }
@@ -177,7 +172,7 @@ export default function Chat() {
           },
           () => {
             setNbSendMessages((prev) => prev + 1);
-          }
+          },
         );
       });
   };
@@ -241,6 +236,12 @@ export default function Chat() {
             setIsFinished("processing");
             const tl = gsap
               .timeline()
+              .to(`.${styles.containerMessages}`, {
+                yPercent: 300,
+                opacity: 0,
+                duration: 1,
+                ease: "power2.out",
+              })
               .to(".pageContainer", {
                 opacity: 0,
                 duration: 3,

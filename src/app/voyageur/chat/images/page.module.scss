@@ -4,6 +4,8 @@
   height: 100%;
   margin: auto;
   text-align: center;
+  --colorActive: red;
+
 
   .swiper {
     //position: absolute;
@@ -40,6 +42,18 @@
         overflow: scroll;
         font-size: 14px;
         text-align: left;
+        @media screen and (max-height: 668px) {
+          height: 200px;
+        }
+        &::-webkit-scrollbar-track {
+          background: transparent;
+        }
+
+        /* Handle */
+        &::-webkit-scrollbar-thumb {
+          background: var(--colorActive);
+          border-radius: 25px;
+        }
       }
     }
 
