@@ -66,7 +66,7 @@ const SocketProvider = ({ children }) => {
                 dispatch(setShaderPosition(1));
               },
               null,
-              2
+              2,
             );
         }
         break;
@@ -120,10 +120,6 @@ const SocketProvider = ({ children }) => {
         break;
       case "VotePhase":
         router.push(`/game?gameId=${gameId}&state=VotePhase`);
-        dispatch(setDistanceCircle([0.1, 0.1]));
-        break;
-      case "RevealPhase":
-        router.push(`/game?gameId=${gameId}&state=RevealPhase`);
         dispatch(setDistanceCircle([0.1, 0.1]));
         break;
       case "ScorePhase":

@@ -4,14 +4,15 @@ import { useSelector } from "react-redux";
 
 const ProgressBar = () => {
   const valueManche = useSelector((state) => state.game.manche);
-  const valueAdvancedManche = useSelector((state) => state.game.advancementManche);
-  
+  const valueAdvancedManche = useSelector(
+    (state) => state.game.advancementManche,
+  );
+
   const players = useSelector((state) => state.players.players);
   const playersInGame = useSelector((state) => state.players.playersInGame);
 
   const maxManche = playersInGame.length;
-  const maxAdvancedManche = 7
-  
+  const maxAdvancedManche = 6;
 
   const currentBluffer = useSelector((state) => state.players.currentBluffer);
   const color =
@@ -22,7 +23,10 @@ const ProgressBar = () => {
   return (
     <div className={styles.progressBar}>
       <span className={styles.label}>
-        Manche <span className={styles.manche}><span style={{color: color}}>{valueManche}</span>/{maxManche}</span> 
+        Manche{" "}
+        <span className={styles.manche}>
+          <span style={{ color: color }}>{valueManche}</span>/{maxManche}
+        </span>
       </span>
       <div
         className={styles.progressBarContainer}

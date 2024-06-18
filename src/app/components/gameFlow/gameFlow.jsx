@@ -8,7 +8,10 @@ import Score from "../score/score";
 import DraggablePawns from "../draggablePawns/draggablePawns";
 import Footer from "../footer/footer";
 import Button from "../button/button";
-import { setAdvancementManche, setDistanceCircle } from "../../store/reducers/gameReducer";
+import {
+  setAdvancementManche,
+  setDistanceCircle,
+} from "../../store/reducers/gameReducer";
 import { setShowFooter } from "../../store/reducers/footerReducer";
 
 export default function GameFlow({ images, gameId }) {
@@ -98,18 +101,8 @@ export default function GameFlow({ images, gameId }) {
           </p>,
         );
         break;
-      case "RevealPhase":
-        setCurrentPhase("RevealPhase");
-        dispatch(setAdvancementManche(6));
-        setContentSentence(
-          <p>
-            Le véritable souvenir se dévoile !<br />
-            <i>Conteur, raconte ton souvenir...</i>
-          </p>,
-        );
-        break;
       case "ScorePhase":
-        dispatch(setAdvancementManche(7));
+        dispatch(setAdvancementManche(6));
         setCurrentPhase("ScorePhase");
         setContentSentence(<p>Voici un récapitulatif des scores</p>);
         break;
@@ -130,15 +123,12 @@ export default function GameFlow({ images, gameId }) {
     } else if (
       currentPhase == "RevealImage" ||
       currentPhase == "QuestionsPhase" ||
-      currentPhase == "VotePhase" ||
-      currentPhase == "RevealPhase"
+      currentPhase == "VotePhase"
     ) {
       return (
         <>
           <div className={styles.containerChrono}>
-            {currentPhase != "RevealPhase" && (
-              <Countdown start={chronoStart} onEnd={eventEndClock}></Countdown>
-            )}
+            <Countdown start={chronoStart} onEnd={eventEndClock}></Countdown>
           </div>
           {currentPhase == "VotePhase" && (
             <DraggablePawns
@@ -200,29 +190,7 @@ export default function GameFlow({ images, gameId }) {
         </div>
       </section>
       <Footer>
-        <div>
-          {contentSentence ? (
-            contentSentence
-          ) : (
-            <p>
-              Nous avons dérobé les souvenirs de{" "}
-              <b style={{ color: colorStyle, textTransform: "capitalize" }}>
-                {currentBluffer}{" "}
-              </b>
-              mais ils sont encore flous...
-              <br /> <i>Chut, n’allez pas lui répéter !</i>
-            </p>
-          )}
-          {/* <div className={styles.playerColors}>
-            {Object.keys(playersInGameObj).map((player) => (
-              <div
-                key={player}
-                style={{ backgroundColor: players[player].color }}
-                className={styles.playerColor}
-              />
-            ))}
-          </div> */}
-        </div>
+        <div>{contentSentence ? contentSentence : null}</div>
         <div>
           <Button
             color={"#373FEF"}
