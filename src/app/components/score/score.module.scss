@@ -1,0 +1,59 @@
+.main {
+  position: relative;
+  height: 100%;
+  width: 100vw;
+  z-index: 10;
+
+  .content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-bottom: 100px;
+
+    h1 {
+      font-family: ContrailOne;
+      font-size: 56px;
+      text-align: center;
+
+      .reverse {
+        color: #efebe2;
+        filter: drop-shadow(1px 1px 0px #373fef);
+        -webkit-text-stroke: 1px #000;
+      }
+    }
+
+    .scoreBoardContainer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 50px;
+    }
+  }
+
+  .footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+
+    .footerContent {
+      font-family: WorkSans;
+
+      .currentBluffer {
+        font-weight: bold;
+      }
+
+      .playerColors {
+        margin-top: 10px;
+        display: flex;
+        gap: 25px;
+
+        .playerColor {
+          height: 25px;
+          width: 25px;
+          border-radius: 50%;
+        }
+      }
+    }
+  }
+}

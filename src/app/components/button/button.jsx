@@ -1,26 +1,65 @@
-import React, { useEffect, useRef } from "react";
+import React, { forwardRef, useContext, useEffect, useRef } from "react";
 import styles from "./button.module.scss";
 import Blob from "../blob/blob";
 import { gsap } from "gsap";
 import { Draggable } from "gsap/Draggable";
+import { SocketContext } from "../../context/socketContext";
 
 gsap.registerPlugin(Draggable);
 
-export default function Button({
-  events,
-  color = "none",
-  colorActive = false,
-  children,
-  type = "cta",
-  disabled = false,
-  dragContainer = null,
-  dragEndEvent = null,
-  dataColor = null,
-}) {
+const Button = forwardRef(function Button(
+  {
+    events,
+    color = "none",
+    colorActive = false,
+    children,
+    type = "cta",
+    disabled = false,
+    dragContainer = null,
+    dragEndEvent = null,
+    dataColor = "none",
+    blobParams = {
+      width: 100,
+      height: 100,
+      numPoints: 12,
+      minRadius: 35,
+      maxRadius: 40,
+      minDuration: 1,
+      maxDuration: 2,
+    },
+  },
+  ref,
+) {
+  const { soundManager } = useContext(SocketContext);
   const buttonRef = useRef();
+  const buttonTl = useRef();
   const draggableRef = useRef();
 
   useEffect(() => {
+    if (type == "blob") {
+      buttonTl.current?.kill();
+
+      let delay = 1;
+      if (Math.random() < 0.33) {
+        delay = 1.5;
+      } else if (Math.random() < 0.66) {
+        delay = 2.25;
+      } else {
+        delay = 3;
+      }
+      buttonTl.current = gsap.timeline().fromTo(
+        buttonRef.current,
+        { opacity: 0, scale: 0 },
+        {
+          scale: 1,
+          opacity: 1,
+          duration: 0.75,
+          ease: "back.out(1.4)",
+          delay: delay,
+        },
+      );
+    }
+
     if (dragContainer) {
       draggableRef.current = Draggable.create(buttonRef.current, {
         type: "x,y",
@@ -76,27 +115,97 @@ export default function Button({
 
     if (type == "blob") {
       return (
-        <Blob
-          numPoints={4}
-          width={200}
-          height={100}
-          minRadius={40}
-          maxRadius={42}
-          minDuration={1}
-          maxDuration={2}
-          color={color}
-        />
+        <button
+          ref={buttonRef}
+          style={{
+            border: "none",
+            background: "none",
+            padding: "0 0",
+            cursor: "pointer",
+          }}
+        >
+          <svg
+            id="svg"
+            viewBox={`0 0 ${blobParams.width} ${blobParams.height}`}
+            width={blobParams.width}
+            height={blobParams.height}
+          >
+            <Blob
+              {...blobParams}
+              color={color}
+              dataColor={dataColor}
+              events={events}
+            />
+          </svg>
+        </button>
       );
     }
 
     if (type == "link") {
       return (
-        <div className={`${styles.link} ${disabled && styles.disabled}`}>
-          {children}
+        <div
+          ref={ref}
+          className={`${styles.buttonBis} ${disabled && styles.disabled}`}
+          {...events}
+          onClick={(e) => {
+            if (!disabled && events && events.onClick) {
+              buttonTl.current?.kill();
+              buttonTl.current = gsap
+                .timeline()
+                .to(`.${styles.principal}`, {
+                  backgroundColor: "#dad6d3",
+                  y: 0,
+                  pointerEvents: "none",
+                  duration: 0.15,
+                  ease: "power2.out",
+                })
+                .to(`.${styles.principal}`, {
+                  backgroundColor: "#EFEBE2",
+                  y: -8,
+                  duration: 0.25,
+                  ease: "power2.out",
+                  onComplete: () => {
+                    soundManager.playSingleSound("cta");
+                  },
+                })
+                .to(
+                  ".pageContainer",
+                  {
+                    opacity: 0,
+                    duration: 1,
+                    ease: "power3.out",
+                    onComplete: () => {
+                      events.onClick(e, buttonTl.current);
+                      buttonTl.current.fromTo(
+                        ".pageContainer",
+                        {
+                          opacity: 0,
+                        },
+                        {
+                          opacity: 1,
+                          delay: 1,
+                          duration: 1,
+                          pointerEvents: "auto",
+                          ease: "power1.out",
+                        },
+                      );
+                    },
+                  },
+                  // "<",
+                );
+            }
+          }}
+        >
+          <div className={styles.principal}>
+            <p>{children}</p>
+          </div>
+          <div className={styles.sub} style={{ background: `${color}` }}></div>
         </div>
       );
     }
   }
 
   return selectButtonType();
-}
+});
+
+export default Button;

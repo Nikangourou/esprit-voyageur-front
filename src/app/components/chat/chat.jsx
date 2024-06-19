@@ -1,84 +1,87 @@
 "use client";
 
-import { useEffect, useState, useRef, useContext, useMemo } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import styles from "./chat.module.scss";
-import Message from "./message/message";
+import Messages from "./messages/messages";
 import RecordingComponent from "../recordingComponent/recordingComponent";
 import * as utils from "../../utils/micro";
 import { v4 as uuidv4 } from "uuid";
-import { pending } from "../../utils/utils";
+import { pending, generateImg } from "../../utils/utils";
 import Countdown from "../chrono/countdown";
 import { SocketContext } from "../../context/socketContext";
+import { div } from "three/nodes";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setDistanceCircle,
+  setShaderPosition,
+} from "../../store/reducers/gameReducer";
+import { get } from "http";
+import { useRouter } from "next/navigation";
+import { gsap } from "gsap";
+import ClipBlob from "../clipBlob/clipBlob";
+import FooterBg from "../footer/footerBg";
 
 const firstMessage = [
   {
     id: uuidv4(),
     content:
-      "Bravo, tu as été désigné comme le Bluffer. Je suis là pour t’aider à tromper les autres joueurs alors, vite, raconte-moi ton souvenir !",
-    send: false,
-  },
-  {
-    id: uuidv4(),
-    content:
-      "C'est parti pour une nouvelle aventure dans tes souvenirs. Pour commencer, peux-tu partager avec moi un souvenir qui te tient particulièrement à cœur ? Mentionne également à quel moment cela s'est passé et quel âge tu avais à ce moment-là.",
+      " Pour commencer, peux-tu partager avec moi un souvenir qui te tient particulièrement à cœur ? Mentionne également à quel moment cela s'est passé et quel âge tu avais à ce moment-là.",
     send: false,
   },
 ];
-
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function Chat() {
+  const players = useSelector((state) => state.players.players);
+  const currentBluffer = useSelector((state) => state.players.currentBluffer);
   const { socket } = useContext(SocketContext);
+  const router = useRouter();
   const [input, setInput] = useState("");
   const [base64, setBase64] = useState(null);
   const [messages, setMessages] = useState(firstMessage);
-  const [isPaused, setIsPaused] = useState(true);
+  const [nbSendMessages, setNbSendMessages] = useState(0);
+
   const [isFinished, setIsFinished] = useState("not");
+  const dispatch = useDispatch();
 
   const threadKey = useRef(null);
   const gameId = useRef(null);
   const isReadyRef = useRef(false);
   const containerMessagesRef = useRef(null);
+  const imagesCountRef = useRef(0);
+  const textAreaRef = useRef(null);
+  const tlStart = useRef(null);
+
+  const colorStyle =
+    currentBluffer && currentBluffer != ""
+      ? players[currentBluffer].color
+      : "#373FEF";
 
   useEffect(() => {
     if (isReadyRef.current) {
       return;
     }
 
-    function startChrono() {
-      setIsPaused(false);
-      console.log("ploppy");
-    }
-
-    const urlParams = new URLSearchParams(window.location.search);
-    gameId.current = urlParams.get("gameId");
-    isReadyRef.current = true;
-    fetch(`${apiUrl}/thread/post/create`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        game_id: gameId.current,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Create Game");
-        console.log(data);
-        threadKey.current = data.key;
-
-        socket.on("startChrono", () => {
-          console.log("test");
-          startChrono();
+    if (!gameId.current) {
+      const urlParams = new URLSearchParams(window.location.search);
+      gameId.current = urlParams.get("gameId");
+      isReadyRef.current = true;
+      fetch(`${apiUrl}/thread/post/create`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          game_id: gameId.current,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Create Game");
+          console.log(data);
+          threadKey.current = data.key;
         });
-
-        socket?.emit("connexionPhone", gameId.current);
-      });
-
-    return () => {
-      socket?.off("startChrono", startChrono);
-    };
+    }
   }, [socket]);
 
   useEffect(() => {
@@ -105,13 +108,6 @@ export default function Chat() {
     }
   }, [base64]);
 
-  useEffect(() => {
-    if (containerMessagesRef.current) {
-      containerMessagesRef.current.scrollTop =
-        containerMessagesRef.current.scrollHeight;
-    }
-  }, [messages]);
-
   const base64Reformat = (base64) => {
     const to_remove = "data:audio/webm;codecs=opus;base64,";
     return utils.arrayBufferToBase64(base64).replace(to_remove, "");
@@ -126,12 +122,8 @@ export default function Chat() {
     };
   };
 
-  const addMessage = (message) => {
-    setMessages((prev) => {
-      const tmp = [...prev];
-      tmp.push(message);
-      return tmp;
-    });
+  const addMessages = (messageAdded) => {
+    setMessages((prev) => [...prev, messageAdded]);
   };
 
   const subMessage = async () => {
@@ -143,16 +135,15 @@ export default function Chat() {
       id: uuidv4(),
       content: input,
       send: true,
-      isImg: false,
     };
 
-    if (messages.length === 1) {
-      updateConversation();
-    } else {
-      sendTextTranscription();
-    }
+    // if (messages.length === 1) {
+    //   updateConversation();
+    // } else {
+    sendTextTranscription();
+    // }
 
-    addMessage(msg);
+    // addMessage(msg);
     setInput("");
   };
 
@@ -172,9 +163,17 @@ export default function Chat() {
         console.log("Send text transcription");
         console.log(data);
 
-        pending(apiUrl, `/run/get/${data.id}`, threadKey.current, (data) => {
-          getAnswer();
-        });
+        pending(
+          apiUrl,
+          `/run/get/${data.id}`,
+          threadKey.current,
+          (data) => {
+            getAnswer();
+          },
+          () => {
+            setNbSendMessages((prev) => prev + 1);
+          },
+        );
       });
   };
 
@@ -209,40 +208,93 @@ export default function Chat() {
     })
       .then((response) => response.json())
       .then((data) => {
+        console.log(data);
         if (data && data[0] && data[0][0]) {
           let content = data[0][0].text.value;
+
+          const regex = /Remember:(.*)/;
+          // Utilisation de la méthode match() pour récupérer le texte correspondant à l'expression régulière
+          const resultat = content.match(regex);
+          const promptRemember = resultat ? resultat[1].trim() : null;
+          if (resultat) {
+            content = promptRemember;
+          }
 
           let msg = {
             id: uuidv4(),
             content: content,
             send: false,
-            isImg: isImg,
-            type: isImg ? type : null,
           };
+
+          if (isImg) {
+            generateImg(apiUrl, content, gameId, type, socket, dispatch);
+          }
 
           if (content.includes("FIN_CONVERSATION")) {
             console.log("FIN_CONVERSATION");
             content = content.replace("FIN_CONVERSATION", "");
             setIsFinished("processing");
-            msg.content = content;
-
-            addMessage(msg);
-
-            generatePrompt("alt")
-              .then(() => {
-                return generatePrompt("simple").then(() => {
-                  setIsFinished("end");
-                });
+            const tl = gsap
+              .timeline()
+              .to(`.${styles.containerMessages}`, {
+                yPercent: 300,
+                opacity: 0,
+                duration: 1,
+                ease: "power2.out",
               })
-              .catch((error) => {
-                console.error(error);
-              });
+              .to(".pageContainer", {
+                opacity: 0,
+                duration: 3,
+                ease: "power2.out",
+              })
+              .to(
+                ".footerBg",
+                {
+                  opacity: 0,
+                  duration: 3,
+                  ease: "power2.out",
+                },
+                "<",
+              )
+              .call(() => {
+                dispatch(setDistanceCircle([0.65, 0.65]));
+              })
+              .call(
+                () => {
+                  dispatch(setShaderPosition(0));
+                },
+                null,
+                ">1",
+              );
+
+            // Utilisation d'une expression régulière pour rechercher la partie du texte après "Remember:"
+
+            addMessages(msg);
+            imagesCountRef.current += 1;
+            if (imagesCountRef.current == 1) {
+              generatePrompt("alt")
+                .then(() => {
+                  console.log("altGenerated");
+                  imagesCountRef.current += 1;
+                  if (imagesCountRef.current == 2) {
+                    return generatePrompt("simple").then(() => {
+                      console.log("simpleGenerated");
+                      setIsFinished("end");
+                      router.push("chat/images?gameId=" + gameId.current);
+                    });
+                  }
+                })
+                .catch((error) => {
+                  console.error(error);
+                });
+            }
           } else {
-            addMessage(msg);
+            addMessages(msg);
           }
         }
       })
       .catch((error) => {
+        console.log("error getAnswer");
         console.error("Error:", error);
       });
   };
@@ -275,7 +327,6 @@ export default function Chat() {
         .then((response) => response.json())
         .then((data) => {
           console.log("Generate prompt", data);
-          // Supposons que pending utilise également des promesses.
           pending(apiUrl, `/run/get/${data.id}`, threadKey.current, (data) => {
             getAnswer(true, type);
             resolve(data); // Résoudre la promesse avec les données reçues.
@@ -286,10 +337,6 @@ export default function Chat() {
           reject(error); // Rejeter la promesse en cas d'erreur.
         });
     });
-  };
-
-  const onEndCountdown = () => {
-    console.log("End countdown");
   };
 
   const handleKeyDown = (event) => {
@@ -306,49 +353,49 @@ export default function Chat() {
 
   return (
     <div className={styles.chat}>
-      <div className={styles.background} />
-      <div className={styles.containerCountdown}>
-         {countdownComponent}
+      <div className={styles.containerMessages}>
+        <Messages
+          nbSendMessages={nbSendMessages}
+          messages={messages}
+        ></Messages>
+        {/*<Message key={message.id} message={message} gameId={gameId.current} />*/}
       </div>
-      <div className={styles.containerMessages} ref={containerMessagesRef}>
-        {messages.map((message) => {
-          return (
-            <Message
-              key={message.id}
-              message={message}
-              gameId={gameId.current}
-            />
-          );
-        })}
+      <div className={styles.inputs}>
+        <div
+          className={styles.containerInput}
+          style={{
+            filter: `drop-shadow(4px 4px 0px ${colorStyle})`,
+          }}
+        >
+          <textarea
+            ref={textAreaRef}
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="Ecrivez votre message"
+          />
+          <button
+            onClick={subMessage}
+            style={{
+              filter: `drop-shadow(1px 2px 0px ${colorStyle})`,
+            }}
+          >
+            <img src="/images/send.svg" alt="Send" />
+          </button>
+          <button
+            className={styles.clearBtn}
+            style={{
+              filter: `drop-shadow(1px 2px 0px ${colorStyle})`,
+            }}
+            onClick={() => setInput("")}
+          >
+            <img src="/images/Trash.svg" alt="Send" />
+          </button>
+        </div>
+        <RecordingComponent onEnd={onSpeechEnd} textAreaRef={textAreaRef} />
       </div>
-      <div
-        className={styles.containerInput}
-        style={{ display: isFinished == "not" ? "auto" : "none" }}
-      >
-        <textarea
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="Ecrivez votre message"
-        />
-        <button onClick={subMessage}>
-          <img src="/send.svg" alt="Send" />
-        </button>
-      </div>
-      <div
-        className={styles.containerRecording}
-        style={{ display: isFinished == "not" ? "auto" : "none" }}
-      >
-        <RecordingComponent onEnd={onSpeechEnd} />
-      </div>
-      {isFinished != "not" && (
-        <p>
-          {isFinished == "processing"
-            ? "Génération des images"
-            : "Veuillez fermé la page et retournez à la table"}
-        </p>
-      )}
+      <FooterBg />
     </div>
   );
 }

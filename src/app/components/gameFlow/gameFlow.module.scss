@@ -1,3 +1,24 @@
+.main {
+  position: relative;
+  height: calc(100vh - 80px);
+
+  .content {
+    height: calc(100% - 190px);
+    width: 100%;
+    position: relative;
+    text-align: center;
+  }
+}
+
+.conversation{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  width: 450px;
+}
+
+
 .imgShaders{
   display: flex;
   flex-direction: row;
@@ -5,12 +26,13 @@
 }
 
 .contentSentence{
-  border-top: 2px solid black;
+  border-top: 2px solid #1c1c1e;
   padding: 20px;
 }
 
 .containerChrono{
   text-align: center;
+  height: 150px;
 }
 
 .dragBtn{

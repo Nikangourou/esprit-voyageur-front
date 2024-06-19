@@ -1,0 +1,38 @@
+.addingPlayer {
+    height: calc(100% - 190px);
+    width: 100%;
+    position: absolute;
+    z-index: 1;
+
+    .blob{
+        position: absolute;
+        &:nth-child(1){
+            top: 8%;
+            left: 32%;
+        }
+        &:nth-child(2){
+            top: 85%;
+            left: 7%;
+        }
+        &:nth-child(3){
+            top: 32%;
+            left: 12.2%;
+        }
+        &:nth-child(4){
+            top: 83%;
+            left: 33%;
+        }
+        &:nth-child(5){
+            top: 23%;
+            left: 82%;
+        }
+        &:nth-child(6){
+            top: 86%;
+            left: 77%;
+        }
+        &:nth-child(7){
+            top: 73%;
+            left: 62%;
+        }
+    }
+}

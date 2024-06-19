@@ -1,21 +1,46 @@
+"use client";
 // BlobComponent.jsx
 import React, { useRef, useEffect } from "react";
 import { gsap, Sine } from "gsap";
+import { useSelector } from "react-redux";
 
 export default function Blob({
   numPoints,
-  width = 200,
-  height = 200,
+  width = 100,
+  height = 100,
   minRadius,
   maxRadius,
   minDuration,
   maxDuration,
-  color,
+  dataColor = "none",
+  colorActive = false,
+  color = "none",
+  events = {},
+  seed = 0,
+  mask,
+  active = false,
+  offset = 2.5,
 }) {
   const blobPathRef = useRef();
   const tlRef = useRef();
+  const yoyoAnim = useRef();
+  const yoyoAnim2 = useRef();
+  const tlTmp = useRef();
+  const randSeed = useRef();
+  const playersInGame = useSelector((state) => state.players.playersInGame);
+
+  function mulberry32(seedVal) {
+    return function () {
+      seedVal |= 0;
+      seedVal = (seedVal + 0x6d2b79f5) | 0;
+      let t = Math.imul(seedVal ^ (seedVal >>> 15), 1 | seedVal);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
 
   useEffect(() => {
+    randSeed.current = mulberry32(seed);
     const blob = createBlob({
       element: blobPathRef.current,
       numPoints,
@@ -29,7 +54,6 @@ export default function Blob({
 
     tlRef.current = blob.tl;
     tlRef.current.play();
-
     return () => {
       if (tlRef.current) {
         tlRef.current.kill();
@@ -45,6 +69,25 @@ export default function Blob({
     maxDuration,
   ]);
 
+  useEffect(() => {
+    if (playersInGame.includes(dataColor) && yoyoAnim.current) {
+      yoyoAnim.current.play();
+      yoyoAnim2.current.pause();
+    }
+  }, [playersInGame]);
+
+  useEffect(() => {
+    if (yoyoAnim2.current && yoyoAnim.current) {
+      if (active) {
+        yoyoAnim2.current.timeScale(10);
+        yoyoAnim2.current.reverse();
+      } else {
+        yoyoAnim2.current.timeScale(1);
+        yoyoAnim2.current.restart();
+      }
+    }
+  }, [active]);
+
   function createBlob(options) {
     const points = []; // This array will hold the center points for the blob
 
@@ -59,6 +102,9 @@ export default function Blob({
       paused: true,
     });
 
+    yoyoAnim.current = gsap.timeline();
+    yoyoAnim2.current = gsap.timeline();
+
     // Use the slice of a circle to calculate initial and target positions for the blob points
     const slice = (Math.PI * 2) / options.numPoints;
     for (let i = 0; i < options.numPoints; i++) {
@@ -71,16 +117,41 @@ export default function Blob({
       const targetX = options.width / 2 + Math.cos(angle) * options.maxRadius;
       const targetY = options.height / 2 + Math.sin(angle) * options.maxRadius;
 
+      const targetX2 =
+        options.width / 2 + Math.cos(angle) * (options.maxRadius - offset);
+      const targetY2 =
+        options.height / 2 + Math.sin(angle) * (options.maxRadius - offset);
+
       // Create a GSAP tween for the point using `to` method chaining it with `yoyo` and `repeat` to make it bounce between minRadius and maxRadius
-      gsap.to(point, {
-        x: targetX,
-        y: targetY,
-        duration: random(options.minDuration, options.maxDuration),
-        yoyo: true,
-        repeat: -1,
-        ease: Sine.easeInOut,
-      });
+      yoyoAnim.current.to(
+        point,
+        {
+          x: targetX,
+          y: targetY,
+          duration: random(options.minDuration, options.maxDuration),
+          yoyo: true,
+          repeat: -1,
+          ease: Sine.easeInOut,
+        },
+        "<",
+      );
+
+      yoyoAnim2.current.to(
+        point,
+        {
+          x: targetX2,
+          y: targetY2,
+          duration: random(options.minDuration, options.maxDuration) * 2,
+          yoyo: true,
+          repeat: -1,
+          ease: Sine.easeInOut,
+        },
+        "<",
+      );
     }
+
+    yoyoAnim.current.pause();
+    yoyoAnim2.current.play();
 
     tl.to({}, { duration: 1, repeat: -1 }); // Dummy tween to keep the timeline active
     tl.play(); // Start the animation
@@ -136,17 +207,21 @@ export default function Blob({
       min = max;
       max = tmp;
     }
-    return min + (max - min) * Math.random();
+    const rand = min + (max - min) * randSeed.current();
+    return rand;
   }
 
   return (
-    <svg
-      id="svg"
-      viewBox={`0 0 ${width} ${height}`}
-      width={width}
-      height={height}
-    >
-      <path id="blob" ref={blobPathRef} fill={color} />
-    </svg>
+    <path
+      id="blob"
+      ref={blobPathRef}
+      fill={seed ? color : colorActive ? color : "#1c1c1e"}
+      style={{
+        transition: "fill 1s ease-out",
+      }}
+      data-color={dataColor != "none" ? dataColor : "none"}
+      mask={mask && `url(${mask})`}
+      {...events}
+    />
   );
 }

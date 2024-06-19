@@ -1,12 +1,36 @@
-.message{
-    max-width: 90%;
-    font-size: 14px;
-    display: block;
-    padding: 10px 20px;
-    font-weight: bold;
-    text-align: center;
-
-    &.send{
-        font-weight: normal;
+.card{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background: var(--backgroundColor);
+    width: 280px;
+    height: 440px;
+    border-radius: 10px;
+    border: 3px solid #221F1F;
+    transform: translateX(-50%);
+    &::before{
+        position: absolute;
+        content:"";
+        width: calc(100% - 15px);
+        height: calc(100% - 15px);
+        border-radius: 5px;
+        background: #221F1F ;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
     }
+}
+
+.message{
+    position: absolute;
+    top:10%;
+    left:50%;
+    transform: translateX(-50%);
+    font-size: 0.9rem;
+    text-align: center;
+    color:#E8E3D8;
+    font-style: italic;
+    width: 85%;
+    opacity: 0;
+
 }

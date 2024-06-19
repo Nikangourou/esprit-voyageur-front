@@ -1,38 +1,50 @@
-.countdown{
-  font-family: Nighty;
-  font-weight:bold;
+.countdown {
+  font-weight: bold;
+  font-family: var(--font-contrail-one);
 
-  p{
+  &.end {
+    animation: shake 0.5s;
+    animation-iteration-count: infinite;
+  }
+
+  p {
     position: relative;
-    font-size:5rem;
+    font-size: 4rem;
     display: inline-block;
-    &:nth-child(1){
-      z-index: 90;
-      transform: translateX(0.1em);
-    }
-    &:nth-child(2){
-      z-index: 80;
-    }
-    &:nth-child(3){
-      z-index: 70;
-      transform: translateX(-0.1em);
-    }
 
-    &:nth-child(4){
-      z-index: 60;
-      transform: translateX(-0.2em);
+    &.dot{
+      -webkit-text-stroke: 1px #1c1c1e;
+      text-stroke: 1px #1c1c1e;
+      color: var(--backgroundColor);
     }
-
-    &:nth-child(5){
-      z-index: 50;
-      transform: translateX(-0.3em);
-    }
-    span{
+    span {
       position: absolute;
+      -webkit-text-stroke: 0px #1c1c1e;
+      text-stroke: 0px #1c1c1e;
       z-index: -1;
       color: var(--backgroundColor);
-      top: 0;
-      left: 0.05em;
+      top: 0.035em;
+      left: 0.035em;
+    }
+  }
+
+  @keyframes shake {
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
+      transform: translateX(-3px);
+    }
+    20%,
+    40%,
+    60%,
+    80% {
+      transform: translateX(3px);
     }
   }
 }

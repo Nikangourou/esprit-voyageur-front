@@ -1,27 +1,46 @@
-.main{
-    background-image: url("/bg.png");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.main {
+  height: calc(100vh - 80px);
 
-    .container{
-        text-align: center;
-        
-        .btnPlay{
-            background-color: #1C1C1E;
-            margin: auto;
-            margin-top: 20px;
-            display: block;
-            width: 130px;
-            color: #fff;
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-size: 20px;
-            cursor: pointer;
-        }
+  .shape {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translate(-33%, -33%);
+  }
+
+  .content {
+    position: relative;
+    height: calc(100% - 190px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    .qrCode {
+        position: absolute;
+        top: 70%;
+        right: 10%;
+        transform: rotate(25deg);
+        z-index: 1;
     }
+  }
+}
+
+.playerColor {
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+  animation: .5s cubic-bezier(.43,1.64,.74,1.01) popIn;
+}
+@keyframes popIn {
+  0%{
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  100%{
+    opacity: 1;
+    transform: scale(1);
+  }
+
 }

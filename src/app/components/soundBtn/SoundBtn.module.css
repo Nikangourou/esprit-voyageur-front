@@ -1,0 +1,43 @@
+
+.soundPlayer{
+    position: fixed;
+    bottom: clamp(1rem,5svw,2.25rem);
+    right: clamp(1rem,5svw,2.25rem);
+    width: clamp(35px,5svw,50px);
+    height: clamp(35px,5svw,50px);
+    z-index: 101;
+    color: var(--brand-color);
+    background: var(--currentFontColorBis);
+    padding: 2px 4px;
+    border: none;
+    border-radius: 50%;
+    transition: all 0.5s;
+    pointer-events: auto;
+    cursor: pointer;
+    &.hidden{
+        opacity: 0;
+        pointer-events: none;
+    }
+    &:focus{
+        transform: scale(1.05);
+    }
+    .containerSnd{
+        display: flex;
+        gap: 2px;
+        justify-content: center;
+        align-items: flex-end;
+        height: 18px;
+        @media screen and (max-width: 740px) {
+            gap: 1px;
+        }
+        .bar{
+            display: inline-block;
+            width: 3px;
+            height: 2px;
+            background: var(--currentMainColor);
+            transition: background-color 0.5s ease-out;
+            //transform: translateY(-100%);
+        }
+    }
+}
+

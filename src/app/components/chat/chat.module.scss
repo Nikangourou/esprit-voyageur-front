@@ -1,64 +1,94 @@
 .chat {
-  max-width: 600px;
-  margin: auto;
-  height: 100vh;
-  position: relative;
 
-  .background {
-    height: 18vh;
-    background-image: url("/bg-mobile.png");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: bottom;
+  .containerMessages{
+    position: relative;
+    display: inline-block;
+    height: 60svh;
+    width: 100svw;
+    animation: appear 1s both 1s cubic-bezier(.26,1.24,.74,1.01);
   }
 
   .containerCountdown {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 90px;
   }
 
-  .containerMessages {
+  .inputs{
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    position: relative;
-    height: calc(100vh - 18vh - 290px);
-    overflow-y: scroll;
-    mask-image: linear-gradient(to top, black calc(100% - 50px), transparent 100%);
-    
-    & > :first-child {
-      margin-top: auto;
-    }
+    z-index: 2;
   }
 
-  .containerRecording {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100px;
-  }
 
   .containerInput {
-    display: flex;
-    justify-content: space-between;
+    position: relative;
     width: 80%;
+    height: 120px;
     margin: auto;
+    @media screen and (max-height: 668px) {
+      height: 80px;
+    }
+
+    button {
+      position: absolute;
+      bottom: 1em;
+      right: 1em;
+      background-color: var(--backgroundColor);
+      border-radius: 50%;
+      border: 2px solid #1c1c1e;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      opacity: 0;
+      transform-origin: center center;
+      transform: scale(0.8);
+      transition: all 0.25s ease-out 0.15s ;
+      img{
+        width: 20px
+      }
+    }
 
     textarea {
+      position: absolute;
+      bottom:0;
       width: 100%;
+      height: 2.25rem;
       display: block;
-      border-radius: 25px 0 0 25px;
-      height: 100px;
-      padding: 10px;
-      background-color: transparent;
-      border: 1px solid grey;
-      border-right: none;
+      background-color: white;
+      border-radius: 5px;
+      border: 2px solid #1c1c1e;
       resize: none;
-
+      transition: all 0.5s cubic-bezier(.33,1.32,.73,.99) 0.25s;
+      font-family: var(--font-work-sans);
+      font-size: 1rem;
+      color: rgba(0, 0, 0, 1);
+      padding: 0.5rem;
+      @media screen and (max-height: 668px) {
+        font-size: .75rem;
+      }
         &:focus {
-            outline: none;
+          & ~ button{
+            opacity: 1;
+            transform: scale(1) ;
+            transition: transform 0.33s cubic-bezier(.34,1.56,.74,1.17) 0.33s, opacity 0.75s ease-out 0.33s;
+            pointer-events: auto;
+
+          }
+          & ~ .clearBtn{
+            transform: scale(1);
+            transition: transform 0.15s cubic-bezier(.34,1.56,.74,1.17) 0.5s, opacity 0.15s ease-out 0.5s;
+          }
+          outline: none;
+          height: 100%;
+          color: rgba(0, 0, 0, 1);
+          transition: all 0.66s cubic-bezier(.55,-0.31,.12,1.48);
         }
 
         &:focus-visible {
@@ -66,17 +96,25 @@
         }
     }
 
-    button {
-      background-color: transparent;
-      border-radius: 0 25px 25px 0;
-      border: 1px solid grey;
-      border-left: none;
-      width: 80px;
-      cursor: pointer;
 
-      img{
-        width: 35px
-      }
+
+    .clearBtn{
+      right: 4.5em;
+      transition: all 0.25s ease-out 0s ;
+
+
     }
   }
+
+
+}
+
+@keyframes appear {
+  0%{
+    transform: translateY(200%);
+  }
+  100%{
+    transform: translateY(0%);
+  }
+
 }

@@ -6,7 +6,7 @@ import { gsap } from "gsap";
 import * as THREE from "three";
 
 const ImageShader = forwardRef(function ImageShader(
-  { url, isBlurry = true },
+  { url, isBlurry = true, width = 700, height = 700, speed = 1},
   ref,
 ) {
   const canvasRef = useRef(null);
@@ -67,8 +67,8 @@ const ImageShader = forwardRef(function ImageShader(
         canvas: canvasRef.current,
       });
       const sizes = {
-        width: 700,
-        height: 700,
+        width: width,
+        height: height
       };
       rendererRef.current.setSize(sizes.width, sizes.height);
 

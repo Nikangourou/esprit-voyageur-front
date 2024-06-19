@@ -4,17 +4,19 @@ export const playersSlice = createSlice({
   name: "counter",
   initialState: {
     playersInGame: [],
-    currentBluffeur: "",
-    nbRound: 0,
     players: {
-      rouge: { color: "red", score: 0, alreadyPlay: false },
-      bleu: { color: "blue", score: 0, alreadyPlay: false },
-      violet: { color: "purple", score: 0, alreadyPlay: false },
-      jaune: { color: "yellow", score: 0, alreadyPlay: false },
-      vert: { color: "green", score: 0, alreadyPlay: false },
-      cyan: { color: "#1ecbe1", score: 0, alreadyPlay: false },
-      noir: { color: "black", score: 0, alreadyPlay: false },
+      rouge: { color: "#FF0066", score: 0, alreadyPlay: false },
+      orange: { color: "#FDA735", score: 0, alreadyPlay: false },
+      violet: { color: "#B75AFF", score: 0, alreadyPlay: false },
+      jaune: { color: "#FFDE00", score: 0, alreadyPlay: false },
+      vert: { color: "#2CD68F", score: 0, alreadyPlay: false },
+      cyan: { color: "#00DACF", score: 0, alreadyPlay: false },
+      rose: { color: "#FF9FC2", score: 0, alreadyPlay: false },
     },
+    currentBluffer: "",
+    gameId: "",
+    trueImageId: "",
+    falseImageId: "",
   },
   reducers: {
     addPlayer: (state, action) => {
@@ -22,60 +24,58 @@ export const playersSlice = createSlice({
       let playerAlreadyAdded = state.players[action.payload.color].used;
       if (!playerAlreadyAdded) {
         state.playersInGame = [...state.playersInGame, action.payload.color];
-        state.players[action.payload.color].used = true;
       }
     },
-    selectBlufferPlayer: (state) => {
-      let currentBluffeur = "";
-      console.log(...state.playersInGame);
-      const playersAvailable = [...state.playersInGame].filter((player) => {
-        return !state.players[player].alreadyPlay;
-      });
-      if (playersAvailable.length > 0) {
-        const idx = Math.floor(Math.random() * playersAvailable.length);
-        currentBluffeur = playersAvailable[idx];
-        state.players[currentBluffeur].alreadyPlay = true;
-      }
-      state.currentBluffeur = currentBluffeur;
+    newRound: (state) => {
+      state.currentBluffer = "";
+      state.trueImageId = null;
+      state.falseImageId = null;
     },
-    // Increment le score de tout les joueurs selon le parametre de la fonction.
-    // format paramettre : {imageTrue: [...listeCouleurs] }
-    incrementScorePlayers: (state, action) => {
-      console.log(action.payload);
-
-      action.payload.imageTrue.forEach((color) => {
-        console.log(state.players[color]);
-        state.players[color].score += 1;
-      });
-      state.players[state.currentBluffeur].score +=
-        state.playersInGame.length - (action.payload.imageTrue.length + 1);
-      // NbPlayers - (NbTrue - currentBluffeur) = additionnalScoreBluffeur
-    },
-    resetGame: (state) => {
-      state.players = {
-        rouge: { color: "red", score: 0, alreadyPlay: false },
-        bleu: { color: "blue", score: 0, alreadyPlay: false },
-        violet: { color: "purple", score: 0, alreadyPlay: false },
-        jaune: { color: "yellow", score: 0, alreadyPlay: false },
-        vert: { color: "green", score: 0, alreadyPlay: false },
-        cyan: { color: "#1ecbe1", score: 0, alreadyPlay: false },
-        noir: { color: "black", score: 0, alreadyPlay: false },
-      };
+    newGame: (state) => {
       state.playersInGame = [];
-      state.currentBluffeur = "";
-      state.nbRound = 0;
+      state.players = {
+        rouge: { color: "#FF0066", score: 0, alreadyPlay: false },
+        orange: { color: "#FDA735", score: 0, alreadyPlay: false },
+        violet: { color: "#B75AFF", score: 0, alreadyPlay: false },
+        jaune: { color: "#FFDE00", score: 0, alreadyPlay: false },
+        vert: { color: "#2CD68F", score: 0, alreadyPlay: false },
+        cyan: { color: "#00DACF", score: 0, alreadyPlay: false },
+        rose: { color: "#FF9FC2", score: 0, alreadyPlay: false },
+      };
+      state.currentBluffer = "";
+      state.gameId = null;
+      state.trueImageId = null;
+      state.falseImageId = null;
     },
-    incrementNbRound: (state) => {
-      state.nbRound += 1;
+    setGameId: (state, action) => {
+      state.gameId = action.payload.gameId;
+      if (action.payload.isReconnected) {
+        console.log("reco");
+      }
+    },
+    setTrueImageId: (state, action) => {
+      state.trueImageId = action.payload.id;
+    },
+    setFalseImageId: (state, action) => {
+      state.falseImageId = action.payload.id;
+    },
+    setCurrentBluffer: (state, action) => {
+      state.currentBluffer = action.payload.CurrentBluffer;
+    },
+    setScore: (state, action) => {
+      state.players = action.payload.Players;
     },
   },
 });
 
 export const {
   addPlayer,
-  selectBlufferPlayer,
-  incrementScorePlayers,
-  resetGame,
-  incrementNbRound,
+  setScore,
+  setGameId,
+  setTrueImageId,
+  setFalseImageId,
+  setCurrentBluffer,
+  newRound,
+  newGame,
 } = playersSlice.actions;
 export default playersSlice.reducer;

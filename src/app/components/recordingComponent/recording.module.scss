@@ -1,11 +1,34 @@
-.recording {
-  background-image: url("/icon-mic.svg");
-  background-size: contain;
-  height: 70px;
-  width: 70px;
-  cursor: pointer;
+.containerRecording{
+  position: relative;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  margin-top:4rem;
+  background: transparent;
+  border:none;
 
-  &.recordingActive {
-    background-image: url("/icon-mic-active.svg");
+  @media screen and (max-height: 668px) {
+    margin-top:2rem;
   }
+
+
+  .recording {
+    height: 60px;
+    width: 60px;
+    cursor: pointer;
+  }
+
+  .clip{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    &:last-child{
+      top:calc(50% + 2px);
+      left: calc(50% + 2px);
+      z-index: -1;
+    }
+  }
+
 }
+

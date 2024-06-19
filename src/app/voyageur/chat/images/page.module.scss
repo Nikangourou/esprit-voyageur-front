@@ -1,0 +1,83 @@
+.images {
+  position: relative;
+  max-width: 600px;
+  height: 100%;
+  margin: auto;
+  text-align: center;
+  --colorActive: red;
+
+
+  .swiper {
+    //position: absolute;
+    //top: 50%;
+    //left: 50%;
+    //transform: translate(-50%,-50%);
+    width: 100dvw;
+    z-index: 0;
+
+    .imageContainer{
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+      width: 100%;
+      aspect-ratio: 1/1;
+
+      // background-color: red;
+      & > p{
+        font-family: var(--font-contrail-one);
+        color: var(--backgroundColor);
+        font-size: 1.5rem;
+        margin-top: 1rem;
+      }
+    }
+
+    .indice{
+      transform: rotateY(180deg) ;
+      padding: 2rem 1rem;
+      color: white;
+
+      & > p {
+        height: 320px;
+        overflow: scroll;
+        font-size: 14px;
+        text-align: left;
+        @media screen and (max-height: 668px) {
+          height: 200px;
+        }
+        &::-webkit-scrollbar-track {
+          background: transparent;
+        }
+
+        /* Handle */
+        &::-webkit-scrollbar-thumb {
+          background: var(--colorActive);
+          border-radius: 25px;
+        }
+      }
+    }
+
+
+
+    img {
+      width: 100%;
+      // object-fit: cover;
+      // clip-path: path(
+      //   "M315.322 198.621C307.379 212.217 296.788 224.74 282.941 232.182C271.921 238.122 259.434 240.555 247.125 242.881C225.729 246.924 204.118 250.788 183.831 258.731C169.591 264.313 155.887 271.934 140.752 274.224C124.007 276.764 106.904 272.506 91.1255 266.316C70.1943 258.123 50.6227 246.423 33.4126 231.932C20.1741 220.769 8.00894 207.315 2.99977 190.749C-1.11491 177.189 -0.113075 162.626 1.31812 148.529C4.0016 122.41 8.18784 96.0759 18.8144 72.0677C29.4411 48.0594 47.1521 26.3053 71.0172 15.3925C93.3438 5.15944 115.134 2.29705 139.679 3.11999C142.72 3.37045 145.761 3.29888 148.803 2.94109C173.956 -0.171759 203.796 -1.99653 224.799 11.0989C234.209 16.9668 241.723 25.4466 250.775 31.887C262.439 40.1521 276.322 44.6961 288.451 52.2815C311.708 66.8438 327.165 92.4264 331.387 119.548C335.609 146.669 329.133 174.935 315.322 198.621Z"
+      // );
+    }
+  }
+
+  .infos{
+    text-transform: uppercase;
+    font-size: 1.75rem;
+    font-weight: normal;
+  }
+}
+
+.buttonContainer{
+  margin-top: 2rem;
+  & > div{
+    margin: 0 auto;
+  }
+}

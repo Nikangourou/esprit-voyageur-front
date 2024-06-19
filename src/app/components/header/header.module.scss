@@ -1,0 +1,17 @@
+    .containerLeft{
+     
+    }
+
+    .containerRight{
+        display: flex;
+        align-items: center;
+        gap: 18px;
+
+        .imgSoundContainer{
+            width: 60px;
+            
+            img{
+                height: 100%;
+            }
+        }
+    }

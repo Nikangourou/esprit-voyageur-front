@@ -1,0 +1,25 @@
+.title{
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: clamp(2rem,5svw,4rem);
+  font-style: italic;
+  white-space: pre-wrap;
+
+  .important{
+    position: relative;
+    display: inline-block;
+    span{
+      display: inline-block;
+      color: var(--backgroundColor)
+    }
+    .outline{
+      position: absolute;
+      top: 0;
+      left: 0;
+      color: #1c1c1e;
+      z-index: -1;
+      -webkit-text-stroke: 4px #1c1c1e;
+    }
+  }
+}
