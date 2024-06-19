@@ -27,7 +27,7 @@ export default function Header({ isProgressBar = false }) {
     if (soundManager) {
       soundManager.toggleSound(
         () => setIsMuted(true),
-        () => setIsMuted(false)
+        () => setIsMuted(false),
       );
     }
   };
@@ -35,16 +35,19 @@ export default function Header({ isProgressBar = false }) {
   return (
     <>
       {openMenu && <Menu openMenu={openMenu} setOpenMenu={setOpenMenu} />}
-      <div className={styles.header}>
+      <div className={`header`}>
         <div className={styles.containerLeft}>
-          {isProgressBar && <ProgressBar/>}
+          {isProgressBar && <ProgressBar />}
         </div>
         <div className={styles.containerRight}>
           <div onClick={() => setOpenMenu(true)}>
             <img src="/images/Pause.svg" alt="logo" />
           </div>
-          <div onClick={toggleMute} className={styles.imgSoundContainer} >
-            <img  src={isMuted ? "/images/soundMute.svg" : "/images/sound.svg"} alt="logo" />
+          <div onClick={toggleMute} className={styles.imgSoundContainer}>
+            <img
+              src={isMuted ? "/images/soundMute.svg" : "/images/sound.svg"}
+              alt="logo"
+            />
           </div>
           <FullScreen />
         </div>

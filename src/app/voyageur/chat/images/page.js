@@ -25,7 +25,7 @@ export default function Images() {
   const [isBlurry, setIsBlurry] = useState(true);
   const [isTrue, setIsTrue] = useState(true);
   const [images, setImages] = useState([]);
-  const [startChrono, setStartChrono] = useState(80);
+  const [startChrono, setStartChrono] = useState(120);
   const [disconnect, setDisconnect] = useState(false);
   const dispatch = useDispatch();
   const currentBluffer = useSelector((state) => state.players.currentBluffer);
@@ -106,7 +106,7 @@ export default function Images() {
         FalseImageId: falseImageId,
       });
       socket.emit("imagesAllGenerated", gameId.current);
-      setStartChrono(30);
+      setStartChrono(120);
     }
   }, [images]);
 

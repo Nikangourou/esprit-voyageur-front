@@ -11,8 +11,11 @@ import Button from "../button/button";
 import {
   setAdvancementManche,
   setDistanceCircle,
+  setShaderPosition,
 } from "../../store/reducers/gameReducer";
 import { setShowFooter } from "../../store/reducers/footerReducer";
+import { gsap } from "gsap";
+import { current } from "@reduxjs/toolkit";
 
 export default function GameFlow({ images, gameId }) {
   const { socket } = useContext(SocketContext);
@@ -75,8 +78,43 @@ export default function GameFlow({ images, gameId }) {
         dispatch(setShowFooter(true));
         dispatch(setDistanceCircle([0.1, 0.1]));
         dispatch(setAdvancementManche(3));
-        setChronoStart(120);
-        setCurrentPhase("RevealImage");
+        dispatch(setShaderPosition(1));
+        gsap
+          .timeline()
+          .to(".pageContainer", {
+            opacity: 0,
+            duration: 1.5,
+            ease: "power2.out",
+          })
+          .to(
+            ".header",
+            {
+              opacity: 0,
+              duration: 1.5,
+              ease: "power2.out",
+              onComplete: () => {
+                setChronoStart(120);
+                setCurrentPhase("RevealImage");
+              },
+            },
+            "<",
+          )
+          .to(".pageContainer", {
+            opacity: 1,
+            duration: 1.5,
+            ease: "power2.out",
+          })
+          .to(".footerBg", {
+            opacity: 1,
+            duration: 1.5,
+            ease: "power2.out",
+          })
+          .to(".header", {
+            opacity: 1,
+            duration: 1.5,
+            ease: "power2.out",
+          });
+
         break;
       case "QuestionsPhase":
         setCurrentPhase("QuestionsPhase");
@@ -103,8 +141,22 @@ export default function GameFlow({ images, gameId }) {
         break;
       case "ScorePhase":
         dispatch(setAdvancementManche(6));
-        setCurrentPhase("ScorePhase");
-        setContentSentence(<p>Voici un récapitulatif des scores</p>);
+        gsap
+          .timeline()
+          .to(".pageContainer", {
+            opacity: 0,
+            duration: 1.5,
+            ease: "power2.out",
+            onComplete: () => {
+              setCurrentPhase("ScorePhase");
+              setContentSentence(<p>Voici un récapitulatif des scores</p>);
+            },
+          })
+          .to(".pageContainer", {
+            opacity: 1,
+            duration: 1.5,
+            ease: "power2.out",
+          });
         break;
     }
   }
@@ -113,12 +165,17 @@ export default function GameFlow({ images, gameId }) {
     console.log(currentPhase, contentSentence, chronoStart);
     if (currentPhase == "Conversation") {
       return (
-        <>
+        <div className={styles.conversation}>
+          <h3>Astuce</h3>
+          <p>
+            Il est plus facile de discerner la vérité avec 2-3 coups dans le
+            nez.
+          </p>
           {/* {currentPhase != "RevealPhase" && (
             <Countdown start={chronoStart} onEnd={eventEndClock}></Countdown>
           )}
           <h1>La conversation est en cours</h1> */}
-        </>
+        </div>
       );
     } else if (
       currentPhase == "RevealImage" ||
@@ -161,10 +218,16 @@ export default function GameFlow({ images, gameId }) {
 
   function clickNextPhase() {
     console.log(colorListTrue);
+    let nextPhase = "EndPhase";
+    if (currentPhase === "ScorePhase") {
+      nextPhase = "Click End";
+    } else if (nextPhase === "RevealImage") {
+      nextPhase = "EndChrono";
+    }
     socket?.emit(
       "sendActorAction",
       gameId,
-      currentPhase == "RevealImage" ? "EndChrono" : "EndPhase",
+      nextPhase,
       currentPhase == "VotePhase" ? { ImageTrueVotes: colorListTrue } : {},
     );
   }
@@ -189,18 +252,20 @@ export default function GameFlow({ images, gameId }) {
             ))}
         </div>
       </section>
-      <Footer>
-        <div>{contentSentence ? contentSentence : null}</div>
-        <div>
-          <Button
-            color={"#373FEF"}
-            type="link"
-            events={{ onClick: clickNextPhase }}
-          >
-            Continuer
-          </Button>
-        </div>
-      </Footer>
+      {currentPhase != "Conversation" ? (
+        <Footer>
+          <div>{contentSentence ? contentSentence : null}</div>
+          <div>
+            <Button
+              color={"#373FEF"}
+              type="link"
+              events={{ onClick: clickNextPhase }}
+            >
+              Continuer
+            </Button>
+          </div>
+        </Footer>
+      ) : null}
     </main>
   );
 }

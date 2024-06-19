@@ -32,7 +32,8 @@ const SocketProvider = ({ children }) => {
   const pathname = usePathname();
   const dispatch = useDispatch();
   const path = useRef();
-  const currentBluffer = useSelector((state) => state.players.currentBluffer);
+  const materialLoaderRef = useRef();
+  const tlLoading = useRef();
 
   useEffect(() => {
     path.current = pathname;
@@ -52,23 +53,59 @@ const SocketProvider = ({ children }) => {
           // dispatch(setOffset(0.115));
         } else {
           router.push(`/game?gameId=${gameId}`);
-          dispatch(setDistanceCircle([0.65, 0.65]));
-          dispatch(setShaderPosition(0));
           const tl = gsap
             .timeline()
             .to(".pageContainer", {
-              opacity: 1,
+              opacity: 0,
               duration: 1.5,
               ease: "power2.out",
-            })
-            .call(
-              () => {
-                dispatch(setShaderPosition(1));
+              onComplete: () => {
+                dispatch(setDistanceCircle([0.45, 0.45]));
+                dispatch(setShaderPosition(0.09));
               },
-              null,
-              2,
-            );
+            })
+            .to(
+              ".footerBg",
+              {
+                opacity: 0,
+                duration: 1.5,
+                ease: "power2.out",
+              },
+              "<",
+            )
+            .to(
+              ".header",
+              {
+                pointerEvents: "none",
+                opacity: 0,
+                duration: 1.5,
+                ease: "power2.out",
+              },
+              "<",
+            )
+            .to(".pageContainer", {
+              opacity: 1,
+              duration: 1.5,
+              delay: 2,
+              ease: "power2.out",
+              onComplete: () => {
+                tlLoading.current = gsap
+                  .timeline()
+                  .to(materialLoaderRef.current.uniforms.uProgress, {
+                    value: 0.25,
+                    duration: 300,
+                    ease: "linear",
+                  });
+              },
+            });
         }
+        break;
+      case "RevealImage":
+        if (path.current == `/game?gameId=${gameId}`) {
+          tlLoading.current?.kill();
+        }
+        break;
+      case "scorePhase":
         break;
       case "WinnerScreen":
         router.push(`/game/qrcode?gameId=${gameId}`);
@@ -190,7 +227,11 @@ const SocketProvider = ({ children }) => {
 
   // État du thème
   return (
-    <SocketContext.Provider value={value}>{children}</SocketContext.Provider>
+    <SocketContext.Provider
+      value={{ materialLoaderRef: materialLoaderRef, ...value }}
+    >
+      {children}
+    </SocketContext.Provider>
   );
 };
 

@@ -31,7 +31,7 @@ export default function Voyageur() {
   return (
     <main className={styles.container}>
       <div className={styles.containerCountdown}>
-        <Countdown start={120} onEnd={onEndCountdown} />
+        <Countdown start={300} onEnd={onEndCountdown} />
         <div className={styles.title}>
           <Title text={"Raconte ton"} important={"souvenir"}></Title>
         </div>

@@ -1,18 +1,20 @@
 "use client";
 
 import styles from "./loadShader.module.scss";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useContext } from "react";
 import { fragmentShader, vertexShader } from "./shader/shader";
 import { gsap } from "gsap";
 import * as THREE from "three";
 import { useSelector } from "react-redux";
 import { CustomEase } from "gsap/CustomEase";
+import { SocketContext } from "../../context/socketContext";
 
 gsap.registerPlugin(CustomEase);
 
 const LoaderShader = () => {
   const players = useSelector((state) => state.players.players);
   const currentBluffer = useSelector((state) => state.players.currentBluffer);
+  const { materialLoaderRef } = useContext(SocketContext);
   const canvasRef = useRef(null);
   const rendererRef = useRef(null);
   const materialRef = useRef();
@@ -93,7 +95,9 @@ const LoaderShader = () => {
       },
     };
 
-    materialRef.current = new THREE.ShaderMaterial(params);
+    const material = new THREE.ShaderMaterial(params);
+    materialRef.current = material;
+    materialLoaderRef.current = material;
 
     meshRef.current = new THREE.Mesh(
       new THREE.PlaneGeometry(2, 2),
