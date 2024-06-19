@@ -347,6 +347,10 @@ export default function Chat() {
     }
   };
 
+  const countdownComponent = useMemo(() => (
+    <Countdown start={120} onEnd={onEndCountdown} paused={isPaused} />
+  ), [isPaused]);
+
   return (
     <div className={styles.chat}>
       <div className={styles.containerMessages}>
