@@ -223,7 +223,13 @@ export default function Cartes() {
           <Card ref={card3Ref} srcFront={"/images/card_3.svg"}></Card>
         </div>
         <div className={styles.countdown}>
-          <Countdown start={chronoStart}></Countdown>
+          <Countdown
+            start={chronoStart}
+            onEnd={() => {
+              const tl = gsap.timeline();
+              clickEvt(null, tl);
+            }}
+          ></Countdown>
         </div>
         <div className={styles.text}>
           <Title

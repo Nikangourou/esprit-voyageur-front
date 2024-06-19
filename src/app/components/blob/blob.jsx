@@ -25,6 +25,7 @@ export default function Blob({
   const tlRef = useRef();
   const yoyoAnim = useRef();
   const yoyoAnim2 = useRef();
+  const tlTmp = useRef();
   const randSeed = useRef();
   const playersInGame = useSelector((state) => state.players.playersInGame);
 
@@ -78,11 +79,11 @@ export default function Blob({
   useEffect(() => {
     if (yoyoAnim2.current && yoyoAnim.current) {
       if (active) {
-        yoyoAnim.current.play();
-        yoyoAnim2.current.pause();
+        yoyoAnim2.current.timeScale(10);
+        yoyoAnim2.current.reverse();
       } else {
-        yoyoAnim.current.pause();
-        yoyoAnim2.current.play();
+        yoyoAnim2.current.timeScale(1);
+        yoyoAnim2.current.restart();
       }
     }
   }, [active]);
