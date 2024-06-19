@@ -34,7 +34,7 @@ export default function Joueurs() {
     gsap.fromTo(
       buttonRef.current,
       { scale: 0.9, opacity: 0 },
-      { scale: 1, opacity: 1, duration: 0.35, delay: 1.5, ease: "back.out(2)" },
+      { scale: 1, opacity: 1, duration: 0.35, delay: 1.5, ease: "back.out(2)" }
     );
   }, []);
 
@@ -42,7 +42,7 @@ export default function Joueurs() {
     gsap.fromTo(
       `.${styles.nbPlayers}`,
       { scale: 0.5 },
-      { scale: 1, duration: 0.5, ease: "back.out(1.2)" },
+      { scale: 1, duration: 0.5, ease: "back.out(1.2)" }
     );
   }, [playersInGame]);
 
@@ -64,7 +64,9 @@ export default function Joueurs() {
             <span className={styles.nbPlayers}>
               {playersInGame.length}
             </span>{" "}
-            joueur enregistrés
+            {playersInGame.length > 0
+              ? "joueurs enregistrés"
+              : "joueur enregistré"}
           </p>
           <div className={styles.playerColors}>
             {Object.keys(playersInGameObj).map((player) => (
