@@ -3,6 +3,7 @@ import "./globals.css";
 import LoadShader from "./components/loadShader/loadShader";
 import { SocketProvider } from "./context/socketContext";
 import FooterBg from "./components/footer/footerBg";
+import { gsap } from "gsap";
 
 const work_sans = Work_Sans({
   subsets: ["latin"],
@@ -33,8 +34,8 @@ export default function RootLayout({ children }) {
     >
       <body>
         <StoreProvider>
-          <LoadShader />
           <SocketProvider>
+            <LoadShader />
             <div className="pageContainer">{children}</div>
             <FooterBg />
           </SocketProvider>
