@@ -10,7 +10,6 @@ export default function QrCode({ gameId, currentBluffer }) {
   }
 
   const domain = window.location.origin;
-  console.log(domain);
   const url = `${domain}/voyageur?gameId=${gameId}&bluffer=${currentBluffer}`;
 
   console.log(url);
