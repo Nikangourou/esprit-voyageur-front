@@ -21,7 +21,7 @@ const RecordingComponent = ({ onEnd, textAreaRef }) => {
 
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
       console.error(
-        "Media devices support is not available, (maybe you are not using https)",
+        "Media devices support is not available, (maybe you are not using https)"
       );
       return;
     }

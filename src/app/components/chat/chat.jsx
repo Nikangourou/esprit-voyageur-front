@@ -121,8 +121,14 @@ export default function Chat() {
     const reader = new FileReader();
     reader.readAsArrayBuffer(audio);
     reader.onload = () => {
-      const buffer = base64Reformat(reader.result);
-      setBase64(buffer);
+      // check if the audio is not empty
+      if (reader.result.byteLength === 0) {
+        console.log("Audio is empty");
+      }else{
+        const buffer = base64Reformat(reader.result);
+        console.log(buffer);
+        setBase64(buffer);
+      }
     };
   };
 
