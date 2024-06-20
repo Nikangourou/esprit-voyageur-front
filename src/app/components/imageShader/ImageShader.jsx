@@ -6,8 +6,8 @@ import { gsap } from "gsap";
 import * as THREE from "three";
 
 const ImageShader = forwardRef(function ImageShader(
-  { url, isBlurry = true, width = 700, height = 700, speed = 1},
-  ref,
+  { url, isBlurry = true, width = 700, height = 700, speed = 1 },
+  ref
 ) {
   const canvasRef = useRef(null);
   const rendererRef = useRef(null);
@@ -55,7 +55,7 @@ const ImageShader = forwardRef(function ImageShader(
 
     meshRef.current = new THREE.Mesh(
       new THREE.PlaneGeometry(2, 2),
-      materialRef.current,
+      materialRef.current
     );
     return meshRef.current;
   }
@@ -68,7 +68,7 @@ const ImageShader = forwardRef(function ImageShader(
       });
       const sizes = {
         width: width,
-        height: height
+        height: height,
       };
       rendererRef.current.setSize(sizes.width, sizes.height);
 
@@ -144,7 +144,11 @@ const ImageShader = forwardRef(function ImageShader(
 
   return (
     <div className={styles.imageShader} ref={ref}>
-      <canvas className={styles.canvas} ref={canvasRef}></canvas>
+      <canvas
+        className={styles.canvas}
+        ref={canvasRef}
+        style={{ background: "transparent" }}
+      ></canvas>
     </div>
   );
 });

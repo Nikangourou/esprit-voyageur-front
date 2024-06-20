@@ -123,6 +123,7 @@ const Button = forwardRef(function Button(
             padding: "0 0",
             cursor: "pointer",
           }}
+          className={styles.blobButton}
         >
           <svg
             id="svg"
@@ -145,7 +146,7 @@ const Button = forwardRef(function Button(
       return (
         <div
           ref={ref}
-          className={`${styles.buttonBis} ${disabled && styles.disabled}`}
+          className={`${styles.linkButton} ${disabled && styles.disabled}`}
           {...events}
           onClick={(e) => {
             if (!disabled && events && events.onClick) {
