@@ -18,10 +18,11 @@ import {
 } from "../store/reducers/gameReducer";
 import SoundManager from "../soundManager";
 
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
 // Créez le contexte
 const value = {
-  socket: io("localhost:5001"),
-  // socket: io("10.137.97.181:5001"),
+  socket: io(apiUrl),
   soundManager: new SoundManager(),
 };
 const SocketContext = createContext(value);
