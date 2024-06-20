@@ -68,7 +68,7 @@ const ImageShader = forwardRef(function ImageShader(
       });
       const sizes = {
         width: width,
-        height: height,
+        height: height
       };
       rendererRef.current.setSize(sizes.width, sizes.height);
 

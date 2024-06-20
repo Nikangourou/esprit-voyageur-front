@@ -31,7 +31,7 @@ export default function Cartes() {
   if (typeof window === "undefined") {
     return <div></div>;
   }
-  
+
   const [isMobile, setIsMobile] = useState(window.innerHeight <= 768);
 
   const cards = [
@@ -220,7 +220,6 @@ export default function Cartes() {
 
   return (
     <main className={styles.main}>
-      {/* <AddPlayer></AddPlayer> */}
       <section className={styles.content}>
         <div className={styles.cardAnim}>
           <Card ref={card1Ref} srcFront={"/images/card_1.svg"}></Card>

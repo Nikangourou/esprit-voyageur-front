@@ -20,11 +20,14 @@ export const playersSlice = createSlice({
   },
   reducers: {
     addPlayer: (state, action) => {
-      console.log(action.payload.color);
-      let playerAlreadyAdded = state.players[action.payload.color].used;
-      if (!playerAlreadyAdded) {
-        state.playersInGame = [...state.playersInGame, action.payload.color];
-      }
+      state.playersInGame = [...state.playersInGame, action.payload.color];
+    },
+    removePlayer: (state, action) => {
+      const copyPlayersInGame = [...state.playersInGame];
+      const index = copyPlayersInGame.indexOf(action.payload.color);
+      const x = copyPlayersInGame.splice(index, 1);
+
+      state.playersInGame = [...copyPlayersInGame];
     },
     newRound: (state) => {
       state.currentBluffer = "";
@@ -70,6 +73,7 @@ export const playersSlice = createSlice({
 
 export const {
   addPlayer,
+  removePlayer,
   setScore,
   setGameId,
   setTrueImageId,

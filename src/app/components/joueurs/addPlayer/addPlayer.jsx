@@ -1,45 +1,13 @@
 import styles from "./addPlayer.module.scss";
-import { useSelector, useDispatch } from "react-redux";
-import { addPlayer } from "../../../store/reducers/playersReducer";
-import { useContext, useEffect, useRef, useState } from "react";
-import Button from "../../button/button";
-import { gsap } from "gsap";
-import Link from "next/link";
-import Blob from "../../blob/blob";
-import { SocketContext } from "../../../context/socketContext";
+import { useSelector } from "react-redux";
+import { useEffect, useRef, useState } from "react";
+import AddBtn from "./addBtn/addBtn";
 
 export default function AddPlayer() {
-  const { soundManager } = useContext(SocketContext);
   const players = useSelector((state) => state.players.players);
-  const timerRef = useRef(null);
   const containerRef = useRef(null);
-  const dispatch = useDispatch();
   let anglesArr = [];
   const [blobs, setBlobs] = useState([]);
-
-  const handleTouchStart = (e) => {
-    timerRef.current = setTimeout(() => {
-      const colorName = e.target.getAttribute("data-color");
-      dispatch(addPlayer({ color: colorName }));
-      gsap.to(e.target, {
-        fill: players[colorName].color,
-      });
-      soundManager.playSingleSound("pawn");
-    }, 1000);
-  };
-
-  const handleTouchEnd = () => {
-    clearTimeout(timerRef.current);
-  };
-
-  const eventsFunctions = {
-    onTouchStart: handleTouchStart,
-    onTouchEnd: handleTouchEnd,
-    onTouchCancel: handleTouchEnd,
-    onMouseDown: handleTouchStart,
-    onMouseUp: handleTouchEnd,
-    onMouseLeave: handleTouchEnd,
-  };
 
   const pawns = [
     {
@@ -157,25 +125,11 @@ export default function AddPlayer() {
   return (
     <section
       className={styles.addingPlayer}
-      // style={{ height: "auto" }} // temporaire
       ref={containerRef}
       onTouchMove={onTouchMove}
     >
       {Object.entries(players).map(([colorName, value], index) => {
-        return (
-          <div
-            className={styles.blob}
-            key={colorName}
-            // style={{ top: blob.top, left: blob.left }}
-          >
-            <Button
-              type={"blob"}
-              color={value.color}
-              dataColor={colorName}
-              events={eventsFunctions}
-            ></Button>
-          </div>
-        );
+        return <AddBtn colorName={colorName} value={value}></AddBtn>;
       })}
     </section>
   );

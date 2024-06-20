@@ -176,7 +176,7 @@ export default function Chat() {
           },
           () => {
             setNbSendMessages((prev) => prev + 1);
-          }
+          },
         );
       });
   };
@@ -268,7 +268,7 @@ export default function Chat() {
                   dispatch(setShaderPosition(0));
                 },
                 null,
-                ">1"
+                ">1",
               );
 
             // Utilisation d'une expression régulière pour rechercher la partie du texte après "Remember:"
