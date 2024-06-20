@@ -59,30 +59,33 @@ export default function Home() {
   };
 
   function clickEvt(e) {
+    const elem = document.documentElement;
+    if (!document.fullscreenElement) {
+      elem.requestFullscreen().catch((err) => {
+        alert(
+          `Error attempting to enable full-screen mode: ${err.message} (${err.name})`,
+        );
+      });
+    }
     router.push("/intro/joueurs");
     soundManager.startXp("global");
     dispatch(setDistanceCircle([0.1, 0.1]));
   }
 
   return (
-      <main className={styles.main}>
-        <div className={styles.container}>
-          <img src="/Logo.svg" alt="Logo" />
-          <div>
-            <Button
-              color={"#373FEF"}
-              type="link"
-              ref={buttonRef}
-              events={events}
-            >
-              Jouer
-            </Button>
-          </div>
-          {/*<Card*/}
-          {/*  frontChild={<p className={styles.front}>Test</p>}*/}
-          {/*  backChild={<p className={styles.back}>Test</p>}*/}
-          {/*></Card>*/}
+    <main className={styles.main}>
+      <div className={styles.container}>
+        <img src="/Logo.svg" alt="Logo" />
+        <div>
+          <Button color={"#373FEF"} type="link" ref={buttonRef} events={events}>
+            Jouer
+          </Button>
         </div>
-      </main>
+        {/*<Card*/}
+        {/*  frontChild={<p className={styles.front}>Test</p>}*/}
+        {/*  backChild={<p className={styles.back}>Test</p>}*/}
+        {/*></Card>*/}
+      </div>
+    </main>
   );
 }
