@@ -134,52 +134,60 @@ export default function Images() {
 
   return (
     <div className={styles.images}>
-      <div className={styles.containerCountdown}>
-        <Countdown start={startChrono} />
-      </div>
-      <Title text={"Prépare ton"} important={"bluff"}></Title>
-      <Swiper
-        pagination={pagination}
-        modules={[Pagination]}
-        className={styles.swiper}
-        spaceBetween={50}
-        slidesPerView={1}
-        onSlideChange={onSlideChange}
-        onSwiper={(swiper) => console.log(swiper)}
-      >
-        {images.map((image, index) => (
-          <SwiperSlide key={image.id}>
-            <Card
-              stylesCard={{
-                position: "relative",
-                margin: "2rem auto",
-                marginBottom: "1.75rem",
-                width: "280px",
-                height: isMobile ? "280px" : "400px",
-                transform: `rotateZ(${index % 2 == 0 ? "2.5deg" : "-1.25deg"})`,
-              }}
-              srcFront={image.url}
-              backChild={
-                <div className={styles.indice}>
-                  <p>{image.prompt}</p>
-                </div>
-              }
-            ></Card>
-            <h3 className={styles.infos}>
-              {image.isTrue ? "Vérité" : "Mensonge"}
-            </h3>
-          </SwiperSlide>
-        ))}
-      </Swiper>
-      <div className={styles.buttonContainer}>
-        <Button
-          color={"#373FEF"}
-          type="link"
-          events={{ onClick: onEndCountdown }}
-        >
-          Je suis prêt
-        </Button>
-      </div>
+      {disconnect ? (
+        <>
+          <div className={styles.containerCountdown}>
+            <Countdown start={startChrono} onEnd={onEndCountdown} />
+          </div>
+          <Title text={"Prépare ton"} important={"bluff"}></Title>
+          <Swiper
+            pagination={pagination}
+            modules={[Pagination]}
+            className={styles.swiper}
+            spaceBetween={50}
+            slidesPerView={1}
+            onSlideChange={onSlideChange}
+            onSwiper={(swiper) => console.log(swiper)}
+          >
+            {images.map((image, index) => (
+              <SwiperSlide key={image.id}>
+                <Card
+                  stylesCard={{
+                    position: "relative",
+                    margin: "2rem auto",
+                    marginBottom: "1.75rem",
+                    width: "280px",
+                    height: isMobile ? "280px" : "400px",
+                    transform: `rotateZ(${
+                      index % 2 == 0 ? "2.5deg" : "-1.25deg"
+                    })`,
+                  }}
+                  srcFront={image.url}
+                  backChild={
+                    <div className={styles.indice}>
+                      <p>{image.prompt}</p>
+                    </div>
+                  }
+                ></Card>
+                <h3 className={styles.infos}>
+                  {image.isTrue ? "Vérité" : "Mensonge"}
+                </h3>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+          <div className={styles.buttonContainer}>
+            <Button
+              color={"#373FEF"}
+              type="link"
+              events={{ onClick: onEndCountdown }}
+            >
+              Je suis prêt
+            </Button>
+          </div>
+        </>
+      ) : (
+        <h4>Veuillez fermer l'application et revenir à la tablette</h4>
+      )}
     </div>
   );
 }

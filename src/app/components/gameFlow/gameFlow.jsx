@@ -93,8 +93,8 @@ export default function GameFlow({ images, gameId }) {
               duration: 1.5,
               ease: "power2.out",
               onComplete: () => {
-                setChronoStart(120);
                 setCurrentPhase("RevealImage");
+                setChronoStart(118.5);
               },
             },
             "<",
@@ -256,13 +256,15 @@ export default function GameFlow({ images, gameId }) {
         <Footer>
           <div>{contentSentence ? contentSentence : null}</div>
           <div>
-            <Button
-              color={"#373FEF"}
-              type="link"
-              events={{ onClick: clickNextPhase }}
-            >
-              Continuer
-            </Button>
+            {currentPhase !== "RevealImage" ? (
+              <Button
+                color={"#373FEF"}
+                type="link"
+                events={{ onClick: clickNextPhase }}
+              >
+                Continuer
+              </Button>
+            ) : null}
           </div>
         </Footer>
       ) : null}
