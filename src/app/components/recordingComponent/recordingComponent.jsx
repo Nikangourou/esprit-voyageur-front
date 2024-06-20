@@ -49,6 +49,7 @@ const RecordingComponent = ({ onEnd, textAreaRef }) => {
   };
 
   const startRecording = () => {
+    console.log("startRecording");
     // Initialize the MediaRecorder if it hasn't been initialized yet
     if (!mediaRecorder.current) {
       initMediaRecorder();
@@ -62,6 +63,7 @@ const RecordingComponent = ({ onEnd, textAreaRef }) => {
   };
 
   const stopRecording = () => {
+    console.log("stopRecording");
     if (
       isRecording &&
       mediaRecorder.current &&
