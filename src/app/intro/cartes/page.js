@@ -215,7 +215,6 @@ export default function Cartes() {
 
   return (
     <main className={styles.main}>
-      {/* <AddPlayer></AddPlayer> */}
       <section className={styles.content}>
         <div className={styles.cardAnim}>
           <Card ref={card1Ref} srcFront={"/images/card_1.svg"}></Card>
