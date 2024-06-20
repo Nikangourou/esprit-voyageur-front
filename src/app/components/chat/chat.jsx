@@ -57,6 +57,10 @@ export default function Chat() {
       ? players[currentBluffer].color
       : "#373FEF";
 
+  if (typeof window === "undefined") {
+    return <div></div>;
+  }
+
   useEffect(() => {
     if (isReadyRef.current) {
       return;
@@ -172,7 +176,7 @@ export default function Chat() {
           },
           () => {
             setNbSendMessages((prev) => prev + 1);
-          },
+          }
         );
       });
   };
@@ -254,7 +258,7 @@ export default function Chat() {
                   duration: 3,
                   ease: "power2.out",
                 },
-                "<",
+                "<"
               )
               .call(() => {
                 dispatch(setDistanceCircle([0.65, 0.65]));
@@ -264,7 +268,7 @@ export default function Chat() {
                   dispatch(setShaderPosition(0));
                 },
                 null,
-                ">1",
+                ">1"
               );
 
             // Utilisation d'une expression régulière pour rechercher la partie du texte après "Remember:"
@@ -346,10 +350,6 @@ export default function Chat() {
       subMessage(); // Soumettez le message
     }
   };
-
-  const countdownComponent = useMemo(() => (
-    <Countdown start={120} onEnd={onEndCountdown} paused={isPaused} />
-  ), [isPaused]);
 
   return (
     <div className={styles.chat}>

@@ -26,6 +26,10 @@ export default function Voyageur() {
   const players = useSelector((state) => state.players.players);
   const [colorStyle, setColorStyle] = useState("#373FEF");
 
+  if (typeof window === "undefined") {
+    return <div></div>;
+  }
+
   const logo = (
     <svg
       style={{ maxWidth: "440px", width: "100%" }}

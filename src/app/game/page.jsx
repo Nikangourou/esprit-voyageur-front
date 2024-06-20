@@ -19,6 +19,10 @@ export default function Intro() {
   const [gameId, setGameId] = useState(null);
   const dispatch = useDispatch();
 
+  if (typeof window === "undefined") {
+    return <div></div>;
+  }
+
   useEffect(() => {
     const handleImagesAllGenerated = (trueImageId, falseImageId) => {
       const arrayTmp = [trueImageId, falseImageId];

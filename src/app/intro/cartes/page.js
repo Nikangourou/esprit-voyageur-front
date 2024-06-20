@@ -27,6 +27,11 @@ export default function Cartes() {
   const card3Ref = useRef();
   const { socket } = useContext(SocketContext);
   const dispatch = useDispatch();
+
+  if (typeof window === "undefined") {
+    return <div></div>;
+  }
+  
   const [isMobile, setIsMobile] = useState(window.innerHeight <= 768);
 
   const cards = [

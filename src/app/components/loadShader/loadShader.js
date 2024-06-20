@@ -29,6 +29,10 @@ const LoaderShader = () => {
   const distanceCircle = useSelector((state) => state.game.distanceCircle);
   const offset = useSelector((state) => state.game.offset);
 
+  if (typeof window === "undefined") {
+    return <div></div>;
+  }
+
   useEffect(() => {
     console.log(currentBluffer);
     const colorStyle =
@@ -89,7 +93,7 @@ const LoaderShader = () => {
         uResolution: {
           value: new THREE.Vector2(
             window.innerWidth * pixelRatio,
-            window.innerHeight * pixelRatio,
+            window.innerHeight * pixelRatio
           ),
         },
       },
@@ -101,7 +105,7 @@ const LoaderShader = () => {
 
     meshRef.current = new THREE.Mesh(
       new THREE.PlaneGeometry(2, 2),
-      materialRef.current,
+      materialRef.current
     );
     return meshRef.current;
   }

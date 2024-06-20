@@ -34,14 +34,16 @@ export default function Images() {
   const falseImageId = useSelector((state) => state.players.falseImageId);
   const { socket } = useContext(SocketContext);
   const gameId = useRef(null);
+
+  if (typeof window === "undefined") {
+    return <div></div>;
+  }
+
   const [isMobile, setIsMobile] = useState(window.innerHeight <= 668);
 
   const urlParams = new URLSearchParams(window.location.search);
   gameId.current = urlParams.get("gameId");
 
-  if (typeof window === "undefined") {
-    return <div></div>;
-  }
   const width = window.innerWidth - window.innerWidth * 0.2;
 
   const colorStyle =

@@ -14,6 +14,10 @@ export default function Voyageur() {
   const [disconnect, setDisconnect] = useState(false);
   const gameId = useRef(null);
 
+  if (typeof window === "undefined") {
+    return <div></div>;
+  }
+
   useEffect(() => {
     if (!gameId.current) {
       const urlParams = new URLSearchParams(window.location.search);
