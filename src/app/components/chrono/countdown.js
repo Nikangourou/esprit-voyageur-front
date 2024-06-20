@@ -45,10 +45,13 @@ const Chrono = React.memo(({ start, onEnd }) => {
 
         if (time <= 0) {
           if (onEnd) {
-            setEndStyle(true);
             onEnd();
           }
+          setEndStyle(true);
         } else {
+          if (endStyle) {
+            setEndStyle(false);
+          }
           requestAnimationId = requestAnimationFrame(update);
         }
       } else {
