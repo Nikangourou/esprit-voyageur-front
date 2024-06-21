@@ -10,15 +10,20 @@ const RecordingComponent = ({ onEnd, textAreaRef }) => {
   const currentBluffer = useSelector((state) => state.players.currentBluffer);
   const [isRecording, setIsRecording] = useState(false);
   const mediaRecorder = useRef(null);
-
+  const streamRef = useRef(null);
+  const chunksRef = useRef([]); 
+  
   const colorStyle =
     currentBluffer && currentBluffer != ""
       ? players[currentBluffer].color
       : "#373FEF";
 
-  const initMediaRecorder = async () => {
-    console.log(navigator);
+  useEffect(() => {
+    // Initialize the media recorder when the component mounts
+    initMediaRecorder();
+  }, []);
 
+  const initMediaRecorder = async () => {
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
       console.error(
         "Media devices support is not available, (maybe you are not using https)"
@@ -30,34 +35,49 @@ const RecordingComponent = ({ onEnd, textAreaRef }) => {
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: true,
       });
-      const newMediaRecorder = new MediaRecorder(stream);
-      newMediaRecorder.ondataavailable = handleDataAvailable;
+      streamRef.current = stream;
 
-      newMediaRecorder.onerror = (event) =>
+      let newMediaRecorder;
+      try {
+        newMediaRecorder = new MediaRecorder(stream);
+      } catch (error) {
+        console.error("MediaRecorder initialization error:", error);
+        return;
+      }
+
+      newMediaRecorder.ondataavailable = (e) => {
+        console.log("Data available:", e.data);
+        if (e.data.size > 0) {
+          chunksRef.current.push(e.data); // Collect each chunk
+        }
+      };
+
+      newMediaRecorder.onstart = () => {
+        console.log("MediaRecorder started");
+      };
+
+      newMediaRecorder.onstop = () => {
+        console.log("MediaRecorder stopped");
+        const blob = new Blob(chunksRef.current, { type: "audio/webm" });
+        chunksRef.current = []; // Reset the chunks array for next record
+        if (onEnd) {
+          onEnd(blob);
+        }
+      };
+
+      newMediaRecorder.onerror = (event) => {
         console.error("MediaRecorder error:", event.error);
+      };
+
       mediaRecorder.current = newMediaRecorder;
-      startRecording();
     } catch (error) {
       console.error("Error accessing media devices:", error);
     }
   };
 
-  const handleDataAvailable = (e) => {
-    if (e.data.size > 0 && onEnd) {
-      onEnd(e.data);
-    }
-  };
-
   const startRecording = () => {
-    console.log("startRecording");
-    // Initialize the MediaRecorder if it hasn't been initialized yet
-    if (!mediaRecorder.current) {
-      initMediaRecorder();
-      return;
-    }
-
     if (mediaRecorder.current && mediaRecorder.current.state === "inactive") {
-      mediaRecorder.current.start();
+      mediaRecorder.current.start(1000);
       setIsRecording(true);
     }
   };
