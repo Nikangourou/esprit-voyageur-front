@@ -110,7 +110,6 @@ a {
 }
 
 .swiper-pagination-bullet-active{
-  --colorActive: #ff0000;
   height: .5rem;
   width: 4rem;
   background: var(--backgroundColor);

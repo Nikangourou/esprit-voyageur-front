@@ -54,12 +54,12 @@ export default function Images() {
   useEffect(() => {
     if (trueImageId && falseImageId) {
       document
-        .querySelector(".swiper-pagination-bullet-active")
-        .style.setProperty("--colorActive", colorStyle);
+        .querySelector(`.${styles.swiper}`)
+        ?.style.setProperty("--colorActive", colorStyle);
 
       document
         .querySelector(`.${styles.images}`)
-        .style.setProperty("--colorActive", colorStyle);
+        ?.style.setProperty("--colorActive", colorStyle);
       const arrayTmp = [trueImageId, falseImageId];
       arrayTmp.forEach((imageId) => {
         fetch(`${apiUrl}/image/get/${imageId}`, {
@@ -136,7 +136,7 @@ export default function Images() {
 
   return (
     <div className={styles.images}>
-      {disconnect ? (
+      {!disconnect ? (
         <>
           <div className={styles.containerCountdown}>
             <Countdown start={startChrono} onEnd={onEndCountdown} />

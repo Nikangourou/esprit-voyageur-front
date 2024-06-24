@@ -4,6 +4,7 @@ import Blob from "../blob/blob";
 import { gsap } from "gsap";
 import { Draggable } from "gsap/Draggable";
 import { SocketContext } from "../../context/socketContext";
+import { useSelector } from "react-redux";
 
 gsap.registerPlugin(Draggable);
 
@@ -34,6 +35,13 @@ const Button = forwardRef(function Button(
   const buttonRef = useRef();
   const buttonTl = useRef();
   const draggableRef = useRef();
+  const players = useSelector((state) => state.players.players);
+  const currentBluffer = useSelector((state) => state.players.currentBluffer);
+
+  const colorStyle =
+    currentBluffer && currentBluffer != ""
+      ? players[currentBluffer].color
+      : "#373FEF";
 
   useEffect(() => {
     if (type == "blob") {
@@ -200,7 +208,10 @@ const Button = forwardRef(function Button(
           <div className={styles.principal}>
             <p>{children}</p>
           </div>
-          <div className={styles.sub} style={{ background: `${color}` }}></div>
+          <div
+            className={styles.sub}
+            style={{ background: `${colorStyle}` }}
+          ></div>
         </div>
       );
     }
