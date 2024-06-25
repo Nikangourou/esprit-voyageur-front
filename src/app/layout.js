@@ -3,6 +3,7 @@ import "./globals.css";
 import LoadShader from "./components/loadShader/loadShader";
 import { SocketProvider } from "./context/socketContext";
 import FooterBg from "./components/footer/footerBg";
+import { Viewport } from "next";
 import { gsap } from "gsap";
 
 const work_sans = Work_Sans({
@@ -24,6 +25,15 @@ import ClipBlob from "./components/clipBlob/clipBlob";
 export const metadata = {
   title: "VraiMent?",
   description: "Le jeu qui fait douter tout le monde",
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  // Also supported by less commonly used
+  // interactiveWidget: 'resizes-visual',
 };
 
 export default function RootLayout({ children }) {

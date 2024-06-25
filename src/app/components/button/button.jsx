@@ -192,7 +192,7 @@ const Button = forwardRef(function Button(
                         },
                         {
                           opacity: 1,
-                          delay: 1,
+                          delay: 1.5,
                           duration: 1,
                           pointerEvents: "auto",
                           ease: "power1.out",
