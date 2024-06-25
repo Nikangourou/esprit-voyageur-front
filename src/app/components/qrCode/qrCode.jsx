@@ -15,8 +15,8 @@ export default function QrCode({ gameId, currentBluffer }) {
   console.log(url);
 
   return (
-    <div>
-      <QRCodeSVG value={url} bgColor="transparent" size={200} />
+    <div style={{ border: "5px solid white" }}>
+      <QRCodeSVG value={url} bgColor="white" size={160} />
     </div>
   );
 }

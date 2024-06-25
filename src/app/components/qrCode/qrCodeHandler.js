@@ -12,14 +12,16 @@ import Button from "../button/button";
 import Footer from "../footer/footer";
 import Title from "../../components/title/title";
 import ClipBlob from "../../components/clipBlob/clipBlob";
-import { setAdvancementManche} from "../../store/reducers/gameReducer";
-
+import Card from "../../components/card/card";
+import { setAdvancementManche } from "../../store/reducers/gameReducer";
+import { gsap } from "gsap";
 
 export default function Code() {
   const players = useSelector((state) => state.players.players);
   const searchParams = useSearchParams();
   const gameId = searchParams.get("gameId");
   const dispatch = useDispatch();
+  const cardRef = useRef();
 
   const currentBluffer = useSelector((state) => state.players.currentBluffer);
   const colorStyle =
@@ -28,9 +30,10 @@ export default function Code() {
       : "#373FEF";
   console.log(colorStyle);
 
-
   useEffect(() => {
     dispatch(setAdvancementManche(1));
+    console.log("advancementManche");
+    anim();
   }, []);
   // useEffect(() => {
   //   if (socket && !isReady.current) {
@@ -50,6 +53,43 @@ export default function Code() {
   //     socket.off("startChrono", handleNextPage);
   //   };
   // }, [socket, gameId]);
+
+  function anim() {
+    const tl = gsap
+      .timeline()
+      .fromTo(
+        cardRef.current,
+        { scale: 1.25, boxShadow: "2px 6px 10px rgba(44,44,44,0.15)" },
+        {
+          scale:  1,
+          duration: 0.5,
+          delay: 5,
+          boxShadow: "2px 6px 10px rgba(44,44,44,.25)",
+          ease: "power2.out",
+        }
+      )
+      .fromTo(
+        cardRef.current,
+        { top: "170%", left: "70%" },
+        {
+          top: "85%",
+          left: "80%",
+          duration: 1.5,
+          ease: "power2.out",
+        },
+        "<"
+      )
+      .fromTo(
+        cardRef.current,
+        { rotationZ: 70 },
+        {
+          rotationZ: 25,
+          duration: 0.25,
+          ease: "power2.out",
+        },
+        "<"
+      );
+  }
 
   return (
     <main className={styles.main}>
@@ -73,9 +113,18 @@ export default function Code() {
           text2={"tu es le\n bluffer "}
         ></Title>
         <p>Scanne le QR code et isole toi...</p>
-        <div className={styles.qrCode}>
-          <QrCode gameId={gameId} currentBluffer={currentBluffer} />
-        </div>
+        <Card
+          ref={cardRef}
+          stylesCard={{
+            position: "absolute",
+            zIndex: 1,
+          }}
+          frontChild={
+            <div className={styles.qrCode}>
+              <QrCode gameId={gameId} currentBluffer={currentBluffer} />
+            </div>
+          }
+        ></Card>
       </section>
       <Footer>
         <div>
