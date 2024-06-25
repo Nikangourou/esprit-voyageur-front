@@ -44,16 +44,21 @@
 
             img{
                 position: relative;
+                height: 100%;
             }
         }
 
-        p{
-            position: relative;
-            font-family: ContrailOne;
-            color: #EFEBE2;
-            font-size: 36px;
-            text-transform: uppercase;
-            margin-bottom: 30px;
-        }
+     
+    }
+    p{
+        position: relative;
+        margin-top: 20px;
+        font-family: ContrailOne;
+        // color: #EFEBE2;
+        color: black;
+        text-align: center;
+        font-size: 36px;
+        text-transform: uppercase;
+        // margin-bottom: 30px;
     }
 }
