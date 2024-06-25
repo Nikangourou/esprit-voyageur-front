@@ -7,7 +7,7 @@ import * as THREE from "three";
 
 const ImageShader = forwardRef(function ImageShader(
   { url, isBlurry = true, width = 700, height = 700, speed = 1 },
-  ref
+  ref,
 ) {
   const canvasRef = useRef(null);
   const rendererRef = useRef(null);
@@ -55,7 +55,7 @@ const ImageShader = forwardRef(function ImageShader(
 
     meshRef.current = new THREE.Mesh(
       new THREE.PlaneGeometry(2, 2),
-      materialRef.current
+      materialRef.current,
     );
     return meshRef.current;
   }
@@ -65,10 +65,11 @@ const ImageShader = forwardRef(function ImageShader(
       // Scene
       rendererRef.current = new THREE.WebGLRenderer({
         canvas: canvasRef.current,
+        alpha: true,
       });
       const sizes = {
         width: width,
-        height: height
+        height: height,
       };
       rendererRef.current.setSize(sizes.width, sizes.height);
 
