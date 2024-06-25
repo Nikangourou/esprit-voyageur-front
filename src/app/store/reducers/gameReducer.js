@@ -8,7 +8,7 @@ export const gameSlice = createSlice({
     offset: 0,
     manche: 0,
     advancementManche: 0,
-    countDownPause: false
+    countDownPause: false,
   },
   reducers: {
     setShaderPosition: (state, action) => {
@@ -30,10 +30,25 @@ export const gameSlice = createSlice({
     setCountDownPause: (state, action) => {
       state.countDownPause = action.payload;
     },
+    resetAllGame: (state, action) => {
+      state.shaderPosition = 0;
+      state.distanceCircle = [0.65, 0.65];
+      state.offset = 0;
+      state.manche = 0;
+      state.advancementManche = 0;
+      state.countDownPause = false;
+    },
   },
 });
 
-export const { setShaderPosition, setDistanceCircle, setOffset, setCountDownPause, incrementManche, setAdvancementManche} =
-  gameSlice.actions;
+export const {
+  setShaderPosition,
+  setDistanceCircle,
+  setOffset,
+  setCountDownPause,
+  incrementManche,
+  setAdvancementManche,
+  resetAllGame,
+} = gameSlice.actions;
 
 export default gameSlice.reducer;

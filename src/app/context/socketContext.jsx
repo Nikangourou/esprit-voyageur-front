@@ -15,8 +15,10 @@ import {
   setOffset,
   setShaderPosition,
   incrementManche,
+  resetAllGame,
 } from "../store/reducers/gameReducer";
 import SoundManager from "../soundManager";
+import { setShowFooter } from "../store/reducers/footerReducer";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -29,6 +31,7 @@ const SocketContext = createContext(value);
 
 // Créez le fournisseur de contexte
 const SocketProvider = ({ children }) => {
+  const [shouldResetGame, setShouldResetGame] = useState(false);
   const gameIdStored = useSelector((state) => state.players.gameId);
   const router = useRouter();
   const pathname = usePathname();
@@ -38,10 +41,31 @@ const SocketProvider = ({ children }) => {
   const tlLoading = useRef();
 
   useEffect(() => {
+    window.addEventListener("popstate", () => {
+      console.log("Retour à la page précédente");
+      setShouldResetGame(true);
+
+      // Effectuer l'action souhaitée
+    });
+  }, []);
+
+  useEffect(() => {
+    if (shouldResetGame) {
+      router.push(`/`);
+      setShouldResetGame(false);
+      dispatch(resetAllGame());
+      dispatch(newGame());
+      dispatch(setShowFooter(false));
+      gsap.to(".footerBg", { opacity: 0 });
+    }
+  }, [shouldResetGame]);
+
+  useEffect(() => {
     path.current = pathname;
     if (
       pathname != "/" &&
       pathname != `/game/qrcode` &&
+      pathname != "/voyageur" &&
       pathname != "/voyageur/chat/images"
     ) {
       console.log(pathname);
@@ -250,7 +274,11 @@ const SocketProvider = ({ children }) => {
   // État du thème
   return (
     <SocketContext.Provider
-      value={{ materialLoaderRef: materialLoaderRef, ...value }}
+      value={{
+        setShouldResetGame: setShouldResetGame,
+        materialLoaderRef: materialLoaderRef,
+        ...value,
+      }}
     >
       {children}
     </SocketContext.Provider>

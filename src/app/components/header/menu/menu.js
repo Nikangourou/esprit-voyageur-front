@@ -1,20 +1,21 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import styles from "./menu.module.scss";
 import { useRouter } from "next/navigation";
 import { newGame } from "../../../store/reducers/playersReducer";
 import { useDispatch } from "react-redux";
 import Galerie from "../galerie/galerie";
+import { SocketContext } from "../../../context/socketContext";
 
 export default function Menu({ openMenu, setOpenMenu }) {
   const router = useRouter();
   const dispatch = useDispatch();
   const [showGalerie, setShowGalerie] = useState(false);
+  const { setShouldResetGame: setShouldResetGame } = useContext(SocketContext);
 
   const restartGame = () => {
-    dispatch(newGame());
-    router.push("/");
+    setShouldResetGame(true);
   };
 
   return (

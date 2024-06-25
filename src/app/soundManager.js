@@ -21,7 +21,7 @@ export default class SoundManager {
     // Définit l'état des sons
     this.soundsList[key].volume(0);
     this.soundsList[key].play();
-    this.soundsList[key].fade(0, 0.2, 500);
+    this.soundsList[key].fade(0, 0.5, 500);
     this.currentSound = this.soundsList[key];
     this.isPlaying = true;
     if (animationStart) {
@@ -31,14 +31,14 @@ export default class SoundManager {
 
   transitionMusic(room) {
     if (this.currentSound) {
-      this.currentSound.fade(0.1, 0, 1000);
+      this.currentSound.fade(0.5, 0, 1000);
       this.currentSound.stop(); // Arrête l'instance audio actuelle
     }
 
     if (this.soundsList[room]) {
       this.soundsList[room].play();
       if (this.isPlaying) {
-        this.soundsList[room].fade(0, 0.1, 1000);
+        this.soundsList[room].fade(0, 0.5, 1000);
       }
       this.currentSound.current = this.soundsList[room];
     }
@@ -48,20 +48,20 @@ export default class SoundManager {
     if (this.soundsList) {
       if (this.isPlaying) {
         for (const [key, value] of Object.entries(this.soundsList)) {
-          this.soundsList[key].fade(0.1, 0, 500);
+          this.soundsList[key].fade(0.5, 0, 500);
         }
         animationStop();
       } else {
         animationStart();
         for (const [key, value] of Object.entries(this.soundsList)) {
-          this.soundsList[key].fade(0, 0.1, 500);
+          this.soundsList[key].fade(0, 0.5, 500);
         }
       }
       this.isPlaying = !this.isPlaying;
     }
   }
 
-  playSingleSound(sound, volume = 0.15) {
+  playSingleSound(sound, volume = 0.35) {
     if (this.soundsList && this.isPlaying && this.soundsList[sound]) {
       this.soundsList[sound].volume(volume);
       this.soundsList[sound].play();
