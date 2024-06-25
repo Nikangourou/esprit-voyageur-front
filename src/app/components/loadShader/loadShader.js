@@ -38,7 +38,7 @@ const LoaderShader = () => {
     const colorStyle =
       currentBluffer && currentBluffer != ""
         ? new THREE.Color(players[currentBluffer].color)
-        : "";
+        : new THREE.Color("#373FEF");
     if (colorStyle !== "") {
       gsap.to(colorRef.current, {
         r: colorStyle.r,
@@ -93,7 +93,7 @@ const LoaderShader = () => {
         uResolution: {
           value: new THREE.Vector2(
             window.innerWidth * pixelRatio,
-            window.innerHeight * pixelRatio
+            window.innerHeight * pixelRatio,
           ),
         },
       },
@@ -105,7 +105,7 @@ const LoaderShader = () => {
 
     meshRef.current = new THREE.Mesh(
       new THREE.PlaneGeometry(2, 2),
-      materialRef.current
+      materialRef.current,
     );
     return meshRef.current;
   }
