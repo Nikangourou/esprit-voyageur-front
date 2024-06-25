@@ -34,12 +34,6 @@ export default function Cartes() {
 
   const [isMobile, setIsMobile] = useState(window.innerHeight <= 768);
 
-  const cards = [
-    "/images/card_1.svg",
-    "/images/card_2.svg",
-    "/images/card_3.svg",
-  ];
-
   const playersInGameObj = playersInGame.reduce((acc, color) => {
     acc[color] = players[color];
     return acc;
@@ -55,7 +49,7 @@ export default function Cartes() {
           dispatch(setShaderPosition(0));
         },
         null,
-        ">1",
+        ">1"
       )
         .to(".footerBg", { opacity: 0, duration: 1, ease: "power2.out" }, "<")
         .call(
@@ -75,7 +69,7 @@ export default function Cartes() {
                 dispatch(
                   setGameId({
                     gameId: data.game_id,
-                  }),
+                  })
                 );
                 gameIdRef.current = data.game_id;
                 localStorage.setItem("gameId", data.game_id);
@@ -87,7 +81,7 @@ export default function Cartes() {
               });
           },
           null,
-          ">2",
+          ">2"
         )
         .call(
           () => {
@@ -95,7 +89,7 @@ export default function Cartes() {
             dispatch(setDistanceCircle([0.1, 0.1]));
           },
           null,
-          ">3",
+          ">3"
         )
         .to(".footerBg", { opacity: 1, duration: 1, ease: "power2.out" }, "<");
     }
@@ -106,6 +100,13 @@ export default function Cartes() {
     anim2();
     anim3();
   }, []);
+
+  function playSound() {
+    if (typeof Audio !== "undefined") {
+      const audio = new Audio("/audio/Son_Carte.mp3");
+      audio.play();
+    }
+  }
 
   function anim1() {
     const tl = gsap
@@ -119,8 +120,9 @@ export default function Cartes() {
           delay: 1.5,
           boxShadow: "2px 6px 10px rgba(44,44,44,.25)",
           ease: "power2.out",
-        },
+        }
       )
+      .call(playSound)
       .fromTo(
         card1Ref.current,
         { top: "170%", left: "50%" },
@@ -130,7 +132,7 @@ export default function Cartes() {
           duration: 1.5,
           ease: "power2.out",
         },
-        "<",
+        "<"
       )
       .fromTo(
         card1Ref.current,
@@ -140,7 +142,7 @@ export default function Cartes() {
           duration: 0.25,
           ease: "power2.out",
         },
-        "<",
+        "<"
       );
   }
 
@@ -156,8 +158,9 @@ export default function Cartes() {
           delay: 1,
           boxShadow: "2px 6px 10px rgba(44,44,44,.25)",
           ease: "power2.out",
-        },
+        }
       )
+      .call(playSound)
       .fromTo(
         card2Ref.current,
         { top: "170%", left: "70%" },
@@ -167,7 +170,7 @@ export default function Cartes() {
           duration: 1.5,
           ease: "power2.out",
         },
-        "<",
+        "<"
       )
       .fromTo(
         card2Ref.current,
@@ -177,7 +180,7 @@ export default function Cartes() {
           duration: 0.25,
           ease: "power2.out",
         },
-        "<",
+        "<"
       );
   }
 
@@ -193,8 +196,9 @@ export default function Cartes() {
           delay: 2,
           boxShadow: "2px 6px 10px rgba(44,44,44,.25)",
           ease: "power2.out",
-        },
+        }
       )
+      .call(playSound)
       .fromTo(
         card3Ref.current,
         { top: "170%", left: "50%" },
@@ -204,7 +208,7 @@ export default function Cartes() {
           duration: 1.5,
           ease: "power2.out",
         },
-        "<",
+        "<"
       )
       .fromTo(
         card3Ref.current,
@@ -214,7 +218,7 @@ export default function Cartes() {
           duration: 0.25,
           ease: "power2.out",
         },
-        "<",
+        "<"
       );
   }
 

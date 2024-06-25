@@ -53,6 +53,13 @@ export default function Code() {
   //   };
   // }, [socket, gameId]);
 
+  function playSound() {
+    if (typeof Audio !== "undefined") {
+      const audio = new Audio("/audio/Son_Carte.mp3");
+      audio.play();
+    }
+  }
+
   function anim() {
     const tl = gsap
       .timeline()
@@ -67,6 +74,7 @@ export default function Code() {
           ease: "power2.out",
         }
       )
+      .call(playSound)
       .fromTo(
         cardRef.current,
         { top: "170%", left: "70%" },

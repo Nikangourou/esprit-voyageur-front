@@ -34,17 +34,6 @@ export default function Menu({ openMenu, setOpenMenu }) {
       </div>
       <div>
         <div
-          className={`${styles.card} ${styles.galerie}`}
-          onClick={() => setShowGalerie(true)}
-        >
-          <div className={styles.containerImg}>
-            <img src="/images/galerie.svg" alt="logo" />
-          </div>
-        </div>
-        <p>Galerie</p>
-      </div>
-      <div>
-        <div
           className={`${styles.card} ${styles.recommencer}`}
           onClick={restartGame}
         >
@@ -53,6 +42,17 @@ export default function Menu({ openMenu, setOpenMenu }) {
           </div>
         </div>
         <p>Recommencer</p>
+      </div>
+      <div>
+        <div
+          className={`${styles.card} ${styles.galerie}`}
+          onClick={() => setShowGalerie(true)}
+        >
+          <div className={styles.containerImg}>
+            <img src="/images/galerie.svg" alt="logo" />
+          </div>
+        </div>
+        <p>Galerie</p>
       </div>
     </div>
   );

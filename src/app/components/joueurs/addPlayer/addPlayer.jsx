@@ -129,7 +129,7 @@ export default function AddPlayer() {
       onTouchMove={onTouchMove}
     >
       {Object.entries(players).map(([colorName, value], index) => {
-        return <AddBtn colorName={colorName} value={value}></AddBtn>;
+        return <AddBtn key={colorName} colorName={colorName} value={value}></AddBtn>;
       })}
     </section>
   );
