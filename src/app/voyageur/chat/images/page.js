@@ -188,7 +188,9 @@ export default function Images() {
           </div>
         </>
       ) : (
-        <h4>Veuillez fermer l'application et revenir à la tablette</h4>
+        <h4 className={styles.closeXp}>
+          Veuillez fermer l'application et revenir à la tablette
+        </h4>
       )}
     </div>
   );
