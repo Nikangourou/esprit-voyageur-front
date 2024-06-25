@@ -75,7 +75,7 @@ export default function Home() {
   return (
     <main className={styles.main}>
       <div className={styles.container}>
-        <img src="/Logo.svg" alt="Logo" />
+        <img src="/images/logo.svg" alt="Logo" />
         <div>
           <Button color={"#373FEF"} type="link" ref={buttonRef} events={events}>
             Jouer

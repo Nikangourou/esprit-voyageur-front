@@ -3,12 +3,18 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  
+
   .container {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 50px;
+    max-width: 500px;
+
+    img {
+      width: 100%;
+      height: auto;
+    }
 
     .blob {
       position: relative;
@@ -17,10 +23,11 @@
   }
 }
 
-.back,.front{
+.back,
+.front {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%,-50%);
-  color:white;
+  transform: translate(-50%, -50%);
+  color: white;
 }
