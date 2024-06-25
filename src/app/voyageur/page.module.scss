@@ -8,7 +8,14 @@
         display: flex;
         flex-direction: column;
         align-items: stretch;
-        gap: 50px;
+        transform: translateY(-100px);
+        // gap: 50px;
+
+        img{
+            width: 90%;
+            max-width: 400px;
+            margin: auto;
+        }
     }
     .buttonContainer{
         margin: 0 auto;

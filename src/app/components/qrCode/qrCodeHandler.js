@@ -32,7 +32,6 @@ export default function Code() {
 
   useEffect(() => {
     dispatch(setAdvancementManche(1));
-    console.log("advancementManche");
     anim();
   }, []);
   // useEffect(() => {
