@@ -5,6 +5,7 @@ import { gsap } from "gsap";
 import { Draggable } from "gsap/Draggable";
 import { SocketContext } from "../../context/socketContext";
 import { useSelector } from "react-redux";
+import { usePathname } from "next/navigation";
 
 gsap.registerPlugin(Draggable);
 
@@ -37,6 +38,7 @@ const Button = forwardRef(function Button(
   const draggableRef = useRef();
   const players = useSelector((state) => state.players.players);
   const currentBluffer = useSelector((state) => state.players.currentBluffer);
+  const pathname = usePathname();
 
   const colorStyle =
     currentBluffer && currentBluffer != ""
@@ -185,19 +187,22 @@ const Button = forwardRef(function Button(
                     ease: "power3.out",
                     onComplete: () => {
                       events.onClick(e, buttonTl.current);
-                      buttonTl.current.fromTo(
-                        ".pageContainer",
-                        {
-                          opacity: 0,
-                        },
-                        {
-                          opacity: 1,
-                          delay: 1.5,
-                          duration: 1,
-                          pointerEvents: "auto",
-                          ease: "power1.out",
-                        },
-                      );
+                      console.log(pathname);
+                      if (pathname == `/intro/cartes` || pathname == "/game") {
+                        buttonTl.current.fromTo(
+                          ".pageContainer",
+                          {
+                            opacity: 0,
+                          },
+                          {
+                            opacity: 1,
+                            delay: 1.5,
+                            duration: 2,
+                            pointerEvents: "auto",
+                            ease: "power1.out",
+                          },
+                        );
+                      }
                     },
                   },
                   // "<",

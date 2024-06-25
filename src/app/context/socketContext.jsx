@@ -29,6 +29,7 @@ const SocketContext = createContext(value);
 
 // Créez le fournisseur de contexte
 const SocketProvider = ({ children }) => {
+  const gameIdStored = useSelector((state) => state.players.gameId);
   const router = useRouter();
   const pathname = usePathname();
   const dispatch = useDispatch();
@@ -38,6 +39,26 @@ const SocketProvider = ({ children }) => {
 
   useEffect(() => {
     path.current = pathname;
+    if (
+      pathname != "/" &&
+      pathname != `/game/qrcode` &&
+      pathname != "/voyageur/chat/images"
+    ) {
+      console.log(pathname);
+      gsap.fromTo(
+        ".pageContainer",
+        {
+          opacity: 0,
+        },
+        {
+          opacity: 1,
+          delay: 1.5,
+          duration: 2,
+          pointerEvents: "auto",
+          ease: "power1.out",
+        },
+      );
+    }
   }, [pathname]);
 
   function routeManagement(state, gameId) {
