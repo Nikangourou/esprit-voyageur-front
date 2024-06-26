@@ -111,6 +111,7 @@ export default function GameFlow({ images, gameId }) {
           })
           .to(".header", {
             opacity: 1,
+            pointerEvents: "auto",
             duration: 1.5,
             ease: "power2.out",
           });

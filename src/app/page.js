@@ -43,7 +43,7 @@ export default function Home() {
           buttonRef.current,
           { scale: 0.9, opacity: 0 },
           { scale: 1, opacity: 1, duration: 0.35, ease: "back.out(2)" },
-          ">-1.5",
+          ">-0.66",
         )
         .fromTo(
           buttonRef.current.children[0],
@@ -75,7 +75,9 @@ export default function Home() {
   return (
     <main className={styles.main}>
       <div className={styles.container}>
-        <img src="/images/logo.gif" alt="Logo" />
+        <div className={styles.logoContainer}>
+          <img src="/images/logo.gif" alt="Logo" />
+        </div>
         <div>
           <Button color={"#373FEF"} type="link" ref={buttonRef} events={events}>
             Jouer
