@@ -69,7 +69,7 @@ export default function Code() {
         {
           scale:  1,
           duration: 0.5,
-          delay: 5,
+          delay: 4,
           boxShadow: "2px 6px 10px rgba(44,44,44,.25)",
           ease: "power2.out",
         }

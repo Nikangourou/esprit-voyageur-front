@@ -121,7 +121,7 @@ export default function GameFlow({ images, gameId }) {
         setCurrentPhase("QuestionsPhase");
         dispatch(setAdvancementManche(4));
         setIsBlurry(false);
-        setChronoStart(30);
+        setChronoStart(300);
         setContentSentence(
           <p>
             Attention !<br />
@@ -132,7 +132,7 @@ export default function GameFlow({ images, gameId }) {
       case "VotePhase":
         setCurrentPhase("VotePhase");
         dispatch(setAdvancementManche(5));
-        setChronoStart(40);
+        setChronoStart(120);
         setContentSentence(
           <p>
             Vite, c’est l’heure de voter !<br />
