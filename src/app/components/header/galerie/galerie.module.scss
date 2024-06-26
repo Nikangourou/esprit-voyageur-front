@@ -18,22 +18,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-
-    &.cardFull {
-      transition: transform 1s ease-out;
-      width: 440px;
-      height: 440px;
-    }
-
+    
     .containerImg {
       width: 95%;
       height: 95%;
       border-radius: 10px;
       overflow: hidden;
-
-      &.back {
-        display: none;
-      }
 
       img {
         position: relative;
@@ -50,10 +40,6 @@
     right: 0;
     left: 0;
     background-color: rgba($color: #1c1c1e, $alpha: 0.8);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
 
     p{
         margin-top: 20px;

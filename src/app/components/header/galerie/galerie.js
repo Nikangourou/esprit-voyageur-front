@@ -1,6 +1,7 @@
 import styles from "./galerie.module.scss";
 import { useState, useEffect, useRef } from "react";
 import { gsap } from "gsap";
+import Card from "../../card/card";
 
 const images = [
   {
@@ -66,41 +67,45 @@ const images = [
 ];
 
 export default function Galerie({ setShowGalerie }) {
-  const tlRef = useRef();
-  const [isTurned, setIsTurned] = useState(false);
   const [imgFull, setImgFull] = useState(null);
-
-  useEffect(() => {
-    tlRef.current?.kill();
-    tlRef.current = gsap.timeline().to(`.${styles.cardFull}`, {
-      rotateY: isTurned ? 180 : 0,
-      duration: 0.15,
-      ease: "power2.inOut",
-    });
-  }, [isTurned]);
-
-  const turn = (e) => {
-    e.stopPropagation();
-    setIsTurned(!isTurned);
-  };
 
   return (
     <div className={styles.galerie}>
       {imgFull && (
         <div className={styles.full} onClick={() => setImgFull(null)}>
-          <div
-            className={`${styles.card} ${styles.cardFull}`}
-            onClick={(e) => turn(e)}
-          >
-            <div className={`${styles.containerImg} ${styles.front}`}>
-              <img src={`/images/${imgFull.front}`} alt="verite" />
-            </div>
-            <div className={`${styles.containerImg} ${styles.back}`}>
-              <img src={`/images/${imgFull.back}`} alt="mensonge" />
-            </div>
+          <div onClick={(e) => e.stopPropagation()}>
+            <Card
+              stylesCard={{
+                width: "440px",
+                height: "440px",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                background: "var(--backgroundColor)",
+              }}
+              frontChild={
+                <div style={{ width: "100%" }}>
+                  <img
+                    src={`/images/${imgFull.front}`}
+                    alt="verite"
+                    style={{ width: "100%" }}
+                  />
+                </div>
+              }
+              backChild={
+                <div style={{ width: "100%" }}>
+                  <img
+                    src={`/images/${imgFull.back}`}
+                    alt="mensonge"
+                    style={{ width: "100%" }}
+                  />
+                </div>
+              }
+            ></Card>
           </div>
-          <p>{isTurned ? "Vérité" : "Mensonge"}</p>
         </div>
+
+        //   <p>{isTurned ? "Vérité" : "Mensonge"}</p>
       )}
       <div className={styles.header}>
         <div className={styles.close} onClick={() => setShowGalerie(false)}>
