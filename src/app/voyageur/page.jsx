@@ -38,7 +38,7 @@ export default function Voyageur() {
           dispatch(setShaderPosition(1));
         },
         null,
-        1.5
+        1.5,
       )
       .to(".pageContainer", {
         opacity: 1,
@@ -50,13 +50,13 @@ export default function Voyageur() {
         buttonRef.current,
         { scale: 0.8, opacity: 0 },
         { scale: 1, opacity: 1, duration: 0.75, ease: "back.out(2)" },
-        ">-2.5"
+        ">-2.5",
       )
       .fromTo(
         buttonRef.current.children[0],
         { y: 0 },
         { y: -8, duration: 0.5, ease: "back.out(3)" },
-        "<.15"
+        "<.15",
       );
     dispatch(setDistanceCircle([0.4, 0.7]));
     const urlParams = new URLSearchParams(window.location.search);
@@ -82,7 +82,9 @@ export default function Voyageur() {
       {/* <FullScreen /> */}
       <main className={styles.main}>
         <div className={styles.container}>
-          <img src="/images/logo.gif" alt="Logo" />
+          <div className={styles.logoContainer}>
+            <img src="/images/logo.gif" alt="Logo" />
+          </div>
           <div className={styles.buttonContainer}>
             <Button
               type="link"
