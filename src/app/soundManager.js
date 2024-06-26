@@ -85,7 +85,7 @@ export default class SoundManager {
     };
 
     await Promise.all([
-      loadAudio("global", "/audio/Ambiance_final.mp3", 0, true),
+      loadAudio("global", "/audio/Ambiance_final.mp3", 1, true),
       loadAudio("cta", "/audio/Click_final.mp3", 0),
       loadAudio("pawn", "/audio/Pawn_final.mp3", 0),
       loadAudio("win", "/audio/Winner_final.mp3", 0),
