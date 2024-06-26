@@ -19,7 +19,6 @@ export default class SoundManager {
 
   async startXp(key, animationStart = null) {
     // Définit l'état des sons
-    this.soundsList[key].volume(0);
     this.soundsList[key].play();
     this.soundsList[key].fade(0, 0.5, 500);
     this.currentSound = this.soundsList[key];
