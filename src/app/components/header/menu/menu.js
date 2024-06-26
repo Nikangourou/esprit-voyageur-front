@@ -43,7 +43,7 @@ export default function Menu({ openMenu, setOpenMenu }) {
           x: 0,
           y: 0,
           rotateZ: 0,
-          duration: 1,
+          duration: 0.75,
           ease: "power2.out",
           stagger: 0.25,
         },
@@ -58,17 +58,17 @@ export default function Menu({ openMenu, setOpenMenu }) {
           y: 0,
           duration: 0.75,
           ease: "power4.out",
-          delay: 0.75,
+          delay: 0.5,
           stagger: 0.4,
         },
         "<",
       );
   }, []);
 
-  function animOut(onComplete) {
+  function animOut(onComplete = null, onStart = null) {
     tlRef.current?.kill();
     tlRef.current = gsap
-      .timeline({ onComplete: onComplete })
+      .timeline({ onComplete: onComplete, onStart: onStart })
       .to(`.${styles.card} + p`, {
         opacity: 0,
         duration: 0.75,
@@ -121,7 +121,7 @@ export default function Menu({ openMenu, setOpenMenu }) {
         <div
           className={`${styles.card} ${styles.recommencer}`}
           onClick={() => {
-            animOut(restartGame);
+            animOut(null, restartGame);
           }}
         >
           <div className={styles.containerImg}>

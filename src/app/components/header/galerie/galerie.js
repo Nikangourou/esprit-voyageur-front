@@ -68,6 +68,56 @@ const images = [
 
 export default function Galerie({ setShowGalerie }) {
   const [imgFull, setImgFull] = useState(null);
+  const tlRef = useRef();
+
+  useEffect(() => {
+    tlRef.current?.kill();
+    tlRef.current = gsap
+      .timeline()
+      .fromTo(
+        `.${styles.galerie}`,
+        { backgroundColor: "rgba(28, 28, 30, 0)", opacity: 1 },
+        { backgroundColor: "rgba(28, 28, 30, 1)", duration: 0.75 },
+      )
+      .fromTo(
+        `.${styles.card}`,
+        { opacity: 0, scale: 0.75 },
+        {
+          opacity: 1,
+          scale: 1,
+          duration: 0.75,
+          ease: "back.out(1.7)",
+          stagger: {
+            amount: 0.5,
+            from: "left",
+            axis: "x",
+            grid: "auto",
+          },
+        },
+        ">.25",
+      );
+  }, []);
+
+  function animOut(onComplete) {
+    tlRef.current?.kill();
+    tlRef.current = gsap
+      .timeline({ onComplete: onComplete })
+      .to(`.${styles.card}`, {
+        opacity: 0,
+        scale: 0.95,
+        duration: 0.5,
+        ease: "back.out(1.7)",
+      })
+      .to(
+        `.${styles.galerie}`,
+        {
+          backgroundColor: "rgba(28, 28, 30, 0)",
+          opacity: 0,
+          duration: 1,
+        },
+        "<.25",
+      );
+  }
 
   return (
     <div className={styles.galerie}>
@@ -108,7 +158,14 @@ export default function Galerie({ setShowGalerie }) {
         //   <p>{isTurned ? "Vérité" : "Mensonge"}</p>
       )}
       <div className={styles.header}>
-        <div className={styles.close} onClick={() => setShowGalerie(false)}>
+        <div
+          className={styles.close}
+          onClick={() => {
+            animOut(() => {
+              setShowGalerie(false);
+            });
+          }}
+        >
           <img src="/images/close.svg" alt="close" />
         </div>
       </div>

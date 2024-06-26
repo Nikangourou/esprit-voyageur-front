@@ -33,12 +33,16 @@ export default function Home() {
           null,
           1.5,
         )
-        .to(".pageContainer", {
-          opacity: 1,
-          duration: 2,
-          delay: 2.25,
-          ease: "power1.out",
-        })
+        .fromTo(
+          ".pageContainer",
+          { opacity: 0 },
+          {
+            opacity: 1,
+            duration: 2,
+            delay: 2.25,
+            ease: "power1.out",
+          },
+        )
         .fromTo(
           buttonRef.current,
           { scale: 0.9, opacity: 0 },
