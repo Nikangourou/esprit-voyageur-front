@@ -90,8 +90,8 @@ export default function Galerie({ setShowGalerie }) {
           setImages((prev) => [
             ...prev,
             {
-              front: data[i].url,
-              back: data[i + 1].url,
+              front: apiUrl + [i].url,
+              back:  apiUrl + [i + 1].url,
             },
           ]);
         }
