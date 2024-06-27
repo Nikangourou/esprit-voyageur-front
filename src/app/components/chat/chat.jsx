@@ -309,6 +309,7 @@ export default function Chat() {
   };
 
   const altGenerateAllImages = () => {
+    console.log("altGenerateAllImages");
     setIsFinished("processing");
     const tl = gsap
       .timeline()
