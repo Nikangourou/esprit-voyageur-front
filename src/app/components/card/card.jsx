@@ -34,21 +34,31 @@ const Card = forwardRef(function Card(
       });
     }
 
-    if (isTurned) {
-      if (showInfo) {
-        gsap.to(infoBackRef.current, { opacity: 1, duration: 0.5, delay: 0.5 });
-        gsap.to(infoFrontRef.current, { opacity: 0, duration: 0.5 });
+    if (infoBackRef.current && infoFrontRef.current) {
+      if (isTurned) {
+        if (showInfo) {
+          gsap.to(infoBackRef.current, {
+            opacity: 1,
+            duration: 0.5,
+            delay: 0.5,
+          });
+          gsap.to(infoFrontRef.current, { opacity: 0, duration: 0.5 });
+        } else {
+          gsap.to(infoBackRef.current, { opacity: 0, duration: 0.5 });
+          gsap.to(infoFrontRef.current, { opacity: 0, duration: 0.5 });
+        }
       } else {
-        gsap.to(infoBackRef.current, { opacity: 0, duration: 0.5 });
-        gsap.to(infoFrontRef.current, { opacity: 0, duration: 0.5 });
-      }
-    } else {
-      if (showInfo) {
-        gsap.to(infoFrontRef.current, { opacity: 1, duration: 0.5, delay: 0.5 });
-        gsap.to(infoBackRef.current, { opacity: 0, duration: 0.5 });
-      } else {
-        gsap.to(infoFrontRef.current, { opacity: 0, duration: 0.5 });
-        gsap.to(infoBackRef.current, { opacity: 0, duration: 0.5 });
+        if (showInfo) {
+          gsap.to(infoFrontRef.current, {
+            opacity: 1,
+            duration: 0.5,
+            delay: 0.5,
+          });
+          gsap.to(infoBackRef.current, { opacity: 0, duration: 0.5 });
+        } else {
+          gsap.to(infoFrontRef.current, { opacity: 0, duration: 0.5 });
+          gsap.to(infoBackRef.current, { opacity: 0, duration: 0.5 });
+        }
       }
     }
   }, [isTurned, showInfo]);
