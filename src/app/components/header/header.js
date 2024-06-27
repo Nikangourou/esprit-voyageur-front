@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect, useRef } from "react";
 import styles from "./header.module.scss";
 import FullScreen from "./fullScreen/fullScreen";
 import Menu from "./menu/menu";
@@ -8,12 +8,18 @@ import { SocketContext } from "../../context/socketContext";
 import { setCountDownPause } from "../../store/reducers/gameReducer";
 import { useDispatch } from "react-redux";
 import ProgressBar from "./progressBar/progressBar";
+import { usePathname } from "next/navigation";
+import { gsap } from "gsap";
 
-export default function Header({ isProgressBar = false }) {
+export default function Header({}) {
   const { soundManager } = useContext(SocketContext);
   const [isMuted, setIsMuted] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
+  const [isProgressBar, setIsProgressBar] = useState(false);
+  const [inVoyageur, setInVoyageur] = useState(false);
   const dispatch = useDispatch();
+  const pathname = usePathname();
+  const headerRef = useRef();
 
   useEffect(() => {
     if (openMenu) {
@@ -22,6 +28,45 @@ export default function Header({ isProgressBar = false }) {
       dispatch(setCountDownPause(false));
     }
   }, [openMenu]);
+
+  useEffect(() => {
+    if (pathname.includes("/game")) {
+      gsap.to(`.${styles.containerLeft}`, {
+        opacity: 1,
+        duration: 1,
+        ease: "power2.out",
+        onComplete: () => {
+          setIsProgressBar(true);
+        },
+      });
+    } else {
+      gsap.to(`.${styles.containerLeft}`, {
+        opacity: 0,
+        duration: 1,
+        ease: "power2.out",
+        onComplete: () => {
+          setIsProgressBar(false);
+        },
+      });
+    }
+
+    if (pathname.includes("voyageur") || pathname == "/") {
+      setInVoyageur(true);
+    } else {
+      setInVoyageur(false);
+    }
+  }, [pathname]);
+
+  useEffect(() => {
+    if (!inVoyageur) {
+      gsap.to(headerRef.current, {
+        opacity: 1,
+        pointerEvents: "auto",
+        duration: 1,
+        ease: "power2.out",
+      });
+    }
+  }, [inVoyageur]);
 
   const toggleMute = () => {
     if (soundManager) {
@@ -32,10 +77,12 @@ export default function Header({ isProgressBar = false }) {
     }
   };
 
-  return (
+  return inVoyageur ? (
+    <></>
+  ) : (
     <>
       {openMenu && <Menu openMenu={openMenu} setOpenMenu={setOpenMenu} />}
-      <div className={`header`}>
+      <div className={`header`} ref={headerRef}>
         <div className={styles.containerLeft}>
           {isProgressBar && <ProgressBar />}
         </div>

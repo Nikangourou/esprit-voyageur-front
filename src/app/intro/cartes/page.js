@@ -49,9 +49,19 @@ export default function Cartes() {
           dispatch(setShaderPosition(0));
         },
         null,
-        ">1"
+        ">1",
       )
         .to(".footerBg", { opacity: 0, duration: 1, ease: "power2.out" }, "<")
+        .to(
+          ".header",
+          {
+            opacity: 0,
+            duration: 1,
+            pointerEvents: "none",
+            ease: "power2.out",
+          },
+          "<",
+        )
         .call(
           () => {
             fetch(`${apiUrl}/game/post/create`, {
@@ -69,7 +79,7 @@ export default function Cartes() {
                 dispatch(
                   setGameId({
                     gameId: data.game_id,
-                  })
+                  }),
                 );
                 gameIdRef.current = data.game_id;
                 localStorage.setItem("gameId", data.game_id);
@@ -81,7 +91,7 @@ export default function Cartes() {
               });
           },
           null,
-          ">2"
+          ">2",
         )
         .call(
           () => {
@@ -89,9 +99,16 @@ export default function Cartes() {
             dispatch(setDistanceCircle([0.1, 0.1]));
           },
           null,
-          ">3"
+          ">3",
         )
-        .to(".footerBg", { opacity: 1, duration: 1, ease: "power2.out" }, "<");
+        .to(".footerBg", { opacity: 1, duration: 1, ease: "power2.out" }, "<")
+        .to(".header", {
+          opacity: 1,
+          duration: 1,
+          delay: 3,
+          pointerEvents: "auto",
+          ease: "power2.out",
+        });
     }
   }
 
@@ -120,7 +137,7 @@ export default function Cartes() {
           delay: 1.5,
           boxShadow: "2px 6px 10px rgba(44,44,44,.25)",
           ease: "power2.out",
-        }
+        },
       )
       .call(playSound)
       .fromTo(
@@ -132,7 +149,7 @@ export default function Cartes() {
           duration: 1.5,
           ease: "power2.out",
         },
-        "<"
+        "<",
       )
       .fromTo(
         card1Ref.current,
@@ -142,7 +159,7 @@ export default function Cartes() {
           duration: 0.25,
           ease: "power2.out",
         },
-        "<"
+        "<",
       );
   }
 
@@ -158,7 +175,7 @@ export default function Cartes() {
           delay: 1,
           boxShadow: "2px 6px 10px rgba(44,44,44,.25)",
           ease: "power2.out",
-        }
+        },
       )
       .call(playSound)
       .fromTo(
@@ -170,7 +187,7 @@ export default function Cartes() {
           duration: 1.5,
           ease: "power2.out",
         },
-        "<"
+        "<",
       )
       .fromTo(
         card2Ref.current,
@@ -180,7 +197,7 @@ export default function Cartes() {
           duration: 0.25,
           ease: "power2.out",
         },
-        "<"
+        "<",
       );
   }
 
@@ -196,7 +213,7 @@ export default function Cartes() {
           delay: 2,
           boxShadow: "2px 6px 10px rgba(44,44,44,.25)",
           ease: "power2.out",
-        }
+        },
       )
       .call(playSound)
       .fromTo(
@@ -208,7 +225,7 @@ export default function Cartes() {
           duration: 1.5,
           ease: "power2.out",
         },
-        "<"
+        "<",
       )
       .fromTo(
         card3Ref.current,
@@ -218,7 +235,7 @@ export default function Cartes() {
           duration: 0.25,
           ease: "power2.out",
         },
-        "<"
+        "<",
       );
   }
 

@@ -22,6 +22,7 @@ import StoreProvider from "./store/storeProvider";
 import Blob from "./components/blob/blob";
 import React from "react";
 import ClipBlob from "./components/clipBlob/clipBlob";
+import Header from "./components/header/header";
 export const metadata = {
   title: "VraiMent?",
   description: "Le jeu qui fait douter tout le monde",
@@ -46,6 +47,8 @@ export default function RootLayout({ children }) {
         <StoreProvider>
           <SocketProvider>
             <LoadShader />
+            <Header />
+
             <div className="pageContainer">{children}</div>
             <FooterBg />
           </SocketProvider>

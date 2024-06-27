@@ -2,10 +2,5 @@ import React from "react";
 import Header from "../components/header/header";
 
 export default function Layout({ children }) {
-  return (
-    <>
-      <Header isProgressBar={true} />
-      {children}
-    </>
-  );
+  return <>{children}</>;
 }
