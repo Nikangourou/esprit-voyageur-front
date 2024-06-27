@@ -151,7 +151,7 @@ export default function Galerie({ setShowGalerie }) {
 
     // Animer de l'état précédent à l'état agrandi
     Flip.from(state, {
-      duration: 0.5,
+      duration: 0.75,
       ease: "circ.out",
       scale: true,
     });
