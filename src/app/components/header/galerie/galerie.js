@@ -184,7 +184,7 @@ export default function Galerie({ setShowGalerie }) {
                 frontChild={
                   <div style={{ width: "100%" }}>
                     <img
-                      src={`/images/${image.front}`}
+                      src={image.front}
                       alt="verite"
                       style={{ width: "100%" }}
                     />
@@ -193,7 +193,7 @@ export default function Galerie({ setShowGalerie }) {
                 backChild={
                   <div style={{ width: "100%" }}>
                     <img
-                      src={`/images/${image.back}`}
+                      src={image.back}
                       alt="mensonge"
                       style={{ width: "100%" }}
                     />
