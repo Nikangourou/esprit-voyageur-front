@@ -106,7 +106,6 @@ export default function Menu({ openMenu, setOpenMenu }) {
           onClick={() => {
             animOut(() => {
               setOpenMenu(false);
-              console.log("aa");
             });
           }}
           className={`${styles.card} ${styles.continuer}`}
@@ -128,7 +127,7 @@ export default function Menu({ openMenu, setOpenMenu }) {
             <img src="/images/quitter.svg" alt="logo" />
           </div>
         </div>
-        <p>Recommencer</p>
+        <p>Quitter</p>
       </div>
       <div>
         <div

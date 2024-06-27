@@ -3,29 +3,42 @@ import React, { forwardRef, useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 
 const Card = forwardRef(function Card(
-  { srcFront, frontChild, stylesCard, backChild },
-  ref,
+  { srcFront, frontChild, stylesCard, backChild, blockRotation = false },
+  ref
 ) {
   const tlRef = useRef();
+  const cardRef = useRef();
   const [isTurned, setIsTurned] = useState(false);
 
   function onClickEvt() {
+    if (blockRotation) return;
     setIsTurned(!isTurned);
   }
 
   useEffect(() => {
-    tlRef.current?.kill();
-    tlRef.current = gsap.timeline().to(`.${styles.card}`, {
-      rotateY: isTurned ? 180 : 0,
-      duration: 0.15,
-      ease: "power2.inOut",
-    });
+    if (cardRef.current) {
+      tlRef.current?.kill();
+      tlRef.current = gsap.timeline().to(cardRef.current, {
+        rotateY: isTurned ? 180 : 0,
+        duration: 0.15,
+        ease: "power2.inOut",
+      });
+    }
   }, [isTurned]);
 
   return (
     <div
       className={styles.card}
-      ref={ref}
+      ref={(element) => {
+        cardRef.current = element;
+        if (ref) {
+          if (typeof ref === "function") {
+            ref(element);
+          } else {
+            ref.current = element;
+          }
+        }
+      }}
       style={stylesCard}
       onClick={onClickEvt}
     >
