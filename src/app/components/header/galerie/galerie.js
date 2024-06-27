@@ -9,64 +9,7 @@ import Card from "../../card/card";
 //     front: "/carteFront.jpg",
 //     back: "/carteBack.jpg",
 //   },
-//   {
-//     front: "/carteFront.jpg",
-//     back: "/carteBack.jpg",
-//   },
-//   {
-//     front: "/carteFront.jpg",
-//     back: "/carteBack.jpg",
-//   },
-//   {
-//     front: "/carteFront.jpg",
-//     back: "/carteBack.jpg",
-//   },
-//   {
-//     front: "/carteFront.jpg",
-//     back: "/carteBack.jpg",
-//   },
-//   {
-//     front: "/carteFront.jpg",
-//     back: "/carteBack.jpg",
-//   },
-//   {
-//     front: "/carteFront.jpg",
-//     back: "/carteBack.jpg",
-//   },
-//   {
-//     front: "/carteFront.jpg",
-//     back: "/carteBack.jpg",
-//   },
-//   {
-//     front: "/carteFront.jpg",
-//     back: "/carteBack.jpg",
-//   },
-//   {
-//     front: "/carteFront.jpg",
-//     back: "/carteBack.jpg",
-//   },
-//   {
-//     front: "/carteFront.jpg",
-//     back: "/carteBack.jpg",
-//   },
-//   {
-//     front: "/carteFront.jpg",
-//     back: "/carteBack.jpg",
-//   },
-//   {
-//     front: "/carteFront.jpg",
-//     back: "/carteBack.jpg",
-//   },
-//   {
-//     front: "/carteFront.jpg",
-//     back: "/carteBack.jpg",
-//   },
-//   {
-//     front: "/carteFront.jpg",
-//     back: "/carteBack.jpg",
-//   },
-// ];
-
+//
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function Galerie({ setShowGalerie }) {
@@ -86,20 +29,23 @@ export default function Galerie({ setShowGalerie }) {
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        for (let i = 0; i < data.length; i + 2) {
-          setImages((prev) => [
-            ...prev,
-            {
-              front: apiUrl + [i].url,
-              back:  apiUrl + [i + 1].url,
-            },
-          ]);
+        for (let i = 0; i < data.length; i += 2) {
+          // Check if current index and next index exist in data
+          if (data[i] && data[i + 1]) {
+            setImages((prev) => [
+              ...prev,
+              {
+                front: apiUrl + data[i].url,
+                back: apiUrl + data[i + 1].url,
+              },
+            ]);
+          }
         }
         animIn();
       });
   }, []);
 
- const animIn = () => {
+  const animIn = () => {
     tlRef.current?.kill();
     tlRef.current = gsap
       .timeline()
@@ -126,7 +72,7 @@ export default function Galerie({ setShowGalerie }) {
         },
         ">.25"
       );
-  }
+  };
 
   function animOut(onComplete) {
     tlRef.current?.kill();
