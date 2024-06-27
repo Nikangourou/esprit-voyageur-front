@@ -419,7 +419,7 @@ export default function Chat() {
 
   return (
     <div className={styles.chat}>
-      <div className={styles.containerMessages} onClick={altGenerateAllImages}>
+      <div className={styles.containerMessages}>
         <Messages
           nbSendMessages={nbSendMessages}
           messages={messages}
@@ -462,6 +462,7 @@ export default function Chat() {
         <RecordingComponent onEnd={onSpeechEnd} textAreaRef={textAreaRef} />
       </div>
       <FooterBg />
+      <div onClick={altGenerateAllImages} className={styles.cheatButton}></div>
     </div>
   );
 }
