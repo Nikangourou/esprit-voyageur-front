@@ -4,45 +4,82 @@ import { gsap } from "gsap";
 import { Flip } from "gsap/Flip";
 import Card from "../../card/card";
 
-// const images = [
-//   {
-//     front: "/carteFront.jpg",
-//     back: "/carteBack.jpg",
-//   },
-//
+const images = [
+  {
+    front: "souvenir_1.png",
+    back: "souvenir_2.png",
+  },
+  {
+    front: "souvenir_3.png",
+    back: "souvenir_4.png",
+  },
+  {
+    front: "souvenir_5.png",
+    back: "souvenir_6.png",
+  },
+  {
+    front: "souvenir_7.png",
+    back: "souvenir_8.png",
+  },
+  {
+    front: "souvenir_9.png",
+    back: "souvenir_10.png",
+  },
+  {
+    front: "souvenir_11.png",
+    back: "souvenir_12.png",
+  },
+  {
+    front: "souvenir_13.png",
+    back: "souvenir_14.png",
+  },
+  {
+    front: "souvenir_15.png",
+    back: "souvenir_16.png",
+  },
+  {
+    front: "souvenir_17.png",
+    back: "souvenir_18.png",
+  },
+];
+
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function Galerie({ setShowGalerie }) {
   const [imgFullScreen, setImgFullScreen] = useState(false);
-  const [images, setImages] = useState([]);
+  // const [images, setImages] = useState([]);
   const tlRef = useRef();
   const galerieRef = useRef();
   const cardRef = useRef();
 
+  // useEffect(() => {
+  //   fetch(`${apiUrl}/image/get`, {
+  //     method: "GET",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       console.log(data);
+  //       for (let i = 0; i < data.length; i += 2) {
+  //         // Check if current index and next index exist in data
+  //         if (data[i] && data[i + 1]) {
+  //           setImages((prev) => [
+  //             ...prev,
+  //             {
+  //               front: apiUrl + data[i].url,
+  //               back: apiUrl + data[i + 1].url,
+  //             },
+  //           ]);
+  //         }
+  //       }
+  //       animIn();
+  //     });
+  // }, []);
+
   useEffect(() => {
-    fetch(`${apiUrl}/image/get`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        for (let i = 0; i < data.length; i += 2) {
-          // Check if current index and next index exist in data
-          if (data[i] && data[i + 1]) {
-            setImages((prev) => [
-              ...prev,
-              {
-                front: apiUrl + data[i].url,
-                back: apiUrl + data[i + 1].url,
-              },
-            ]);
-          }
-        }
-        animIn();
-      });
+    animIn();
   }, []);
 
   const animIn = () => {
@@ -184,7 +221,7 @@ export default function Galerie({ setShowGalerie }) {
                 frontChild={
                   <div style={{ width: "100%" }}>
                     <img
-                      src={image.front}
+                      src={`/images/souvenirs/${image.front}`}
                       alt="verite"
                       style={{ width: "100%" }}
                     />
@@ -193,7 +230,7 @@ export default function Galerie({ setShowGalerie }) {
                 backChild={
                   <div style={{ width: "100%" }}>
                     <img
-                      src={image.back}
+                      src={`/images/souvenirs/${image.back}`}
                       alt="mensonge"
                       style={{ width: "100%" }}
                     />
