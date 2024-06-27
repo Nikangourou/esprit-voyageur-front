@@ -47,6 +47,7 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function Galerie({ setShowGalerie }) {
   const [imgFullScreen, setImgFullScreen] = useState(false);
+  const [fullScreenIndex, setFullScreenIndex] = useState(null);
   // const [images, setImages] = useState([]);
   const tlRef = useRef();
   const galerieRef = useRef();
@@ -89,7 +90,7 @@ export default function Galerie({ setShowGalerie }) {
       .fromTo(
         `.${styles.galerie}`,
         { backgroundColor: "rgba(28, 28, 30, 0)", opacity: 1 },
-        { backgroundColor: "rgba(28, 28, 30, 1)", duration: 0.75 },
+        { backgroundColor: "rgba(28, 28, 30, 1)", duration: 0.75 }
       )
       .fromTo(
         `.${styles.containerCard}`,
@@ -107,7 +108,7 @@ export default function Galerie({ setShowGalerie }) {
           },
           clearProps: "x, y",
         },
-        ">.25",
+        ">.25"
       );
   };
 
@@ -128,16 +129,20 @@ export default function Galerie({ setShowGalerie }) {
           opacity: 0,
           duration: 1,
         },
-        "<.25",
+        "<.25"
       );
   }
 
-  const setCardFullScreen = (e) => {
+  const setCardFullScreen = (e, index) => {
     setImgFullScreen(true);
+    setFullScreenIndex(index); 
     gsap.registerPlugin(Flip);
     const card = e.currentTarget;
     cardRef.current = card;
     const state = Flip.getState(card);
+
+    // set show info to true
+
 
     // Définir votre élément de grande taille
     // Ici, vous pouvez le positionner ou lui appliquer le style que vous voulez afficher en grand
@@ -159,6 +164,7 @@ export default function Galerie({ setShowGalerie }) {
 
   const removeCardFullScreen = () => {
     setImgFullScreen(false);
+    setFullScreenIndex(null); 
     const state = Flip.getState(cardRef.current);
 
     // Remettre la carte à sa place
@@ -192,7 +198,6 @@ export default function Galerie({ setShowGalerie }) {
           className={styles.fullContainer}
         ></div>
       </div>
-      {/* <p>{isTurned ? "Vérité" : "Mensonge"}</p> */}
       <div className={styles.header}>
         <div
           className={styles.close}
@@ -208,13 +213,14 @@ export default function Galerie({ setShowGalerie }) {
       <div className={styles.content}>
         {images.map((image, index) => (
           <div className={styles.containerCard} key={index}>
-            <div onClick={(e) => setCardFullScreen(e)}>
+            <div onClick={(e) => setCardFullScreen(e, index)}>
               <Card
+                showInfo={imgFullScreen && fullScreenIndex === index}
                 blockRotation={!imgFullScreen}
                 stylesCard={{
                   position: "relative",
-                  width: "160px",
-                  height: "160px",
+                  width: "200px",
+                  height: "200px",
                   background: "var(--backgroundColor)",
                   transform: "translate(0, 0)",
                 }}

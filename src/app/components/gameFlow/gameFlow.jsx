@@ -35,7 +35,7 @@ export default function GameFlow({ images, gameId }) {
   if (typeof window === "undefined") {
     return <div></div>;
   }
-  const width = window.innerWidth * 0.4;
+  const width = window.innerWidth * 0.5;
   const blobParams = {
     width: 50,
     height: 50,
