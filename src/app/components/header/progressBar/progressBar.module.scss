@@ -15,6 +15,7 @@
   .progressBarValue {
     height: 8px;
     border-radius: 0.5em;
+    transition: width 0.5s cubic-bezier(.61,.16,.81,.64);
   }
 }
 }
