@@ -15,8 +15,8 @@
         top: 50%;
         left: 50%;
         display: inline-block;
-        width: calc(100% - 15px);
-        height: calc(100% - 15px);
+        width: calc(100% - 12px);
+        height: calc(100% - 12px);
         border-radius: 5px;
         background: #1c1c1e;
 
@@ -24,6 +24,9 @@
         background-position: center;
         background-size: cover;
         transform: translate3d(-50%,-50%,0.1px);
+        img{
+            border-radius: 5px;
+        }
     }
 
 
