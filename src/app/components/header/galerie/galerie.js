@@ -4,75 +4,90 @@ import { gsap } from "gsap";
 import { Flip } from "gsap/Flip";
 import Card from "../../card/card";
 
-const images = [
-  {
-    front: "/carteFront.jpg",
-    back: "/carteBack.jpg",
-  },
-  {
-    front: "/carteFront.jpg",
-    back: "/carteBack.jpg",
-  },
-  {
-    front: "/carteFront.jpg",
-    back: "/carteBack.jpg",
-  },
-  {
-    front: "/carteFront.jpg",
-    back: "/carteBack.jpg",
-  },
-  {
-    front: "/carteFront.jpg",
-    back: "/carteBack.jpg",
-  },
-  {
-    front: "/carteFront.jpg",
-    back: "/carteBack.jpg",
-  },
-  {
-    front: "/carteFront.jpg",
-    back: "/carteBack.jpg",
-  },
-  {
-    front: "/carteFront.jpg",
-    back: "/carteBack.jpg",
-  },
-  {
-    front: "/carteFront.jpg",
-    back: "/carteBack.jpg",
-  },
-  {
-    front: "/carteFront.jpg",
-    back: "/carteBack.jpg",
-  },
-  {
-    front: "/carteFront.jpg",
-    back: "/carteBack.jpg",
-  },
-  {
-    front: "/carteFront.jpg",
-    back: "/carteBack.jpg",
-  },
-  {
-    front: "/carteFront.jpg",
-    back: "/carteBack.jpg",
-  },
-  {
-    front: "/carteFront.jpg",
-    back: "/carteBack.jpg",
-  },
-  {
-    front: "/carteFront.jpg",
-    back: "/carteBack.jpg",
-  },
-];
+// const images = [
+//   {
+//     front: "/carteFront.jpg",
+//     back: "/carteBack.jpg",
+//   },
+//   {
+//     front: "/carteFront.jpg",
+//     back: "/carteBack.jpg",
+//   },
+//   {
+//     front: "/carteFront.jpg",
+//     back: "/carteBack.jpg",
+//   },
+//   {
+//     front: "/carteFront.jpg",
+//     back: "/carteBack.jpg",
+//   },
+//   {
+//     front: "/carteFront.jpg",
+//     back: "/carteBack.jpg",
+//   },
+//   {
+//     front: "/carteFront.jpg",
+//     back: "/carteBack.jpg",
+//   },
+//   {
+//     front: "/carteFront.jpg",
+//     back: "/carteBack.jpg",
+//   },
+//   {
+//     front: "/carteFront.jpg",
+//     back: "/carteBack.jpg",
+//   },
+//   {
+//     front: "/carteFront.jpg",
+//     back: "/carteBack.jpg",
+//   },
+//   {
+//     front: "/carteFront.jpg",
+//     back: "/carteBack.jpg",
+//   },
+//   {
+//     front: "/carteFront.jpg",
+//     back: "/carteBack.jpg",
+//   },
+//   {
+//     front: "/carteFront.jpg",
+//     back: "/carteBack.jpg",
+//   },
+//   {
+//     front: "/carteFront.jpg",
+//     back: "/carteBack.jpg",
+//   },
+//   {
+//     front: "/carteFront.jpg",
+//     back: "/carteBack.jpg",
+//   },
+//   {
+//     front: "/carteFront.jpg",
+//     back: "/carteBack.jpg",
+//   },
+// ];
+
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function Galerie({ setShowGalerie }) {
   const [imgFullScreen, setImgFullScreen] = useState(false);
+  const [images, setImages] = useState([]);
   const tlRef = useRef();
   const galerieRef = useRef();
   const cardRef = useRef();
 
+  useEffect(() => {
+    fetch(`${apiUrl}/image/get`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+      });
+  }, []);
 
   useEffect(() => {
     tlRef.current?.kill();
@@ -85,7 +100,7 @@ export default function Galerie({ setShowGalerie }) {
       )
       .fromTo(
         `.${styles.containerCard}`,
-        { opacity: 0, scale: 0.75},
+        { opacity: 0, scale: 0.75 },
         {
           opacity: 1,
           scale: 1,
