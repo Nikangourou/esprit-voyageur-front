@@ -86,6 +86,15 @@ export default function Galerie({ setShowGalerie }) {
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
+        for (let i = 0; i < data.length; i + 2) {
+          setImages((prev) => [
+            ...prev,
+            {
+              front: data[i].url,
+              back: data[i + 1].url,
+            },
+          ]);
+        }
       });
   }, []);
 

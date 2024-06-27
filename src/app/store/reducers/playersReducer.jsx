@@ -5,13 +5,13 @@ export const playersSlice = createSlice({
   initialState: {
     playersInGame: [],
     players: {
-      rouge: { color: "#FF0066", score: 0, alreadyPlay: false },
-      orange: { color: "#FDA735", score: 0, alreadyPlay: false },
-      violet: { color: "#B75AFF", score: 0, alreadyPlay: false },
-      jaune: { color: "#FFDE00", score: 0, alreadyPlay: false },
-      vert: { color: "#2CD68F", score: 0, alreadyPlay: false },
-      cyan: { color: "#00DACF", score: 0, alreadyPlay: false },
-      rose: { color: "#FF9FC2", score: 0, alreadyPlay: false },
+      rouge: { color: "#F13C05", score: 0, alreadyPlay: false },
+      orange: { color: "#FFB000", score: 0, alreadyPlay: false },
+      violet: { color: "#9F54EB", score: 0, alreadyPlay: false },
+      turquoise: { color: "#25CD9A", score: 0, alreadyPlay: false },
+      vert: { color: "#4BB825", score: 0, alreadyPlay: false },
+      bleue: { color: "#40B3F3", score: 0, alreadyPlay: false },
+      rose: { color: "#E71674", score: 0, alreadyPlay: false },
     },
     currentBluffer: "",
     gameId: "",
@@ -37,13 +37,13 @@ export const playersSlice = createSlice({
     newGame: (state) => {
       state.playersInGame = [];
       state.players = {
-        rouge: { color: "#FF0066", score: 0, alreadyPlay: false },
-        orange: { color: "#FDA735", score: 0, alreadyPlay: false },
-        violet: { color: "#B75AFF", score: 0, alreadyPlay: false },
-        jaune: { color: "#FFDE00", score: 0, alreadyPlay: false },
-        vert: { color: "#2CD68F", score: 0, alreadyPlay: false },
-        cyan: { color: "#00DACF", score: 0, alreadyPlay: false },
-        rose: { color: "#FF9FC2", score: 0, alreadyPlay: false },
+        rouge: { color: "#F13C05", score: 0, alreadyPlay: false },
+        orange: { color: "#FFB000", score: 0, alreadyPlay: false },
+        violet: { color: "#9F54EB", score: 0, alreadyPlay: false },
+        turquoise: { color: "#25CD9A", score: 0, alreadyPlay: false },
+        vert: { color: "#4BB825", score: 0, alreadyPlay: false },
+        bleue: { color: "#40B3F3", score: 0, alreadyPlay: false },
+        rose: { color: "#E71674", score: 0, alreadyPlay: false },
       };
       state.currentBluffer = "";
       state.gameId = null;
