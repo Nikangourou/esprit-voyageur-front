@@ -25,6 +25,7 @@
 
 .imgShaders{
   display: flex;
+  gap: 3rem;
   flex-direction: row;
   justify-content: space-around;
   position: absolute;
@@ -53,7 +54,7 @@
 }
 .indicatorPoint{
   position: absolute;
-  bottom: .5rem;
+  bottom: -.5rem;
   left: 50%;
   transform: translate(-50%,-50%);
 }
