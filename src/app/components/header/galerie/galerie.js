@@ -95,10 +95,11 @@ export default function Galerie({ setShowGalerie }) {
             },
           ]);
         }
+        animIn();
       });
   }, []);
 
-  useEffect(() => {
+ const animIn = () => {
     tlRef.current?.kill();
     tlRef.current = gsap
       .timeline()
@@ -125,7 +126,7 @@ export default function Galerie({ setShowGalerie }) {
         },
         ">.25"
       );
-  }, []);
+  }
 
   function animOut(onComplete) {
     tlRef.current?.kill();
