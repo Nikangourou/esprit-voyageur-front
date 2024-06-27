@@ -89,7 +89,7 @@ export default function Galerie({ setShowGalerie }) {
       .fromTo(
         `.${styles.galerie}`,
         { backgroundColor: "rgba(28, 28, 30, 0)", opacity: 1 },
-        { backgroundColor: "rgba(28, 28, 30, 1)", duration: 0.75 }
+        { backgroundColor: "rgba(28, 28, 30, 1)", duration: 0.75 },
       )
       .fromTo(
         `.${styles.containerCard}`,
@@ -107,7 +107,7 @@ export default function Galerie({ setShowGalerie }) {
           },
           clearProps: "x, y",
         },
-        ">.25"
+        ">.25",
       );
   };
 
@@ -128,7 +128,7 @@ export default function Galerie({ setShowGalerie }) {
           opacity: 0,
           duration: 1,
         },
-        "<.25"
+        "<.25",
       );
   }
 
@@ -151,8 +151,8 @@ export default function Galerie({ setShowGalerie }) {
 
     // Animer de l'état précédent à l'état agrandi
     Flip.from(state, {
-      duration: 1,
-      ease: "power1.inOut",
+      duration: 0.75,
+      ease: "circ.out",
       scale: true,
     });
   };
@@ -170,8 +170,8 @@ export default function Galerie({ setShowGalerie }) {
     });
 
     Flip.from(state, {
-      duration: 1,
-      ease: "power1.inOut",
+      duration: 0.75,
+      ease: "circ.out",
       scale: true,
       onComplete: () => {
         gsap.set(cardRef.current, {
