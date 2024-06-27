@@ -124,7 +124,7 @@ export default function Chat() {
       // check if the audio is not empty
       if (reader.result.byteLength === 0) {
         console.log("Audio is empty");
-      }else{
+      } else {
         const buffer = base64Reformat(reader.result);
         console.log(buffer);
         setBase64(buffer);
@@ -242,7 +242,6 @@ export default function Chat() {
 
           if (content.includes("FIN_CONVERSATION")) {
             console.log("FIN_CONVERSATION");
-            content = content.replace("FIN_CONVERSATION", "");
             setIsFinished("processing");
             const tl = gsap
               .timeline()
@@ -264,7 +263,7 @@ export default function Chat() {
                   duration: 3,
                   ease: "power2.out",
                 },
-                "<"
+                "<",
               )
               .call(() => {
                 dispatch(setDistanceCircle([0.65, 0.65]));
@@ -306,6 +305,66 @@ export default function Chat() {
       .catch((error) => {
         console.log("error getAnswer");
         console.error("Error:", error);
+      });
+  };
+
+  const altGenerateAllImages = () => {
+    setIsFinished("processing");
+    const tl = gsap
+      .timeline()
+      .to(`.${styles.containerMessages}`, {
+        yPercent: 300,
+        opacity: 0,
+        duration: 1,
+        ease: "power2.out",
+      })
+      .to(".pageContainer", {
+        opacity: 0,
+        duration: 3,
+        ease: "power2.out",
+      })
+      .to(
+        ".footerBg",
+        {
+          opacity: 0,
+          duration: 3,
+          ease: "power2.out",
+        },
+        "<",
+      )
+      .call(() => {
+        dispatch(setDistanceCircle([0.65, 0.65]));
+      })
+      .call(
+        () => {
+          dispatch(setShaderPosition(0));
+        },
+        null,
+        ">1",
+      )
+      .call(async () => {
+        const trueContent =
+          "In 2021, on a serene spring day under a sky brushed with delicate pastels, you and your mother were sitting on a soft pink floral blanket spread beneath the overwhelmingly beautiful canopy of Cherry Blossoms in Kyoto, Japan. The air was vibrant with the sweet fragrance of the blossoms and the gentle hum of the bustling crowd around. As part of the Hanami festival, lanterns floated above altering their hues between soft pinks and deep reds, casting a warm glow. The festival celebrated the fleeting nature of life, mirrored by the brief bloom of the cherry blossoms. You indulged in tasting exquisite local dishes, surrounded by a setting sun that tinted everything golden, feeling a deep sense of joy and peace.";
+        const falseContent =
+          "In 2021, you and your mother traveled to Cambodia for her birthday, a significant trip since she hadn't returned since the 1970s. Your journey took you to the heart of Cambodia’s historic wonder, Angkor Wat. As you approached the majestic site, the excitement and anticipation were palpable. The air around Angkor Wat was thick with the aroma of tropical flora and the resonant sounds of ancient ceremonial music. It was a sunny day, the sky clear except for a few wispy clouds, creating a perfect backdrop for photography and exploration. During your visit, you encountered a spectacular performance depicting the coronation of the first king of Siam. The event was not only a feast for the eyes but also a poignant reminder of the rich tapestry of history and tradition that Cambodia preserves. Performers dressed in elaborate traditional attire danced and reenacted scenes from history with a grace that seemed to stop time itself. Emotions ran deep as your mother watched, tears gleaming in her eyes, moved by the profound connection to her past and the joy of sharing this moment with you.";
+        await generateImg(
+          apiUrl,
+          trueContent,
+          gameId,
+          "simple",
+          socket,
+          dispatch,
+        );
+        await generateImg(
+          apiUrl,
+          falseContent,
+          gameId,
+          "false",
+          socket,
+          dispatch,
+        );
+        setIsFinished("end");
+        router.push("chat/images?gameId=" + gameId.current);
       });
   };
 
