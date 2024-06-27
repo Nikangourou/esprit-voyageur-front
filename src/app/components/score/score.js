@@ -13,7 +13,6 @@ import ImageShader from "../imageShader/ImageShader";
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function Score({ gameId }) {
-
   const dispatch = useDispatch();
   const { socket } = useContext(SocketContext);
   const [trueImageUrl, setTrueImageUrl] = useState();
@@ -28,30 +27,28 @@ export default function Score({ gameId }) {
   if (typeof window === "undefined") {
     return <div></div>;
   }
-  const width = window.innerWidth * 0.3;
+  const width = window.innerWidth * 0.45;
 
   useEffect(() => {
     if (trueImageId != null && trueImageId != "") {
-        fetch(`${apiUrl}/image/get/${trueImageId}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            console.log(data);
-            setTrueImageUrl(`${apiUrl}${data.url}`);
+      fetch(`${apiUrl}/image/get/${trueImageId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          setTrueImageUrl(`${apiUrl}${data.url}`);
 
-            const timer = setTimeout(() => {
-              setIsBlurry(false);
-            }, 1000);
-
-          });
+          const timer = setTimeout(() => {
+            setIsBlurry(false);
+          }, 1000);
+        });
     }
   }, [trueImageId]);
 
- 
   const currentBluffer = useSelector((state) => state.players.currentBluffer);
   const colorStyle =
     currentBluffer && currentBluffer != ""
@@ -60,7 +57,7 @@ export default function Score({ gameId }) {
 
   const sortedPlayersInGame = useMemo(() => {
     return [...playersInGame].sort(
-      (a, b) => players[b].score - players[a].score
+      (a, b) => players[b].score - players[a].score,
     );
   }, [playersInGame, players]);
 

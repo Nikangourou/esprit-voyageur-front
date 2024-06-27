@@ -52,9 +52,13 @@
 .dragBtn{
   cursor: pointer;
 }
-.indicatorPoint{
+
+.votesIndicators{
   position: absolute;
   bottom: -.5rem;
   left: 50%;
   transform: translate(-50%,-50%);
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
 }

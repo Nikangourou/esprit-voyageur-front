@@ -291,7 +291,9 @@ export default function GameFlow({ images, gameId }) {
                   width={width}
                   height={width}
                 ></ImageShader>
-                {getVote(image.isTrue)}
+                <div className={styles.votesIndicators}>
+                  {getVote(image.isTrue)}
+                </div>
               </div>
             ))}
         </div>
