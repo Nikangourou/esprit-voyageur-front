@@ -7,7 +7,9 @@ export default function DraggablePawns({
   imageRef2,
   images,
   setColorListTrue,
+  setColorListFalse,
   colorListTrue,
+  colorListFalse,
 }) {
   const currentBluffer = useSelector((state) => state.players.currentBluffer);
   const playersInGame = useSelector((state) => state.players.playersInGame);
@@ -36,16 +38,49 @@ export default function DraggablePawns({
     return arr;
   }
 
+  function addElt(point) {
+    setColorListTrue((prev) => {
+      const tmp = [...prev];
+      return [
+        ...removeItemOnce(tmp, point.target.getAttribute("data-color")),
+        point.target.getAttribute("data-color"),
+      ];
+    });
+    setColorListFalse((prev) => {
+      const tmp = [...prev];
+      return [...removeItemOnce(tmp, point.target.getAttribute("data-color"))];
+    });
+  }
+
+  function removeAll(point) {
+    setColorListFalse((prev) => {
+      const tmp = [...prev];
+      return [...removeItemOnce(tmp, point.target.getAttribute("data-color"))];
+    });
+    setColorListTrue((prev) => {
+      const tmp = [...prev];
+      return [...removeItemOnce(tmp, point.target.getAttribute("data-color"))];
+    });
+  }
+
+  function removeElt(point) {
+    setColorListTrue((prev) => {
+      const tmp = [...prev];
+      return [...removeItemOnce(tmp, point.target.getAttribute("data-color"))];
+    });
+    setColorListFalse((prev) => {
+      const tmp = [...prev];
+      return [
+        ...removeItemOnce(tmp, point.target.getAttribute("data-color")),
+        point.target.getAttribute("data-color"),
+      ];
+    });
+  }
+
   function eventDragEnd(point) {
     if (isPointWithinRadiusFromCenter(imageRef1.current, point)) {
       if (images && images[0].isTrue) {
-        setColorListTrue((prev) => {
-          const tmp = [...prev];
-          return [
-            ...removeItemOnce(tmp, point.target.getAttribute("data-color")),
-            point.target.getAttribute("data-color"),
-          ];
-        });
+        addElt(point);
         console.log(
           "AJOUT DANS LISTE TRUE",
           colorListTrue,
@@ -53,22 +88,11 @@ export default function DraggablePawns({
         );
         //TODO GSAP ANIM FEEDBACK
       } else {
-        setColorListTrue((prev) => {
-          const tmp = [...prev];
-          return [
-            ...removeItemOnce(tmp, point.target.getAttribute("data-color")),
-          ];
-        });
+        removeElt(point);
       }
     } else if (isPointWithinRadiusFromCenter(imageRef2.current, point)) {
       if (images && images[1].isTrue) {
-        setColorListTrue((prev) => {
-          const tmp = [...prev];
-          return [
-            ...removeItemOnce(tmp, point.target.getAttribute("data-color")),
-            point.target.getAttribute("data-color"),
-          ];
-        });
+        addElt(point);
         console.log(
           "AJOUT DANS LISTE TRUE",
           colorListTrue,
@@ -76,20 +100,10 @@ export default function DraggablePawns({
         );
         //TODO GSAP ANIM FEEDBACK
       } else {
-        setColorListTrue((prev) => {
-          const tmp = [...prev];
-          return [
-            ...removeItemOnce(tmp, point.target.getAttribute("data-color")),
-          ];
-        });
+        removeElt(point);
       }
     } else {
-      setColorListTrue((prev) => {
-        const tmp = [...prev];
-        return [
-          ...removeItemOnce(tmp, point.target.getAttribute("data-color")),
-        ];
-      });
+      removeAll(point);
     }
   }
 

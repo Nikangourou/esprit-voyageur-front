@@ -34,11 +34,14 @@ const LoaderShader = () => {
   }
 
   useEffect(() => {
-    console.log(currentBluffer);
-    const colorStyle =
+    const colorStyle = (
       currentBluffer && currentBluffer != ""
         ? new THREE.Color(players[currentBluffer].color)
-        : new THREE.Color("#373FEF");
+        : new THREE.Color("#373FEF")
+    ).convertSRGBToLinear();
+
+    console.log(colorStyle, colorRef.current);
+
     if (colorStyle !== "") {
       gsap.to(colorRef.current, {
         r: colorStyle.r,
@@ -117,6 +120,7 @@ const LoaderShader = () => {
         canvas: canvasRef.current,
         pixelRatio: window.devicePixelRatio,
       });
+      rendererRef.current.outputEncoding = THREE.sRGBEncoding;
 
       const pixelRatio = window.devicePixelRatio;
       const sizes = {

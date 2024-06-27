@@ -1,6 +1,6 @@
 import styles from "./gameFlow.module.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useRef, useState, useContext } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
 import ImageShader from "../imageShader/ImageShader";
 import Countdown from "../chrono/countdown";
 import { SocketContext } from "../../context/socketContext";
@@ -16,6 +16,7 @@ import {
 import { setShowFooter } from "../../store/reducers/footerReducer";
 import { gsap } from "gsap";
 import { current } from "@reduxjs/toolkit";
+import Blob from "../blob/blob";
 
 export default function GameFlow({ images, gameId }) {
   const { socket } = useContext(SocketContext);
@@ -23,6 +24,7 @@ export default function GameFlow({ images, gameId }) {
   const [contentSentence, setContentSentence] = useState();
   const [chronoStart, setChronoStart] = useState(120);
   const [colorListTrue, setColorListTrue] = useState([]);
+  const [colorListFalse, setColorListFalse] = useState([]);
   const [isBlurry, setIsBlurry] = useState(true);
   const [render, setRender] = useState(null);
   const containerRef = useRef();
@@ -34,9 +36,19 @@ export default function GameFlow({ images, gameId }) {
     return <div></div>;
   }
   const width = window.innerWidth * 0.4;
+  const blobParams = {
+    width: 50,
+    height: 50,
+    numPoints: 12,
+    minRadius: 10,
+    maxRadius: 15,
+    minDuration: 1,
+    maxDuration: 2,
+  };
 
   const players = useSelector((state) => state.players.players);
   const currentBluffer = useSelector((state) => state.players.currentBluffer);
+  const playersInGame = useSelector((state) => state.players.playersInGame);
 
   console.log(currentBluffer);
 
@@ -191,11 +203,13 @@ export default function GameFlow({ images, gameId }) {
           {currentPhase == "VotePhase" && (
             <DraggablePawns
               colorListTrue={colorListTrue}
+              colorListFalse={colorListFalse}
               containerRef={containerRef}
               imageRef1={imageRef1}
               imageRef2={imageRef2}
               images={images}
               setColorListTrue={setColorListTrue}
+              setColorListFalse={setColorListFalse}
             ></DraggablePawns>
           )}
         </>
@@ -233,6 +247,31 @@ export default function GameFlow({ images, gameId }) {
     );
   }
 
+  function getVote(type = true) {
+    return playersInGame.map((color, index) => {
+      const checkTrue = colorListTrue.includes(color) && type;
+      const checkFalse = colorListFalse.includes(color) && !type;
+      if ((checkTrue || checkFalse) && color !== currentBluffer) {
+        return (
+          <svg
+            id="svg"
+            viewBox={`0 0 ${blobParams.width} ${blobParams.height}`}
+            width={blobParams.width}
+            height={blobParams.height}
+          >
+            <Blob
+              {...blobParams}
+              color={players[color].color}
+              dataColor={color}
+              colorActive={true}
+            />
+          </svg>
+        );
+      }
+      return <></>;
+    });
+  }
+
   return (
     <main className={styles.main}>
       <section className={styles.content} ref={containerRef}>
@@ -242,14 +281,17 @@ export default function GameFlow({ images, gameId }) {
           {currentPhase != "ScorePhase" &&
             images.length > 0 &&
             images.map((image, i) => (
-              <ImageShader
-                key={image.id}
-                url={image.url}
-                ref={i == 0 ? imageRef1 : imageRef2}
-                isBlurry={isBlurry}
-                width={width}
-                height={width}
-              ></ImageShader>
+              <div>
+                <ImageShader
+                  key={image.id}
+                  url={image.url}
+                  ref={i == 0 ? imageRef1 : imageRef2}
+                  isBlurry={isBlurry}
+                  width={width}
+                  height={width}
+                ></ImageShader>
+                {getVote(image.isTrue)}
+              </div>
             ))}
         </div>
       </section>
