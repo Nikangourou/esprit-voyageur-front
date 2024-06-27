@@ -16,7 +16,7 @@ export default function Title({ text, text2, important }) {
         <span>{important}</span>
         <span
           className={styles.outline}
-          style={{ filter: `drop-shadow(4px 4px 0px ${colorStyle})` }}
+          style={{ filter: `drop-shadow(2px 2px 0px ${colorStyle})` }}
         >
           {important}
         </span>

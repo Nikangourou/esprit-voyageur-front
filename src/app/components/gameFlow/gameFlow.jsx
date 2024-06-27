@@ -254,6 +254,7 @@ export default function GameFlow({ images, gameId }) {
       if ((checkTrue || checkFalse) && color !== currentBluffer) {
         return (
           <svg
+            className={styles.indicatorPoint}
             id="svg"
             viewBox={`0 0 ${blobParams.width} ${blobParams.height}`}
             width={blobParams.width}
@@ -281,7 +282,7 @@ export default function GameFlow({ images, gameId }) {
           {currentPhase != "ScorePhase" &&
             images.length > 0 &&
             images.map((image, i) => (
-              <div>
+              <div className={styles.singleImage}>
                 <ImageShader
                   key={image.id}
                   url={image.url}
