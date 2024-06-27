@@ -113,13 +113,38 @@ const Button = forwardRef(function Button(
 
     if (type == "player") {
       return (
+        // <button
+        //   {...events}
+        //   className={`${styles.button} ${styles[type]}`}
+        //   data-color={dataColor != "none" ? dataColor : "none"}
+        //   style={colorActive ? { backgroundColor: color } : {}}
+        //   ref={buttonRef}
+        // />
         <button
-          {...events}
-          className={`${styles.button} ${styles[type]}`}
-          data-color={dataColor != "none" ? dataColor : "none"}
-          style={colorActive ? { backgroundColor: color } : {}}
-          ref={buttonRef}
-        />
+        ref={buttonRef}
+        style={{
+          border: "none",
+          background: "none",
+          padding: "0 0",
+          cursor: "pointer",
+        }}
+        className={styles.blobButton}
+      >
+        <svg
+          id="svg"
+          viewBox={`0 0 ${blobParams.width} ${blobParams.height}`}
+          width={blobParams.width}
+          height={blobParams.height}
+        >
+          <Blob
+            {...blobParams}
+            color={color}
+            dataColor={dataColor}
+            events={events}
+            colorActive={colorActive}
+          />
+        </svg>
+      </button>
       );
     }
 
