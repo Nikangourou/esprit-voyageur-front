@@ -127,6 +127,7 @@ const Button = forwardRef(function Button(
           background: "none",
           padding: "0 0",
           cursor: "pointer",
+          position: "relative",
         }}
         className={styles.blobButton}
       >
