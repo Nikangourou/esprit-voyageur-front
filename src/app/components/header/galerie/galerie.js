@@ -41,6 +41,18 @@ const images = [
     front: "souvenir_17.png",
     back: "souvenir_18.png",
   },
+  {
+    front : "souvenir_19.png",
+    back : "souvenir_20.png"
+  },
+  {
+    front : "souvenir_21.png",
+    back : "souvenir_22.png"
+  },
+  {
+    front : "souvenir_23.png",
+    back : "souvenir_24.png"
+  },
 ];
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
