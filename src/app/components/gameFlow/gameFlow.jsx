@@ -17,6 +17,7 @@ import { setShowFooter } from "../../store/reducers/footerReducer";
 import { gsap } from "gsap";
 import { current } from "@reduxjs/toolkit";
 import Blob from "../blob/blob";
+import TipDisplay from "./tipDisplay/tipDisplay";
 
 export default function GameFlow({ images, gameId }) {
   const { socket } = useContext(SocketContext);
@@ -180,10 +181,7 @@ export default function GameFlow({ images, gameId }) {
       return (
         <div className={styles.conversation}>
           <h3>Astuce</h3>
-          <p>
-            Il est plus facile de discerner la vérité avec 2-3 coups dans le
-            nez.
-          </p>
+          <TipDisplay />
           {/* {currentPhase != "RevealPhase" && (
             <Countdown start={chronoStart} onEnd={eventEndClock}></Countdown>
           )}

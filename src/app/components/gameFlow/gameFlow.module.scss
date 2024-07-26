@@ -15,22 +15,21 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%,-50%);
-  width: 450px;
+  width: 500px;
   h3{
     font-size: 56px;
     
   }
 }
 
-
 .imgShaders{
   display: flex;
-  gap: 3rem;
   flex-direction: row;
   justify-content: space-around;
   position: absolute;
   top: 50%;
   left: 50%;
+  gap: 3rem;
   transform: translate(-50%,-50%);
   z-index: -1;
 }

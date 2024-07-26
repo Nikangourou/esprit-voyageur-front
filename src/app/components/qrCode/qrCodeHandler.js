@@ -67,7 +67,7 @@ export default function Code() {
         cardRef.current,
         { scale: 1.25, boxShadow: "2px 6px 10px rgba(44,44,44,0.15)" },
         {
-          scale:  1,
+          scale: 1,
           duration: 0.5,
           delay: 4,
           boxShadow: "2px 6px 10px rgba(44,44,44,.25)",
@@ -130,6 +130,9 @@ export default function Code() {
             <div className={styles.qrCode}>
               <QrCode gameId={gameId} currentBluffer={currentBluffer} />
             </div>
+          }
+          backChild={
+            <img className={styles.egg} src="/images/egg1.png" alt="le goat" />
           }
         ></Card>
       </section>
