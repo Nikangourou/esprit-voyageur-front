@@ -3,6 +3,7 @@
 import { useState } from "react";
 import styles from "./prompt.module.scss";
 import ImageShader from "../components/imageShader/ImageShader";
+import FileDownloader from "./FileDownloader";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -39,6 +40,7 @@ export default function Prompt() {
       <button onClick={createImg}>Envoyer</button>
       <ImageShader url={`${apiUrl}${url}`}></ImageShader>
       <img src={`${apiUrl}${url}`} alt="" />
+      <FileDownloader></FileDownloader>
     </>
   );
 }
